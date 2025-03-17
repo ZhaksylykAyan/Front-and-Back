@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
@@ -60,3 +60,24 @@ class ProfileCompletionView(generics.RetrieveUpdateAPIView):
         serializer.save()  # This will trigger the profile completion check
 
         return Response({"message": "Profile updated successfully", "is_profile_completed": instance.user.is_profile_completed})
+
+class StudentProfileDetailView(generics.RetrieveAPIView):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentProfileSerializer
+    permission_classes = [permissions.AllowAny]
+
+class SupervisorListView(generics.ListAPIView):
+    """
+    API to list all supervisors with their profiles and skills
+    """
+    queryset = SupervisorProfile.objects.all()
+    serializer_class = SupervisorProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+class SupervisorProfileDetailView(generics.RetrieveAPIView):
+    """
+    Публичный просмотр профиля супервизора по его user.id (primary_key)
+    """
+    queryset = SupervisorProfile.objects.all()
+    serializer_class = SupervisorProfileSerializer
+    permission_classes = [permissions.AllowAny]  # Публичный доступ

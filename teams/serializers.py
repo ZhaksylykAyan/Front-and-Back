@@ -1,40 +1,48 @@
 from rest_framework import serializers
-from .models import Team
+
+from topics.serializers import ThesisTopicSerializer
+from .models import Team, JoinRequest, SupervisorRequest
 from profiles.models import StudentProfile, SupervisorProfile
+from profiles.serializers import StudentProfileSerializer, SupervisorProfileSerializer
 from topics.models import ThesisTopic
 
 class TeamSerializer(serializers.ModelSerializer):
     """ Serializer for Team model """
-    members = serializers.PrimaryKeyRelatedField(many=True, queryset=StudentProfile.objects.all())
+    members = StudentProfileSerializer(many=True, read_only=True)
     owner = serializers.PrimaryKeyRelatedField(queryset=SupervisorProfile.objects.all(), required=False)
-    thesis_topic = serializers.PrimaryKeyRelatedField(queryset=ThesisTopic.objects.all())
+    thesis_topic = ThesisTopicSerializer()
+    supervisor = SupervisorProfileSerializer(read_only=True)
+    thesis_name = serializers.CharField(source='thesis_topic.title', read_only=True)
+    thesis_description = serializers.CharField(source='thesis_topic.description', read_only=True)
+    required_skills = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Team
-        fields = ['id', 'thesis_topic', 'owner', 'members', 'status', 'supervisor']
+        fields = ['id', 'thesis_topic', 'thesis_name', 'thesis_description', 'owner', 'members', 'status', 'supervisor', 'required_skills']
+
+    def get_required_skills(self, obj):
+        return [skill.name for skill in obj.thesis_topic.required_skills.all()]
 
     def validate(self, data):
-        """ Ensure a supervisor does not exceed 10 teams including thesis topics they created """
+        """ Ensure a student can only apply to 1 team at a time """
         user = self.context['request'].user
-
-        # Ensure students can only apply to one team at a time
         if hasattr(user, 'student_profile'):
             if user.student_profile.teams.filter(status="open").exists():
                 raise serializers.ValidationError("You can only apply to 1 team at a time.")
-
-        # Ensure supervisors do not exceed 10 total (teams + topics)
-        elif hasattr(user, 'supervisor_profile'):
-            total_owned = Team.objects.filter(owner=user).count() + ThesisTopic.objects.filter(created_by_supervisor=user.supervisor_profile).count()
-            if total_owned >= 10:
-                raise serializers.ValidationError("Supervisors cannot own more than 10 teams including thesis topics they created.")
-
         return data
 
-    # def create(self, validated_data):
-    #     """ Create a new team with the correct owner """
-    #     user = self.context['request'].user
-    #     if hasattr(user, 'student_profile'):
-    #         validated_data['owner'] = user
-    #     elif hasattr(user, 'supervisor_profile'):
-    #         validated_data['owner'] = user
-    #     return super().create(validated_data)
+class JoinRequestSerializer(serializers.ModelSerializer):
+    team = TeamSerializer(read_only=True)
+    student = StudentProfileSerializer(read_only=True)
+
+    class Meta:
+        model = JoinRequest
+        fields = ['id', 'team', 'student', 'status', 'created_at']
+
+class SupervisorRequestSerializer(serializers.ModelSerializer):
+    supervisor = SupervisorProfileSerializer(read_only=True)
+    team = TeamSerializer(read_only=True)
+
+    class Meta:
+        model = SupervisorRequest
+        fields = ['id', 'team', 'supervisor', 'status', 'created_at']

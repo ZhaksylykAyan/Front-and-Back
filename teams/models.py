@@ -47,3 +47,36 @@ class Team(models.Model):
 
     def __str__(self):
         return f"Team for {self.thesis_topic.title} (Status: {self.status})"
+
+class JoinRequest(models.Model):
+    student = models.ForeignKey('profiles.StudentProfile', on_delete=models.CASCADE, related_name='join_requests')
+    team = models.ForeignKey('teams.Team', on_delete=models.CASCADE, related_name='join_requests')
+    status = models.CharField(
+        max_length=10,
+        choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected')],
+        default='pending'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('student', 'team')
+
+    def __str__(self):
+        return f"{self.student.user.email} requests to join {self.team}"
+
+class SupervisorRequest(models.Model):
+    """ Request from a Team Owner to a Supervisor """
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='supervisor_requests')
+    supervisor = models.ForeignKey(SupervisorProfile, on_delete=models.CASCADE, related_name='incoming_requests')
+    status = models.CharField(
+        max_length=10,
+        choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected')],
+        default='pending'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('team', 'supervisor')
+
+    def __str__(self):
+        return f"{self.team.thesis_topic.title} → {self.supervisor.user.email} [{self.status}]"

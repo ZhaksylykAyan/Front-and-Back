@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.core.exceptions import ValidationError
 from .models import Skill, StudentProfile, SupervisorProfile, DeanOfficeProfile
 
 
@@ -15,6 +14,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(many=True, read_only=True)
     skill_ids = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True, write_only=True, source='skills')
     is_profile_completed = serializers.BooleanField(source="user.is_profile_completed", read_only=True)
+    user_email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = StudentProfile
@@ -44,6 +44,8 @@ class SupervisorProfileSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(many=True, read_only=True)
     skill_ids = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True, write_only=True, source='skills')
     is_profile_completed = serializers.BooleanField(source="user.is_profile_completed", read_only=True)
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    photo = serializers.ImageField(read_only=True)
 
     class Meta:
         model = SupervisorProfile
@@ -71,6 +73,7 @@ class SupervisorProfileSerializer(serializers.ModelSerializer):
 class DeanOfficeProfileSerializer(serializers.ModelSerializer):
     """ Serializer for Dean Office Profile """
     is_profile_completed = serializers.BooleanField(source="user.is_profile_completed", read_only=True)
+    user_email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = DeanOfficeProfile
