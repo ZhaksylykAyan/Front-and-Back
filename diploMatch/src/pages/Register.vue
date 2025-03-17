@@ -85,7 +85,7 @@
     border-radius: 12px;
     box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.12);
     text-align: center;
-    width: 420px;
+    width: 400px;
   }
   
   .logo {
@@ -117,7 +117,7 @@
   }
   
   input {
-    width: 100%;
+    width: 93%;
     padding: 0.8rem;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -127,7 +127,7 @@
   button {
     width: 100%;
     padding: 0.9rem;
-    background: #144A77;
+    background: #1e40af;;
     color: white;
     border: none;
     border-radius: 6px;

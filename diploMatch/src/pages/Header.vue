@@ -10,13 +10,13 @@
     <!-- Right Side: Navigation -->
     <div class="header-right">
       <nav class="nav-menu">
+        <router-link to="/professors" class="nav-item">Professors</router-link>
         <router-link to="/projects" class="nav-item">Projects</router-link>
+        <router-link to="/orders" class="nav-item">Orders</router-link>
         <router-link to="/liked" class="icon">
           <i class="fas fa-heart"></i>
         </router-link>
-        <router-link to="/notifications" class="icon">
-          <i class="fas fa-bell"></i>
-        </router-link>
+        <NotificationBell />
       </nav>
 
       <!-- Profile Dropdown -->
@@ -50,7 +50,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
-
+import NotificationBell from "../components/notification/NotificationBell.vue";
 const router = useRouter();
 const authStore = useAuthStore();
 const dropdownOpen = ref(false);
@@ -147,10 +147,31 @@ onBeforeUnmount(() => {
   font-size: 18px;
   color: black;
   cursor: pointer;
+  position: relative;
 }
 
 .icon:hover {
   color: #007bff;
+}
+
+/* Notification Bell Badge */
+.notification-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  line-height: 1;
+  z-index: 2;
 }
 
 /* Profile Menu */

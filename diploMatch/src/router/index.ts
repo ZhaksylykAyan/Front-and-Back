@@ -6,7 +6,13 @@ import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import Profile from "../pages/Profile.vue";
+import CreateTopic from '../pages/CreateProject.vue';
 import PasswordReset from "../pages/PasswordReset.vue";
+import Orders from "../pages/Orders.vue";
+import StudentProfile from "../components/profiles/students/StudentProfile.vue";
+import SupervisorProfile from "../components/profiles/supervisors/SupervisorProfile.vue";
+import Professors from "../pages/Professors.vue";
+import Notifications from "../pages/Notifications.vue";
 
 const routes = [
   { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } },
@@ -15,6 +21,41 @@ const routes = [
   { path: "/profile", component: Profile, meta: { requiresAuth: true, requiresProfile: true } },
   { path: "/forgot-password", component: PasswordReset },
   { path: "/reset-password/:uid/:token", component: PasswordReset },
+  {
+    path: '/create-project',
+    name: 'CreateTopic',
+    component: CreateTopic,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/students/:id",
+    name: "StudentPublicProfile",
+    component: StudentProfile,
+    meta: { requiresAuth: true },
+    props: route => ({ viewedUserId: route.params.id, readonly: true }),
+  },
+  {
+    path: "/orders",
+    name: "Orders",
+    component: Orders,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/professors',
+    name: 'Professors',
+    component: Professors
+  },
+
+  {
+    path: '/supervisors/:id',
+    name: 'SupervisorProfile',
+    component: SupervisorProfile // компонент, который отображает профиль супервизора
+  },
+  {
+    path: "/notifications",
+    name: 'Notifications',
+    component: Notifications,
+  }
 ];
 
 const router = createRouter({
