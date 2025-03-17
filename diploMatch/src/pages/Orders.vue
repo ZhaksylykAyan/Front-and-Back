@@ -106,7 +106,7 @@
     </div>
 
     <!-- ===== OWNER VIEW: Incoming Join Requests ===== -->
-    <div v-if="isOwner && incomingJoinRequests.length > 0">
+    <div v-if="(isOwner || userRole === 'Student') && incomingJoinRequests.length > 0">
       <h2 class="section-title">Incoming Join Requests</h2>
 
       <div v-for="req in incomingJoinRequests" :key="req.id" class="request-card">
@@ -181,16 +181,28 @@ const getPhoto = (member) => {
 
 const fetchRequests = async () => {
   try {
-    // Owner check
+    // ===== Check if user is owner of any team =====
     try {
       const resTeam = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
         headers: { Authorization: `Bearer ${authStore.token}` },
       });
-      isOwner.value = resTeam.data.is_owner === true;
+
+      // Если backend возвращает массив команд — проверим owner
+      if (Array.isArray(resTeam.data)) {
+        isOwner.value = resTeam.data.some(
+          (team) => team.owner === authStore.user.id
+        );
+      } else {
+        // Если backend возвращает одну команду
+        isOwner.value =
+          resTeam.data.owner === authStore.user.id ||
+          resTeam.data.is_owner === true;
+      }
     } catch (err) {
       isOwner.value = false;
     }
 
+    // ===== Student-specific logic =====
     if (userRole === "Student") {
       const res = await axios.get(
         "http://127.0.0.1:8000/api/teams/my-join-requests/",
@@ -199,6 +211,7 @@ const fetchRequests = async () => {
         }
       );
       requests.value = res.data;
+
       await fetchMySupervisorRequest();
 
       if (
@@ -209,6 +222,7 @@ const fetchRequests = async () => {
       }
     }
 
+    // ===== Supervisor-specific logic =====
     if (userRole === "Supervisor") {
       const res = await axios.get(
         "http://127.0.0.1:8000/api/teams/supervisor-requests/incoming/",
@@ -219,6 +233,7 @@ const fetchRequests = async () => {
       supervisorRequests.value = res.data;
     }
 
+    // ✅ Final: universal for ANY owner (student or supervisor)
     if (isOwner.value) {
       await fetchIncomingJoinRequests();
     }
@@ -226,6 +241,7 @@ const fetchRequests = async () => {
     console.error("Failed to fetch requests:", err);
   }
 };
+
 
 const fetchMySupervisorRequest = async () => {
   try {
@@ -419,8 +435,8 @@ onMounted(() => {
   margin-bottom: 8px;
 }
 .skill-pill {
-  background-color: #007bff;
-  color: white;
+  background: #80C5FF;
+  color: black;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;

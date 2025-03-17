@@ -79,7 +79,7 @@
         <div class="project-skills">
           <span
             v-for="skill in project.required_skills"
-            :key="skill.id"
+            :key="skill"
             class="skill-pill"
           >
             {{ skill }}
@@ -155,8 +155,7 @@ onMounted(async () => {
         }
       );
       profile.value = profileRes.data;
-      selectedSkills.value =
-        profile.value.skills?.map((skill) => skill.id) || [];
+      selectedSkills.value = profile.value.skills?.map((s) => s.id) || [];
     } else {
       const profileRes = await axios.get(
         "http://127.0.0.1:8000/api/profiles/complete-profile/",
@@ -165,23 +164,29 @@ onMounted(async () => {
         }
       );
       profile.value = profileRes.data;
-      selectedSkills.value =
-        profile.value.skills?.map((skill) => skill.id) || [];
+      selectedSkills.value = profile.value.skills?.map((s) => s.id) || [];
 
-      // load supervisor projects
+      // ✅ Получить проекты
       const projectsRes = await axios.get(
         "http://127.0.0.1:8000/api/teams/my/",
         {
           headers: { Authorization: `Bearer ${authStore.token}` },
         }
       );
-      myProjects.value = [projectsRes.data]; // wrapped in array if only one project
+
+      // 📦 Поддержка обоих вариантов ответа: один объект (студент) или массив (супервизор)
+      if (Array.isArray(projectsRes.data)) {
+        myProjects.value = projectsRes.data;
+      } else {
+        myProjects.value = [projectsRes.data];
+      }
     }
   } catch (error) {
     console.error("Error loading profile or projects:", error);
   }
 });
 </script>
+
 
 <style scoped>
 .profile-container {
@@ -202,6 +207,7 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .profile-actions {
@@ -269,16 +275,15 @@ onMounted(async () => {
 }
 
 .skill-chip {
-  background: #007bff;
-  color: white;
+  background: #80C5FF;
+  color: black;
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 14px;
-  font-weight: bold;
 }
 
 .projects-section {
-  max-width: 900px;
+  max-width: 1100px;
   padding-left: 30px;
 }
 
@@ -343,8 +348,8 @@ onMounted(async () => {
 }
 
 .skill-pill {
-  background-color: #007bff;
-  color: white;
+  background-color: #80C5FF;
+  color: black;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;

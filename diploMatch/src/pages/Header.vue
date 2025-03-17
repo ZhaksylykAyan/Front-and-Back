@@ -11,7 +11,7 @@
     <div class="header-right">
       <nav class="nav-menu">
         <router-link to="/professors" class="nav-item">Professors</router-link>
-        <router-link to="/projects" class="nav-item">Projects</router-link>
+        <router-link to="/dashboard" class="nav-item">Projects</router-link>
         <router-link to="/orders" class="nav-item">Orders</router-link>
         <router-link to="/liked" class="icon">
           <i class="fas fa-heart"></i>

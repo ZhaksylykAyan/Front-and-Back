@@ -75,11 +75,21 @@ const fetchTeamData = async () => {
     const res = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
-    isOwner.value = res.data.is_owner === true;
+
+    // 💡 Проверка на массив или объект
+    if (Array.isArray(res.data)) {
+      isOwner.value = res.data.some(
+        (team) => team.owner === authStore.user.id
+      );
+    } else {
+      isOwner.value =
+        res.data.is_owner === true || res.data.owner === authStore.user.id;
+    }
   } catch (err) {
     isOwner.value = false;
   }
 };
+
 
 const getPhoto = (prof) => {
   if (prof.photo) {

@@ -28,7 +28,7 @@
         placeholder="Portfolio (optional)"
       />
 
-      <div class="section-title">Specialization</div>
+      <div class="section-title">Major</div>
       <input
         type="text"
         v-model="profile.specialization"

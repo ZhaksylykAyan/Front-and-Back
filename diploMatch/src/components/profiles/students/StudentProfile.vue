@@ -147,6 +147,7 @@ onMounted(async () => {
       props.viewedUserId &&
       props.viewedUserId !== authStore.user.id.toString()
     ) {
+      // 📌 Загружаем профиль другого пользователя
       const profileRes = await axios.get(
         `http://127.0.0.1:8000/api/profiles/students/${props.viewedUserId}/`,
         {
@@ -155,7 +156,12 @@ onMounted(async () => {
       );
       profile.value = profileRes.data;
       selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
+
+      // 📌 Подставляем команду из profileRes
+      team.value = profileRes.data.team || null;
+
     } else {
+      // 📌 Загружаем профиль текущего пользователя
       const profileRes = await axios.get(
         "http://127.0.0.1:8000/api/profiles/complete-profile/",
         {
@@ -164,18 +170,19 @@ onMounted(async () => {
       );
       profile.value = profileRes.data;
       selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
+
+      // 📌 Только в этом случае запрашиваем api/teams/my/
+      const teamRes = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      });
+      team.value = teamRes.data || null;
     }
-    // ✅ Получаем данные о проекте/команде
-    const res = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
-      headers: { Authorization: `Bearer ${authStore.token}` },
-    });
-    team.value = res.data;
-    console.log("TEAM DATA:", team.value);
   } catch (err) {
     console.error("Error loading profile or team data:", err);
     team.value = null;
   }
 });
+
 
 const goToEdit = () => {
   if (authStore.user?.role) {
@@ -192,14 +199,14 @@ const goToCreateProject = () => {
 .profile-container {
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
+  gap: 30px;
+  padding-top: 30px;
 }
-
 .profile-card {
   padding: 30px;
-  border-radius: 12px;
-  width: 700px;
-  max-width: 100%;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
 }
 
 .profile-header {
@@ -234,7 +241,7 @@ const goToCreateProject = () => {
 }
 
 .create-btn {
-  background: #007bff;
+  background: #80C5FF;
   color: white;
 }
 
@@ -244,8 +251,8 @@ const goToCreateProject = () => {
 
 .profile-main {
   display: flex;
-  gap: 20px;
-  align-items: flex-start;
+  gap: 30px;
+  margin-top: 30px;
 }
 
 .photo-section {
@@ -253,11 +260,11 @@ const goToCreateProject = () => {
 }
 
 .profile-img {
-  width: 100px;
-  height: 100px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #007bff;
+  border: 3px solid #007bff;
 }
 
 .profile-info {
@@ -265,7 +272,7 @@ const goToCreateProject = () => {
 }
 
 .profile-info h3 {
-  font-size: 20px;
+  font-size: 26px;
   font-weight: bold;
   margin-bottom: 5px;
 }
@@ -289,8 +296,8 @@ const goToCreateProject = () => {
 }
 
 .skill-pill {
-  background: #007bff;
-  color: white;
+  background: #80C5FF;
+  color: black;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 13px;
@@ -302,9 +309,9 @@ const goToCreateProject = () => {
 }
 
 .project-card {
-  max-width: 700px;
+  max-width: 800px;
   width: 100%;
-  background: #f5f5f5;
+  background: #e6f0ff;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -351,11 +358,4 @@ const goToCreateProject = () => {
   gap: 8px;
 }
 
-.skill-pill {
-  background-color: #007bff;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-}
 </style>

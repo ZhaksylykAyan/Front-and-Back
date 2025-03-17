@@ -290,8 +290,8 @@ onMounted(async () => {
   gap: 8px;
 }
 .skill-pill {
-  background-color: #007bff;
-  color: white;
+  background: #80C5FF;
+  color: black;
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
