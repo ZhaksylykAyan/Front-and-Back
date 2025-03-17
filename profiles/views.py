@@ -3,6 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
+
+from teams.models import Team
+from teams.serializers import TeamSerializer
 from .models import StudentProfile, SupervisorProfile, DeanOfficeProfile, Skill
 from .serializers import (
     StudentProfileSerializer,
@@ -63,8 +67,27 @@ class ProfileCompletionView(generics.RetrieveUpdateAPIView):
 
 class StudentProfileDetailView(generics.RetrieveAPIView):
     queryset = StudentProfile.objects.all()
-    serializer_class = StudentProfileSerializer
     permission_classes = [permissions.AllowAny]
+
+    def get(self, request, pk):
+        try:
+            profile = StudentProfile.objects.get(pk=pk)
+        except StudentProfile.DoesNotExist:
+            return Response({"detail": "Student not found."}, status=404)
+
+        serializer = StudentProfileSerializer(profile)
+        data = serializer.data
+
+        # ✅ Импортируем TeamSerializer внутри метода, чтобы избежать цикличности
+        team = profile.teams.first()
+        if team:
+            from teams.serializers import TeamSerializer
+            team_serializer = TeamSerializer(team, context={"request": request})
+            data['team'] = team_serializer.data
+        else:
+            data['team'] = None
+
+        return Response(data)
 
 class SupervisorListView(generics.ListAPIView):
     """

@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, status
+
+import teams
 from profiles.models import SupervisorProfile
 from topics.models import ThesisTopic
 from topics.serializers import ThesisTopicSerializer
@@ -49,34 +51,29 @@ class MyTeamView(APIView):
 
     def get(self, request):
         user = request.user
-        profile = None
+
+        # 🧠 Если студент — верни команду, в которой он состоит
         if hasattr(user, "student_profile"):
-            profile = user.student_profile
+            try:
+                team = Team.objects.get(members=user.student_profile)
+                serializer = TeamSerializer(team)
+                data = serializer.data
+                data['is_owner'] = False
+                return Response(data)
+            except Team.DoesNotExist:
+                return Response({"detail": "No team found for student"}, status=404)
+
+        # 🧠 Если супервизор — верни все команды, где он является owner
         elif hasattr(user, "supervisor_profile"):
-            profile = user.supervisor_profile
-        else:
-            return Response({"detail": "No profile found"}, status=400)
-
-        try:
-            team = Team.objects.get(owner=request.user)
-            serializer = TeamSerializer(team)
-            data = serializer.data
-            data['is_owner'] = True  # 💥 ВАЖНО
-            return Response(data)
-
-        except Team.DoesNotExist:
-            # Если не owner, но студент — участник команды
-            if hasattr(user, "student_profile"):
-                try:
-                    team = Team.objects.get(members=user.student_profile)
-                    serializer = TeamSerializer(team)
-                    data = serializer.data
-                    data['is_owner'] = False
-                    return Response(data)
-                except Team.DoesNotExist:
-                    return Response({"detail": "No team found"}, status=404)
+            teams = Team.objects.filter(owner=user)
+            if teams.exists():
+                serializer = TeamSerializer(teams, many=True)
+                return Response(serializer.data)
             else:
-                return Response({"detail": "No team found"}, status=404)
+                return Response({"detail": "No teams found for supervisor"}, status=404)
+
+        return Response({"detail": "No profile found"}, status=400)
+
 
 class SupervisorProjectsView(APIView):
     """Returns all supervisor's projects"""
@@ -184,20 +181,18 @@ class JoinTeamView(APIView):
 
         return Response({"message": "Join request sent."}, status=status.HTTP_200_OK)
 
-
-
 class MyTeamJoinRequestsView(APIView):
     """ Owner sees join requests for his team """
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        try:
-            team = Team.objects.get(owner=request.user)
-            requests = JoinRequest.objects.filter(team=team).order_by('-created_at')  # Сортировка сверху вниз
-            serializer = JoinRequestSerializer(requests, many=True)
-            return Response(serializer.data)
-        except Team.DoesNotExist:
+        teams = Team.objects.filter(owner=request.user)
+        if not teams.exists():
             return Response({"error": "You don't own any team."}, status=404)
+
+        all_requests = JoinRequest.objects.filter(team__in=teams).order_by('-created_at')
+        serializer = JoinRequestSerializer(all_requests, many=True)
+        return Response(serializer.data)
 
 
 class MySupervisorRequestView(APIView):

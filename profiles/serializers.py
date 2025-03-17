@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Skill, StudentProfile, SupervisorProfile, DeanOfficeProfile
 
 
@@ -15,6 +16,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
     skill_ids = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True, write_only=True, source='skills')
     is_profile_completed = serializers.BooleanField(source="user.is_profile_completed", read_only=True)
     user_email = serializers.EmailField(source='user.email', read_only=True)
+
 
     class Meta:
         model = StudentProfile
