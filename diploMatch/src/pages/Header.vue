@@ -14,7 +14,7 @@
         <router-link to="/dashboard" class="nav-item">Projects</router-link>
         <router-link to="/orders" class="nav-item">Orders</router-link>
         <router-link to="/liked" class="icon">
-          <i class="fas fa-heart"></i>
+          <i class="fa-regular fa-heart"></i>
         </router-link>
         <NotificationBell />
       </nav>
@@ -36,7 +36,7 @@
           <img src="../icons/flags/en.png" alt="English" class="flag-icon" />
         </button>
         <button @click="switchLanguage('ru')">
-          <img src="../icons/flags/ru.jpg" alt="Russian" class="flag-icon" />
+          <img src="../icons/flags/ru.png" alt="Russian" class="flag-icon" />
         </button>
         <button @click="switchLanguage('kz')">
           <img src="../icons/flags/kz.png" alt="Kazakh" class="flag-icon" />
@@ -103,7 +103,6 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 

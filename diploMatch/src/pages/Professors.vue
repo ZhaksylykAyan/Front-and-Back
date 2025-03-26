@@ -23,7 +23,7 @@
 
         <!-- ✅ Request button внутри info-блока справа -->
         <button
-          v-if="isOwner"
+          v-if="isOwner && !isSupervisor"
           class="request-btn"
           @click="sendRequest(prof.user)"
         >
@@ -41,12 +41,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import { useAuthStore } from "../store/auth";
 
 const authStore = useAuthStore();
 const professors = ref([]);
+const isSupervisor = computed(() => authStore.user?.role === "Supervisor");
 const isOwner = ref(false);
 const defaultAvatar = new URL("../icons/default-avatar.png", import.meta.url)
   .href;
@@ -78,9 +79,7 @@ const fetchTeamData = async () => {
 
     // 💡 Проверка на массив или объект
     if (Array.isArray(res.data)) {
-      isOwner.value = res.data.some(
-        (team) => team.owner === authStore.user.id
-      );
+      isOwner.value = res.data.some((team) => team.owner === authStore.user.id);
     } else {
       isOwner.value =
         res.data.is_owner === true || res.data.owner === authStore.user.id;
@@ -89,7 +88,6 @@ const fetchTeamData = async () => {
     isOwner.value = false;
   }
 };
-
 
 const getPhoto = (prof) => {
   if (prof.photo) {

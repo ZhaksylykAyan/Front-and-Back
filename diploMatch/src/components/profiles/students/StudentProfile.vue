@@ -1,4 +1,3 @@
-<!-- src/components/profiles/Students/StudentProfile.vue -->
 <template>
   <div class="profile-container">
     <div class="profile-card">
@@ -24,13 +23,13 @@
             GPA: <strong> {{ profile.gpa }} </strong>
           </p>
           <p v-if="profile.specialization">
-            <strong> Specialization: </strong> {{ profile.specialization }}
+            <strong>Specialization:</strong> {{ profile.specialization }}
           </p>
           <p v-if="profile.portfolio">
             <strong>
-              <a :href="profile.portfolio" target="_blank">{{
-                profile.portfolio
-              }}</a>
+              <a :href="profile.portfolio" target="_blank">
+                {{ profile.portfolio }}
+              </a>
             </strong>
           </p>
 
@@ -47,13 +46,55 @@
         </div>
       </div>
     </div>
-    <div v-if="team && team.thesis_topic" class="project-section">
-      <h2 class="section-title">My Project</h2>
-      <div class="project-card">
-        <h3 class="project-title">{{ team.thesis_name }}</h3>
-        <p class="project-description">{{ team.thesis_description }}</p>
 
+    <!-- 💡 My Project -->
+    <div v-if="team && team.thesis_topic" class="project-section">
+      <h2>{{ isViewingOther ? "Projects" : "My Projects" }}</h2>
+      <div class="project-card">
+        <div class="project-header">
+          <h3 class="project-title">{{ team.thesis_name }}</h3>
+          <div v-if="isViewingOther" class="actions">
+            <i
+              :class="[
+                'heart-icon',
+                likeStore.likedProjectIds.includes(team.id)
+                  ? 'fa-solid fa-heart'
+                  : 'fa-regular fa-heart',
+              ]"
+              @click="toggleLike(team.id)"
+              title="Add to favorites"
+            ></i>
+            <button
+              class="apply-btn"
+              :disabled="userHasTeam || userHasPendingRequest"
+              @click="applyToTeam(team.id)"
+            >
+              {{
+                userHasTeam
+                  ? "Already in a team"
+                  : userHasPendingRequest
+                  ? "Applied"
+                  : "Apply"
+              }}
+            </button>
+          </div>
+        </div>
+        <p class="project-description">{{ team.thesis_description }}</p>
         <div class="team-members">
+          <!-- ✅ Supervisor first -->
+          <router-link
+            v-if="team.supervisor"
+            :to="`/supervisors/${team.supervisor.id}`"
+            :title="`${team.supervisor.first_name} ${team.supervisor.last_name} (Supervisor)`"
+          >
+            <img
+              :src="getPhoto(team.supervisor)"
+              class="avatar supervisor-avatar"
+              alt="Supervisor"
+            />
+          </router-link>
+
+          <!-- 👥 Members -->
           <router-link
             v-for="member in team.members"
             :key="member.id"
@@ -63,6 +104,7 @@
             <img
               :src="getPhoto(member)"
               class="avatar"
+              :class="{ 'owner-avatar': member.user === team.owner }"
               :alt="member.first_name"
             />
           </router-link>
@@ -87,7 +129,8 @@ import { ref, onMounted, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "../../../store/auth";
 import axios from "axios";
-
+import { useLikeStore } from "../../../store/likes";
+const likeStore = useLikeStore();
 const router = useRouter();
 const authStore = useAuthStore();
 const team = ref(null);
@@ -103,6 +146,29 @@ const props = defineProps({
   readonly: Boolean,
   viewedUserId: String,
 });
+const userHasTeam = ref(false);
+const userHasPendingRequest = ref(false);
+const toggleLike = async (projectId) => {
+  await likeStore.toggleLike(projectId);
+};
+
+const applyToTeam = async (teamId) => {
+  if (userHasTeam.value || userHasPendingRequest.value) return;
+  try {
+    await axios.post(
+      `http://127.0.0.1:8000/api/teams/${teamId}/join/`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+    alert("Join request sent!");
+    userHasPendingRequest.value = true;
+  } catch (err) {
+    console.error("Failed to apply:", err);
+    alert(err.response?.data?.error || "Failed to apply");
+  }
+};
 
 // Если открываем чужой профиль — загружаем профиль этого пользователя
 const isViewingOther = computed(
@@ -134,6 +200,7 @@ const getPhoto = (user) => {
 };
 
 onMounted(async () => {
+  await likeStore.fetchLikes();
   try {
     const skillsRes = await axios.get(
       "http://127.0.0.1:8000/api/profiles/skills/",
@@ -156,10 +223,9 @@ onMounted(async () => {
       );
       profile.value = profileRes.data;
       selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
-
+      userHasTeam.value = profileRes.data?.team !== null;
       // 📌 Подставляем команду из profileRes
       team.value = profileRes.data.team || null;
-
     } else {
       // 📌 Загружаем профиль текущего пользователя
       const profileRes = await axios.get(
@@ -168,6 +234,7 @@ onMounted(async () => {
           headers: { Authorization: `Bearer ${authStore.token}` },
         }
       );
+
       profile.value = profileRes.data;
       selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
 
@@ -182,7 +249,6 @@ onMounted(async () => {
     team.value = null;
   }
 });
-
 
 const goToEdit = () => {
   if (authStore.user?.role) {
@@ -200,7 +266,7 @@ const goToCreateProject = () => {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding-top: 30px;
+  padding: 30px;
 }
 .profile-card {
   padding: 30px;
@@ -219,6 +285,47 @@ const goToCreateProject = () => {
 .profile-header h2 {
   font-size: 22px;
   font-weight: bold;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.heart-icon {
+  font-size: 20px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.heart-icon:hover {
+  color: #ff6666;
+}
+
+.fa-solid.fa-heart {
+  color: #ef6f6f;
+}
+
+.apply-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.apply-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+.apply-btn:hover {
+  background-color: #0056b3;
 }
 
 .actions button {
@@ -241,7 +348,7 @@ const goToCreateProject = () => {
 }
 
 .create-btn {
-  background: #80C5FF;
+  background: #80c5ff;
   color: white;
 }
 
@@ -256,7 +363,7 @@ const goToCreateProject = () => {
 }
 
 .photo-section {
-  flex-shrink: 0;
+  flex: 1;
 }
 
 .profile-img {
@@ -268,7 +375,7 @@ const goToCreateProject = () => {
 }
 
 .profile-info {
-  flex-grow: 1;
+  flex: 2;
 }
 
 .profile-info h3 {
@@ -296,7 +403,7 @@ const goToCreateProject = () => {
 }
 
 .skill-pill {
-  background: #80C5FF;
+  background: #80c5ff;
   color: black;
   padding: 6px 12px;
   border-radius: 20px;
@@ -305,16 +412,23 @@ const goToCreateProject = () => {
 
 .project-section {
   padding-left: 30px;
+  max-width: 1100px;
   width: 100%;
 }
 
 .project-card {
-  max-width: 800px;
   width: 100%;
   background: #e6f0ff;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .project-title {
@@ -351,11 +465,16 @@ const goToCreateProject = () => {
   object-fit: cover;
   border: 2px solid #007bff;
 }
-
+.supervisor-avatar {
+  border: 2px solid #28a745 !important;
+}
+.owner-avatar {
+  border: 3px solid gold !important;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+}
 .project-skills {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
-
 </style>

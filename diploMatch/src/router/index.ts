@@ -13,6 +13,7 @@ import StudentProfile from "../components/profiles/students/StudentProfile.vue";
 import SupervisorProfile from "../components/profiles/supervisors/SupervisorProfile.vue";
 import Professors from "../pages/Professors.vue";
 import Notifications from "../pages/Notifications.vue";
+import Likes from "../pages/Likes.vue";
 
 const routes = [
   { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } },
@@ -55,7 +56,12 @@ const routes = [
     path: "/notifications",
     name: 'Notifications',
     component: Notifications,
-  }
+  },
+  {
+    path: "/liked",
+    name: 'Liked',
+    component: Likes,
+  },
 ];
 
 const router = createRouter({

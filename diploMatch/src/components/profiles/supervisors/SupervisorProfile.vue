@@ -5,7 +5,9 @@
         <h2 class="section-title">My Profile</h2>
         <div class="profile-actions" v-if="!isViewingOther && !editing">
           <button class="edit-btn" @click="goToEdit">✏️ Edit Profile</button>
-          <button class="create-btn" @click="goToCreateProject">➕ Create Project</button>
+          <button class="create-btn" @click="goToCreateProject">
+            ➕ Create Project
+          </button>
         </div>
       </div>
 
@@ -39,26 +41,49 @@
       </div>
     </div>
 
-    <!-- My Projects -->
-    <div v-if="!isViewingOther && myProjects.length > 0" class="projects-section">
+    <!-- Projects Section -->
+    <div v-if="myProjects.length > 0" class="projects-section">
       <div class="projects-header">
-        <h2 class="section-title">My Projects</h2>
-        <div class="project-count">
-          {{ myProjects.length }} out of 10 left
-        </div>
+        <h2 class="section-title">
+          {{ isViewingOther ? "Supervised Projects" : "My Projects" }}
+        </h2>
+        <div class="project-count">{{ myProjects.length }} out of 10 left</div>
       </div>
 
-      <div
-        v-for="project in myProjects"
-        :key="project.id"
-        class="project-card"
-      >
+      <div v-for="project in myProjects" :key="project.id" class="project-card">
         <div class="project-header">
           <h3 class="project-title">{{ project.thesis_name }}</h3>
-          <div class="project-actions">
+          <!-- Actions for owner -->
+          <div class="project-actions" v-if="!isViewingOther">
             <button class="edit-icon">✏️</button>
             <button class="view-icon">👁️</button>
             <button class="delete-icon">🗑️</button>
+          </div>
+          <!-- ❤️ Like + Apply for others -->
+          <div class="actions" v-else>
+            <i
+              :class="[
+                'heart-icon',
+                likeStore.likedProjectIds.includes(project.id)
+                  ? 'fa-solid fa-heart'
+                  : 'fa-regular fa-heart',
+              ]"
+              @click="toggleLike(project.id)"
+              title="Add to favorites"
+            ></i>
+            <button
+              class="apply-btn"
+              :disabled="userHasTeam || userHasPendingRequest"
+              @click="applyToTeam(project.id)"
+            >
+              {{
+                userHasTeam
+                  ? "Already in a team"
+                  : userHasPendingRequest
+                  ? "Applied"
+                  : "Apply"
+              }}
+            </button>
           </div>
         </div>
 
@@ -67,13 +92,32 @@
         </p>
 
         <div class="team-members">
-          <img
+          <!-- 🟢 Сначала — Супервайзер -->
+          <router-link
+            v-if="project.supervisor"
+            :to="`/supervisors/${project.supervisor.id}`"
+            :title="`${project.supervisor.first_name} ${project.supervisor.last_name} (Supervisor)`"
+          >
+            <img
+              :src="getPhoto(project.supervisor)"
+              class="avatar supervisor-avatar"
+              alt="Supervisor"
+            />
+          </router-link>
+
+          <!-- 🧑‍💻 Затем — Участники -->
+          <router-link
             v-for="member in project.members"
             :key="member.user"
-            :src="getPhoto(member)"
-            :alt="member.first_name"
-            class="avatar"
-          />
+            :to="`/students/${member.user}`"
+            :title="`${member.first_name} ${member.last_name}`"
+          >
+            <img
+              :src="getPhoto(member)"
+              class="avatar"
+              :alt="member.first_name"
+            />
+          </router-link>
         </div>
 
         <div class="project-skills">
@@ -95,17 +139,39 @@ import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import { useAuthStore } from "../../../store/auth";
-
+import { useLikeStore } from "../../../store/likes";
+const likeStore = useLikeStore();
+const userHasTeam = ref(false);
+const userHasPendingRequest = ref(false);
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
-
 const profile = ref({});
 const skills = ref([]);
 const selectedSkills = ref([]);
 const myProjects = ref([]);
 const isViewingOther = computed(() => !!route.params.id);
 
+const toggleLike = async (projectId) => {
+  await likeStore.toggleLike(projectId);
+};
+const applyToTeam = async (teamId) => {
+  if (userHasTeam.value || userHasPendingRequest.value) return;
+  try {
+    await axios.post(
+      `http://127.0.0.1:8000/api/teams/${teamId}/join/`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+    alert("Join request sent!");
+    userHasPendingRequest.value = true;
+  } catch (err) {
+    console.error("Apply failed:", err);
+    alert(err.response?.data?.error || "Failed to apply");
+  }
+};
 const imageUrl = computed(() =>
   profile.value.photo
     ? profile.value.photo.startsWith("http")
@@ -138,6 +204,7 @@ const goToEdit = () => {
 };
 
 onMounted(async () => {
+  await likeStore.fetchLikes();
   try {
     const skillsRes = await axios.get(
       "http://127.0.0.1:8000/api/profiles/skills/",
@@ -156,6 +223,7 @@ onMounted(async () => {
       );
       profile.value = profileRes.data;
       selectedSkills.value = profile.value.skills?.map((s) => s.id) || [];
+      myProjects.value = profile.value.projects || [];
     } else {
       const profileRes = await axios.get(
         "http://127.0.0.1:8000/api/profiles/complete-profile/",
@@ -166,27 +234,21 @@ onMounted(async () => {
       profile.value = profileRes.data;
       selectedSkills.value = profile.value.skills?.map((s) => s.id) || [];
 
-      // ✅ Получить проекты
       const projectsRes = await axios.get(
         "http://127.0.0.1:8000/api/teams/my/",
         {
           headers: { Authorization: `Bearer ${authStore.token}` },
         }
       );
-
-      // 📦 Поддержка обоих вариантов ответа: один объект (студент) или массив (супервизор)
-      if (Array.isArray(projectsRes.data)) {
-        myProjects.value = projectsRes.data;
-      } else {
-        myProjects.value = [projectsRes.data];
-      }
+      myProjects.value = Array.isArray(projectsRes.data)
+        ? projectsRes.data
+        : [projectsRes.data];
     }
   } catch (error) {
     console.error("Error loading profile or projects:", error);
   }
 });
 </script>
-
 
 <style scoped>
 .profile-container {
@@ -209,7 +271,6 @@ onMounted(async () => {
   align-items: center;
   margin-bottom: 20px;
 }
-
 .profile-actions {
   display: flex;
   gap: 10px;
@@ -275,7 +336,7 @@ onMounted(async () => {
 }
 
 .skill-chip {
-  background: #80C5FF;
+  background: #80c5ff;
   color: black;
   padding: 8px 16px;
   border-radius: 20px;
@@ -320,6 +381,37 @@ onMounted(async () => {
   margin-bottom: 6px;
 }
 
+.heart-icon {
+  font-size: 20px;
+  color: #ccc;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.heart-icon:hover {
+  color: #ff6666;
+}
+.fa-solid.fa-heart {
+  color: #ef6f6f;
+}
+.apply-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.apply-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
+.apply-btn:hover {
+  background-color: #0056b3;
+}
 .project-description {
   font-size: 15px;
   color: #444;
@@ -348,7 +440,7 @@ onMounted(async () => {
 }
 
 .skill-pill {
-  background-color: #80C5FF;
+  background-color: #80c5ff;
   color: black;
   padding: 6px 14px;
   border-radius: 20px;
@@ -369,5 +461,8 @@ onMounted(async () => {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #007bff;
+}
+.supervisor-avatar {
+  border: 2px solid #28a745 !important; /* зеленая рамка */
 }
 </style>
