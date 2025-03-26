@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from profiles.models import Skill
-from profiles.serializers import SkillSerializer
+from profiles.serializers_shared import SkillSerializer
 from teams.models import Team, JoinRequest
 from .models import ThesisTopic
 

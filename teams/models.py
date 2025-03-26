@@ -80,3 +80,14 @@ class SupervisorRequest(models.Model):
 
     def __str__(self):
         return f"{self.team.thesis_topic.title} → {self.supervisor.user.email} [{self.status}]"
+
+class Like(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    team = models.ForeignKey("teams.Team", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'team')  # Один лайк на один проект
+
+    def __str__(self):
+        return f"{self.user.email} likes {self.team.thesis_topic}"

@@ -5,7 +5,7 @@ import teams
 from profiles.models import SupervisorProfile
 from topics.models import ThesisTopic
 from topics.serializers import ThesisTopicSerializer
-from .models import Team, JoinRequest, SupervisorRequest
+from .models import Team, JoinRequest, SupervisorRequest, Like
 from .serializers import TeamSerializer, JoinRequestSerializer, SupervisorRequestSerializer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -353,3 +353,28 @@ class CancelSupervisorRequestView(APIView):
             return Response({"message": "Request canceled."})
         except (Team.DoesNotExist, SupervisorRequest.DoesNotExist):
             return Response({"error": "No pending request."}, status=404)
+
+class LikeToggleView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, team_id):
+        user = request.user
+        try:
+            team = Team.objects.get(id=team_id)
+        except Team.DoesNotExist:
+            return Response({"error": "Team not found"}, status=404)
+
+        like, created = Like.objects.get_or_create(user=user, team=team)
+        if not created:
+            like.delete()
+            return Response({"message": "Unliked"}, status=200)
+        return Response({"message": "Liked"}, status=201)
+
+class LikedProjectsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        liked_team_ids = Like.objects.filter(user=request.user).values_list("team_id", flat=True)
+        teams = Team.objects.filter(id__in=liked_team_ids)
+        serializer = TeamSerializer(teams, many=True)
+        return Response(serializer.data)

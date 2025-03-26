@@ -3,7 +3,7 @@ from .views import TeamCreateView, TeamListView, TeamDetailView, \
     MyTeamView, JoinTeamView, AcceptJoinRequestView, RejectJoinRequestView, MyJoinRequestView, \
     MyJoinRequestsView, MyTeamJoinRequestsView, CreateSupervisorRequestView, IncomingSupervisorRequestsView, \
     AcceptSupervisorRequestView, RejectSupervisorRequestView, CancelSupervisorRequestView, SupervisorProjectsView, \
-    MySupervisorRequestView
+    MySupervisorRequestView, LikedProjectsView, LikeToggleView
 
 urlpatterns = [
     path('create/', TeamCreateView.as_view(), name='create-team'),
@@ -21,9 +21,12 @@ urlpatterns = [
     path('my-projects/', SupervisorProjectsView.as_view(), name='supervisor-projects'),
     path('my-join-request/', MyJoinRequestView.as_view(), name='my-join-request'),
     path('my-supervisor-request/', MySupervisorRequestView.as_view()),
-    path('supervisor-request/<int:supervisor_id>/', CreateSupervisorRequestView.as_view(), name='supervisor-request-create'),
+    path('supervisor-request/<int:supervisor_id>/', CreateSupervisorRequestView.as_view(),
+         name='supervisor-request-create'),
     path('supervisor-requests/incoming/', IncomingSupervisorRequestsView.as_view()),
     path('supervisor-requests/<int:request_id>/accept/', AcceptSupervisorRequestView.as_view()),
     path('supervisor-requests/<int:request_id>/reject/', RejectSupervisorRequestView.as_view()),
     path('supervisor-requests/cancel/', CancelSupervisorRequestView.as_view()),
+    path('likes/', LikedProjectsView.as_view(), name='liked-projects'),
+    path('likes/toggle/<int:team_id>/', LikeToggleView.as_view(), name='like-toggle'),
 ]

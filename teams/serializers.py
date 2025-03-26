@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
 from topics.serializers import ThesisTopicSerializer
-from .models import Team, JoinRequest, SupervisorRequest
+from .models import Team, JoinRequest, SupervisorRequest, Like
 from profiles.models import StudentProfile, SupervisorProfile
-from profiles.serializers import StudentProfileSerializer, SupervisorProfileSerializer
+from profiles.serializers import StudentProfileSerializer, SupervisorShortSerializer
+from profiles.serializers import SupervisorProfileSerializer
 from topics.models import ThesisTopic
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -11,7 +12,7 @@ class TeamSerializer(serializers.ModelSerializer):
     members = StudentProfileSerializer(many=True, read_only=True)
     owner = serializers.PrimaryKeyRelatedField(queryset=SupervisorProfile.objects.all(), required=False)
     thesis_topic = ThesisTopicSerializer()
-    supervisor = SupervisorProfileSerializer(read_only=True)
+    supervisor = SupervisorShortSerializer(read_only=True)
     thesis_name = serializers.CharField(source='thesis_topic.title', read_only=True)
     thesis_description = serializers.CharField(source='thesis_topic.description', read_only=True)
     required_skills = serializers.SerializerMethodField(read_only=True)
@@ -46,3 +47,9 @@ class SupervisorRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = SupervisorRequest
         fields = ['id', 'team', 'supervisor', 'status', 'created_at']
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ['id', 'team', 'user', 'created_at']
+        read_only_fields = ['user']
