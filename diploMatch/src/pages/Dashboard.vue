@@ -14,7 +14,11 @@
 
     <h2 class="section-title">Projects for you</h2>
 
-    <div v-for="project in paginatedProjects" :key="project.id" class="project-card">
+    <div
+      v-for="project in paginatedProjects"
+      :key="project.id"
+      class="project-card"
+    >
       <div class="project-header">
         <h3 class="project-title">{{ project.thesis_name }}</h3>
         <div class="actions">
@@ -96,7 +100,9 @@
       >
         {{ page }}
       </button>
-      <button @click="nextPage" :disabled="currentPage === totalPages">›</button>
+      <button @click="nextPage" :disabled="currentPage === totalPages">
+        ›
+      </button>
     </div>
   </div>
   <Footer />
@@ -115,13 +121,14 @@ const user = authStore.user;
 
 const projects = ref([]);
 const showModal = ref(false);
-const userHasTeam = ref(false);
-const userHasPendingRequest = ref(false);
-
+const userHasTeam = computed(() => authStore.userHasTeam);
+const userHasPendingRequest = computed(() => authStore.userHasPendingRequest);
 // ✅ Pagination
 const currentPage = ref(1);
 const projectsPerPage = 5;
-const totalPages = computed(() => Math.ceil(projects.value.length / projectsPerPage));
+const totalPages = computed(() =>
+  Math.ceil(projects.value.length / projectsPerPage)
+);
 const paginatedProjects = computed(() => {
   const start = (currentPage.value - 1) * projectsPerPage;
   return projects.value.slice(start, start + projectsPerPage);
@@ -182,7 +189,7 @@ const applyToTeam = async (teamId) => {
       }
     );
     alert("Join request sent!");
-    userHasPendingRequest.value = true;
+    await authStore.refreshTeamAndRequestStatus();
   } catch (err) {
     console.error("Failed to apply:", err);
     alert(err.response?.data?.error || "Failed to apply");
@@ -194,31 +201,14 @@ onMounted(async () => {
     if (!user?.is_profile_completed) showModal.value = true;
 
     await likeStore.fetchLikes();
-
-    try {
-      const reqRes = await axios.get(
-        "http://127.0.0.1:8000/api/teams/my-join-request/",
-        {
-          headers: { Authorization: `Bearer ${authStore.token}` },
-        }
-      );
-      userHasPendingRequest.value = reqRes.data.status === "pending";
-    } catch {
-      userHasPendingRequest.value = false;
-    }
+    await authStore.refreshTeamAndRequestStatus();
+    console.log("✅ Pending:", authStore.userHasPendingRequest);
+    console.log("✅ Team:", authStore.userHasTeam);
 
     const res = await axios.get("http://127.0.0.1:8000/api/teams/", {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
     projects.value = res.data;
-
-    const profileRes = await axios.get(
-      "http://127.0.0.1:8000/api/profiles/complete-profile/",
-      {
-        headers: { Authorization: `Bearer ${authStore.token}` },
-      }
-    );
-    userHasTeam.value = profileRes.data?.team !== null;
   } catch (err) {
     console.error("Error loading data:", err);
   }
@@ -427,5 +417,4 @@ onMounted(async () => {
   opacity: 0.4;
   cursor: not-allowed;
 }
-
 </style>

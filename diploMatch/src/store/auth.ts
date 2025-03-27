@@ -9,6 +9,8 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
     token: localStorage.getItem("token") || null,
+    userHasTeam: false,
+    userHasPendingRequest: false,
   }),
 
   actions: {
@@ -80,6 +82,36 @@ export const useAuthStore = defineStore("auth", {
         this.logout();
       }
     },
+    async fetchTeamStatus() {
+      try {
+        const res = await axios.get("http://127.0.0.1:8000/api/profiles/complete-profile/", {
+          headers: { Authorization: `Bearer ${this.token}` },
+        });
+    
+        console.log("🚨 Profile response:", res.data); // Добавь для проверки
+        this.userHasTeam = !!res.data?.team?.id; // ✅ Надежная проверка
+      } catch (err) {
+        console.error("Failed to fetch team status:", err);
+        this.userHasTeam = false;
+      }
+    },
+    
+
+    async fetchPendingRequest() {
+      try {
+        const res = await axios.get("http://127.0.0.1:8000/api/teams/my-join-request/", {
+          headers: { Authorization: `Bearer ${this.token}` },
+        });
+        this.userHasPendingRequest = res.data.status === "pending";
+      } catch {
+        this.userHasPendingRequest = false;
+      }
+    },
+
+    async refreshTeamAndRequestStatus() {
+      await this.fetchTeamStatus();
+      await this.fetchPendingRequest();
+    },
 
     async updateProfile(profileData: any) {
       try {
@@ -114,7 +146,7 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     },
-
+    
     logout() {
       this.user = null;
       this.token = null;

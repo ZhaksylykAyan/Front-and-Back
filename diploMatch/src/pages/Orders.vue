@@ -295,10 +295,14 @@ const cancelRequest = async (id) => {
       }
     );
     requests.value = requests.value.filter((r) => r.id !== id);
+
+    // ✅ Обнови статус после отмены
+    await authStore.refreshTeamAndRequestStatus();
   } catch (err) {
     console.error("Failed to cancel request", err);
   }
 };
+
 
 const acceptSupervisorRequest = async (requestId) => {
   try {

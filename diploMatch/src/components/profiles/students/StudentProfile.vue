@@ -146,8 +146,8 @@ const props = defineProps({
   readonly: Boolean,
   viewedUserId: String,
 });
-const userHasTeam = ref(false);
-const userHasPendingRequest = ref(false);
+const userHasTeam = computed(() => authStore.userHasTeam);
+const userHasPendingRequest = computed(() => authStore.userHasPendingRequest);
 const toggleLike = async (projectId) => {
   await likeStore.toggleLike(projectId);
 };
@@ -224,6 +224,8 @@ onMounted(async () => {
       profile.value = profileRes.data;
       selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
       userHasTeam.value = profileRes.data?.team !== null;
+      await authStore.refreshTeamAndRequestStatus();
+
       // 📌 Подставляем команду из profileRes
       team.value = profileRes.data.team || null;
     } else {

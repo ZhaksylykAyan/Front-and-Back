@@ -55,7 +55,7 @@
           <h3 class="project-title">{{ project.thesis_name }}</h3>
           <!-- Actions for owner -->
           <div class="project-actions" v-if="!isViewingOther">
-            <span><i class="fa-regular fa-pen"></i></span>
+            <font-awesome-icon :icon="['fal', 'pen']" />
             <button class="view-icon">👁️</button>
             <button class="delete-icon">🗑️</button>
           </div>
@@ -141,8 +141,8 @@ import axios from "axios";
 import { useAuthStore } from "../../../store/auth";
 import { useLikeStore } from "../../../store/likes";
 const likeStore = useLikeStore();
-const userHasTeam = ref(false);
-const userHasPendingRequest = ref(false);
+const userHasTeam = computed(() => authStore.userHasTeam);
+const userHasPendingRequest = computed(() => authStore.userHasPendingRequest);
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
@@ -207,7 +207,6 @@ onMounted(async () => {
   await likeStore.fetchLikes();
 
   try {
-    // ✅ Загрузка всех скиллов
     const skillsRes = await axios.get(
       "http://127.0.0.1:8000/api/profiles/skills/",
       {
@@ -217,7 +216,6 @@ onMounted(async () => {
     skills.value = skillsRes.data;
 
     if (isViewingOther.value) {
-      // ✅ Загрузка чужого профиля супервизора
       const profileRes = await axios.get(
         `http://127.0.0.1:8000/api/profiles/supervisors/${route.params.id}/`,
         {
@@ -228,7 +226,6 @@ onMounted(async () => {
       selectedSkills.value = profile.value.skills?.map((s) => s.id) || [];
       myProjects.value = profile.value.projects || [];
     } else {
-      // ✅ Загрузка своего профиля супервизора
       const profileRes = await axios.get(
         "http://127.0.0.1:8000/api/profiles/complete-profile/",
         {
@@ -247,33 +244,15 @@ onMounted(async () => {
       myProjects.value = Array.isArray(projectsRes.data)
         ? projectsRes.data
         : [projectsRes.data];
-    }
 
-    // ✅ Проверка на наличие команды
-    const userProfileRes = await axios.get(
-      "http://127.0.0.1:8000/api/profiles/complete-profile/",
-      {
-        headers: { Authorization: `Bearer ${authStore.token}` },
-      }
-    );
-    userHasTeam.value = userProfileRes.data?.team !== null;
-
-    // ✅ Проверка на наличие запроса
-    try {
-      const reqRes = await axios.get(
-        "http://127.0.0.1:8000/api/teams/my-join-request/",
-        {
-          headers: { Authorization: `Bearer ${authStore.token}` },
-        }
-      );
-      userHasPendingRequest.value = reqRes.data.status === "pending";
-    } catch {
-      userHasPendingRequest.value = false;
+      // ✅ Обновляем статус запроса и команды
+      await authStore.refreshTeamAndRequestStatus();
     }
   } catch (error) {
     console.error("Error loading profile or projects:", error);
   }
 });
+
 
 </script>
 
