@@ -1,99 +1,104 @@
 <template>
-    <div class="notification-icon" style="position: relative">
-      <router-link to="/notifications">
-        <i class="fas fa-bell"></i>
-        <span v-if="unreadCount > 0" class="notif-badge">{{ unreadCount }}</span>
-      </router-link>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted, onUnmounted } from "vue";
-  import axios from "axios";
-  import { useAuthStore } from "../../store/auth";
-  
-  const authStore = useAuthStore();
-  const unreadCount = ref(0);
-  let socket = null;
-  
-  // 🔥 Функция для загрузки количества непрочитанных уведомлений
-  const fetchUnread = async () => {
-    try {
-      const res = await axios.get("http://127.0.0.1:8000/api/notifications/unread/", {
-        headers: { Authorization: `Bearer ${authStore.token}` }
-      });
-      unreadCount.value = res.data.unread_count;
-    } catch (err) {
-      console.error("Failed to fetch unread notifications:", err);
-    }
-  };
-  
-  // 🔥 WebSocket подключение с JWT авторизацией
-  const connectWebSocket = () => {
-    const token = authStore.token;
-    if (!token) return; // Если нет токена — не подключаемся
-  
-    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-    socket = new WebSocket(`${protocol}://127.0.0.1:8000/ws/notifications/?token=${token}`);
-  
-    socket.onopen = () => {
-      console.log("WebSocket Connected ✅");
-    };
-  
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.message) {
-        unreadCount.value += 1; // 📈 Увеличиваем счетчик при новом уведомлении
+  <div class="notification-icon" style="position: relative">
+    <router-link to="/notifications">
+      <i class="fas fa-bell"></i>
+      <span v-if="unreadCount > 0" class="notif-badge">{{ unreadCount }}</span>
+    </router-link>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+import axios from "axios";
+import { useAuthStore } from "../../store/auth";
+
+const authStore = useAuthStore();
+const unreadCount = ref(0);
+let socket = null;
+
+// 🔥 Функция для загрузки количества непрочитанных уведомлений
+const fetchUnread = async () => {
+  try {
+    const res = await axios.get(
+      "http://127.0.0.1:8000/api/notifications/unread/",
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
       }
-    };
-  
-    socket.onerror = (err) => {
-      console.error("WebSocket error:", err);
-    };
-  
-    socket.onclose = () => {
-      console.log("WebSocket disconnected. Reconnecting...");
-      setTimeout(connectWebSocket, 3000); // ⏳ Авто-реконнект
-    };
+    );
+    unreadCount.value = res.data.unread_count;
+  } catch (err) {
+    console.error("Failed to fetch unread notifications:", err);
+  }
+};
+
+// 🔥 WebSocket подключение с JWT авторизацией
+const connectWebSocket = () => {
+  const token = authStore.token;
+  if (!token) return; // Если нет токена — не подключаемся
+
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+  socket = new WebSocket(
+    `${protocol}://127.0.0.1:8000/ws/notifications/?token=${token}`
+  );
+
+  socket.onopen = () => {
+    console.log("WebSocket Connected ✅");
   };
-  
-  // 🔥 Автоматическая загрузка уведомлений при загрузке компонента
-  onMounted(() => {
-    fetchUnread();
-    connectWebSocket();
-  });
-  
-  // Очистка при размонтировании
-  onUnmounted(() => {
-    if (socket) {
-      socket.close();
+
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.message) {
+      unreadCount.value += 1; // 📈 Увеличиваем счетчик при новом уведомлении
     }
-  });
-  </script>
-  
-  <style scoped>
-  .notification-icon {
-    position: relative;
-    display: inline-block;
+  };
+
+  socket.onerror = (err) => {
+    console.error("WebSocket error:", err);
+  };
+
+  socket.onclose = () => {
+    console.log("WebSocket disconnected. Reconnecting...");
+    setTimeout(connectWebSocket, 3000); // ⏳ Авто-реконнект
+  };
+};
+
+// 🔥 Автоматическая загрузка уведомлений при загрузке компонента
+onMounted(() => {
+  fetchUnread();
+  connectWebSocket();
+});
+
+// Очистка при размонтировании
+onUnmounted(() => {
+  if (socket) {
+    socket.close();
   }
-  
-  .notification-icon .fas.fa-bell {
-    font-size: 18px; /* такой же как у сердечка */
-    color: black;
-  }
-  
-  .notif-badge {
-    position: absolute;
-    top: -6px;
-    right: -8px;
-    background-color: red;
-    color: white;
-    font-size: 11px;
-    padding: 2px 6px;
-    border-radius: 50%;
-    font-weight: bold;
-    line-height: 1;
-    z-index: 2;
-  }
-  </style>
-  
+});
+</script>
+
+<style scoped>
+.notification-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-icon .fas.fa-bell {
+  font-size: 18px; /* такой же как у сердечка */
+  color: black;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+  line-height: 1;
+  z-index: 2;
+}
+
+</style>

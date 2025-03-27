@@ -55,7 +55,7 @@
           <h3 class="project-title">{{ project.thesis_name }}</h3>
           <!-- Actions for owner -->
           <div class="project-actions" v-if="!isViewingOther">
-            <button class="edit-icon">✏️</button>
+            <span><i class="fa-regular fa-pen"></i></span>
             <button class="view-icon">👁️</button>
             <button class="delete-icon">🗑️</button>
           </div>
@@ -205,7 +205,9 @@ const goToEdit = () => {
 
 onMounted(async () => {
   await likeStore.fetchLikes();
+
   try {
+    // ✅ Загрузка всех скиллов
     const skillsRes = await axios.get(
       "http://127.0.0.1:8000/api/profiles/skills/",
       {
@@ -215,6 +217,7 @@ onMounted(async () => {
     skills.value = skillsRes.data;
 
     if (isViewingOther.value) {
+      // ✅ Загрузка чужого профиля супервизора
       const profileRes = await axios.get(
         `http://127.0.0.1:8000/api/profiles/supervisors/${route.params.id}/`,
         {
@@ -225,6 +228,7 @@ onMounted(async () => {
       selectedSkills.value = profile.value.skills?.map((s) => s.id) || [];
       myProjects.value = profile.value.projects || [];
     } else {
+      // ✅ Загрузка своего профиля супервизора
       const profileRes = await axios.get(
         "http://127.0.0.1:8000/api/profiles/complete-profile/",
         {
@@ -244,10 +248,33 @@ onMounted(async () => {
         ? projectsRes.data
         : [projectsRes.data];
     }
+
+    // ✅ Проверка на наличие команды
+    const userProfileRes = await axios.get(
+      "http://127.0.0.1:8000/api/profiles/complete-profile/",
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+    userHasTeam.value = userProfileRes.data?.team !== null;
+
+    // ✅ Проверка на наличие запроса
+    try {
+      const reqRes = await axios.get(
+        "http://127.0.0.1:8000/api/teams/my-join-request/",
+        {
+          headers: { Authorization: `Bearer ${authStore.token}` },
+        }
+      );
+      userHasPendingRequest.value = reqRes.data.status === "pending";
+    } catch {
+      userHasPendingRequest.value = false;
+    }
   } catch (error) {
     console.error("Error loading profile or projects:", error);
   }
 });
+
 </script>
 
 <style scoped>
@@ -356,7 +383,7 @@ onMounted(async () => {
 }
 
 .project-count {
-  background: #ccc;
+  background: #ADADAD;
   padding: 6px 12px;
   border-radius: 12px;
   font-size: 14px;

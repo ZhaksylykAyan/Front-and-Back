@@ -6,15 +6,15 @@
         <p class="modal-text">
           To continue using the platform, please complete your profile.
         </p>
-        <router-link to="/profile?edit=true" class="modal-btn"
-          >Complete Now</router-link
-        >
+        <router-link to="/profile?edit=true" class="modal-btn">
+          Complete Now
+        </router-link>
       </div>
     </div>
 
     <h2 class="section-title">Projects for you</h2>
 
-    <div v-for="project in projects" :key="project.id" class="project-card">
+    <div v-for="project in paginatedProjects" :key="project.id" class="project-card">
       <div class="project-header">
         <h3 class="project-title">{{ project.thesis_name }}</h3>
         <div class="actions">
@@ -47,7 +47,6 @@
       <p class="project-description">{{ project.thesis_description }}</p>
 
       <div class="project-members">
-        <!-- ✅ Supervisor first (if exists) -->
         <router-link
           v-if="project.supervisor"
           :to="`/supervisors/${project.supervisor.id}`"
@@ -60,7 +59,6 @@
           />
         </router-link>
 
-        <!-- ✅ Team members -->
         <router-link
           v-for="member in getSortedMembers(project)"
           :key="member.id"
@@ -86,25 +84,71 @@
         </span>
       </div>
     </div>
+
+    <!-- ✅ Pagination Controls -->
+    <div v-if="totalPages > 1" class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">‹</button>
+      <button
+        v-for="page in totalPages"
+        :key="page"
+        @click="goToPage(page)"
+        :class="{ active: currentPage === page }"
+      >
+        {{ page }}
+      </button>
+      <button @click="nextPage" :disabled="currentPage === totalPages">›</button>
+    </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import { useAuthStore } from "../store/auth";
 import { useLikeStore } from "../store/likes";
+import Footer from "../components/Footer/Footer.vue";
 
 const authStore = useAuthStore();
-const projects = ref([]);
 const likeStore = useLikeStore();
 const user = authStore.user;
+
+const projects = ref([]);
 const showModal = ref(false);
 const userHasTeam = ref(false);
 const userHasPendingRequest = ref(false);
 
+// ✅ Pagination
+const currentPage = ref(1);
+const projectsPerPage = 5;
+const totalPages = computed(() => Math.ceil(projects.value.length / projectsPerPage));
+const paginatedProjects = computed(() => {
+  const start = (currentPage.value - 1) * projectsPerPage;
+  return projects.value.slice(start, start + projectsPerPage);
+});
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
 const toggleLike = async (projectId) => {
-  await likeStore.toggleLike(projectId); // ✅ вызываем из store
+  await likeStore.toggleLike(projectId);
 };
 
 const getPhoto = (person) => {
@@ -147,10 +191,10 @@ const applyToTeam = async (teamId) => {
 
 onMounted(async () => {
   try {
-    if (authStore.user && !authStore.user.is_profile_completed) {
-      showModal.value = true;
-    }
+    if (!user?.is_profile_completed) showModal.value = true;
+
     await likeStore.fetchLikes();
+
     try {
       const reqRes = await axios.get(
         "http://127.0.0.1:8000/api/teams/my-join-request/",
@@ -166,8 +210,8 @@ onMounted(async () => {
     const res = await axios.get("http://127.0.0.1:8000/api/teams/", {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
-
     projects.value = res.data;
+
     const profileRes = await axios.get(
       "http://127.0.0.1:8000/api/profiles/complete-profile/",
       {
@@ -357,4 +401,31 @@ onMounted(async () => {
   border-radius: 20px;
   font-size: 12px;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #eee;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 </style>

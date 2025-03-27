@@ -272,7 +272,7 @@ const goToCreateProject = () => {
   padding: 30px;
   border-radius: 16px;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
 }
 
 .profile-header {
@@ -412,7 +412,7 @@ const goToCreateProject = () => {
 
 .project-section {
   padding-left: 30px;
-  max-width: 1100px;
+  max-width: 1000px;
   width: 100%;
 }
 
@@ -459,8 +459,8 @@ const goToCreateProject = () => {
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #007bff;
