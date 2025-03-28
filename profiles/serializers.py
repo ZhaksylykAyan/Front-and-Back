@@ -1,7 +1,7 @@
 from rest_framework import serializers
+
 from .models import StudentProfile, SupervisorProfile, DeanOfficeProfile, Skill
 from profiles.serializers_shared import SkillSerializer
-
 
 class StudentProfileSerializer(serializers.ModelSerializer):
     """ Serializer for Student Profile """

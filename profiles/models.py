@@ -16,6 +16,15 @@ class Skill(models.Model):
 
 class StudentProfile(models.Model):
     """ Profile model for students """
+
+    MAJOR_CHOICES = [
+        ("Automation and Control", "Automation and Control"),
+        ("Information Systems", "Information Systems"),
+        ("Computer Systems and Software", "Computer Engineering and Software"),
+        ("IT Management", "IT Management"),
+        ("Robotics and Mechatronics", "Robotics and Mechatronics"),
+    ]
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -24,7 +33,12 @@ class StudentProfile(models.Model):
     )
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
-    specialization = models.CharField(max_length=255, blank=True, null=True)
+    specialization = models.CharField(
+        max_length=100,
+        choices=MAJOR_CHOICES,
+        blank=True,
+        null=True
+    )
     gpa = models.FloatField(blank=True, null=True)
     portfolio = models.URLField(blank=True, null=True)
     photo = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
