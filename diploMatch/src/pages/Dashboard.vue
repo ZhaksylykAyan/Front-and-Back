@@ -82,7 +82,7 @@
         <span
           v-for="skill in project.required_skills"
           :key="skill"
-          class="skill-pill"
+          :class="getSkillClass(skill, project)"
         >
           {{ skill }}
         </span>
@@ -118,7 +118,7 @@ import Footer from "../components/Footer/Footer.vue";
 const authStore = useAuthStore();
 const likeStore = useLikeStore();
 const user = authStore.user;
-
+const mySkills = ref([]);
 const projects = ref([]);
 const showModal = ref(false);
 const userHasTeam = computed(() => authStore.userHasTeam);
@@ -156,6 +156,26 @@ const prevPage = () => {
 };
 const toggleLike = async (projectId) => {
   await likeStore.toggleLike(projectId);
+};
+const getSkillClass = (skillName, project) => {
+  const mySkillNames = mySkills.value.map((s) => s.toLowerCase());
+
+  // Собираем все покрытые скиллы (именами) в команде
+  const allCoveredSkills = new Set();
+  project.members.forEach((member) => {
+    member.skills?.forEach((s) => {
+      allCoveredSkills.add(s.name.toLowerCase());
+    });
+  });
+
+  const skill = skillName.toLowerCase();
+  const isMySkill = mySkillNames.includes(skill);
+  const isCovered = allCoveredSkills.has(skill);
+
+  if (isMySkill && isCovered) return "skill-pill my-covered"; // 🟢🩶
+  if (isMySkill && !isCovered) return "skill-pill my-unique"; // 🟢
+  if (!isMySkill && isCovered) return "skill-pill covered"; // 🔵🩶
+  return "skill-pill"; // 🔵
 };
 
 const getPhoto = (person) => {
@@ -199,16 +219,19 @@ const applyToTeam = async (teamId) => {
 onMounted(async () => {
   try {
     if (!user?.is_profile_completed) showModal.value = true;
-
     await likeStore.fetchLikes();
     await authStore.refreshTeamAndRequestStatus();
-    console.log("✅ Pending:", authStore.userHasPendingRequest);
-    console.log("✅ Team:", authStore.userHasTeam);
-
     const res = await axios.get("http://127.0.0.1:8000/api/teams/", {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
     projects.value = res.data;
+    const profileRes = await axios.get(
+      "http://127.0.0.1:8000/api/profiles/complete-profile/",
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+    mySkills.value = profileRes.data.skills.map((s) => s.name.toLowerCase());
   } catch (err) {
     console.error("Error loading data:", err);
   }
@@ -370,12 +393,13 @@ onMounted(async () => {
 }
 
 .owner-avatar {
-  border: 3px solid gold !important;
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+  border: 2px solid #28a745 !important;
+
 }
 
 .supervisor-avatar {
-  border: 2px solid #28a745 !important;
+  border: 3px solid gold !important;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
 }
 
 .project-skills {
@@ -386,10 +410,25 @@ onMounted(async () => {
 
 .skill-pill {
   background: #80c5ff;
+  font-family: Arial, sans-serif, 'Segoe UI';
   color: black;
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
+}
+.skill-pill.covered {
+  background: #B1D0E9;
+  color: #898787;
+}
+
+.skill-pill.my-unique {
+  background: #83D481;
+  color: black;
+}
+
+.skill-pill.my-covered {
+  background: #9EDE9C;
+  color: #898787;
 }
 .pagination {
   display: flex;

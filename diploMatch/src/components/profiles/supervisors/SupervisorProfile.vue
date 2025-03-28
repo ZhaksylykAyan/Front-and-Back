@@ -55,10 +55,19 @@
           <h3 class="project-title">{{ project.thesis_name }}</h3>
           <!-- Actions for owner -->
           <div class="project-actions" v-if="!isViewingOther">
-            <font-awesome-icon :icon="['fal', 'pen']" />
-            <button class="view-icon">👁️</button>
-            <button class="delete-icon">🗑️</button>
+            <button class="action-btn green" title="Approve">
+              <img :src="requestIcon" alt="Approve" class="icon" />
+            </button>
+
+            <button class="action-btn gray" title="Edit">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+
+            <button class="action-btn red" title="Delete">
+              <i class="fa-solid fa-trash"></i>
+            </button>
           </div>
+
           <!-- ❤️ Like + Apply for others -->
           <div class="actions" v-else>
             <i
@@ -138,6 +147,7 @@
 import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
+import requestIcon from "../../../icons/request.png";
 import { useAuthStore } from "../../../store/auth";
 import { useLikeStore } from "../../../store/likes";
 const likeStore = useLikeStore();
@@ -252,8 +262,6 @@ onMounted(async () => {
     console.error("Error loading profile or projects:", error);
   }
 });
-
-
 </script>
 
 <style scoped>
@@ -268,7 +276,7 @@ onMounted(async () => {
   padding: 30px;
   border-radius: 16px;
   width: 100%;
-  max-width: 900px;
+  max-width: 1100px;
 }
 
 .profile-header {
@@ -362,8 +370,9 @@ onMounted(async () => {
 }
 
 .project-count {
-  background: #ADADAD;
+  background: #adadad;
   padding: 6px 12px;
+  color:white;
   border-radius: 12px;
   font-size: 14px;
 }
@@ -429,13 +438,52 @@ onMounted(async () => {
   gap: 8px;
 }
 
-.edit-icon,
-.view-icon,
-.delete-icon {
-  background: none;
+.action-btn {
+  width: 36px;
+  height: 36px;
   border: none;
-  font-size: 18px;
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.action-btn .icon,
+.action-btn i {
+  width: 16px;
+  height: 16px;
+  color: white;
+}
+
+.action-btn img.icon {
+  object-fit: contain;
+}
+
+/* Цвета */
+.green {
+  background-color: #2EAD2B;
+}
+
+.gray {
+  background-color: #A8A8A8;
+}
+
+.red {
+  background-color: #C23434;
+}
+
+/* Hover (необязательно) */
+.action-btn:hover {
+  opacity: 0.9;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
 }
 
 .project-skills {

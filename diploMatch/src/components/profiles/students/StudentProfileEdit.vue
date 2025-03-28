@@ -29,11 +29,14 @@
       />
 
       <div class="section-title">Major</div>
-      <input
-        type="text"
-        v-model="profile.specialization"
-        placeholder="Specialization"
-      />
+      <select v-model="profile.specialization" class="select-input">
+        <option value="" disabled hidden>Select your major</option>
+        <option>Automation and Control</option>
+        <option>Information Systems</option>
+        <option>Computer Systems and Software</option>
+        <option>IT Management</option>
+        <option>Robotics and Mechatronics</option>
+      </select>
 
       <div class="section-title">Skills</div>
       <div v-if="!authStore.user.is_profile_completed" class="skills-container">
@@ -262,7 +265,7 @@ const saveProfile = async () => {
 }
 
 input {
-  width: 100%;
+  width: 95%;
   padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -322,6 +325,24 @@ input:focus {
   color: white;
   font-weight: 500;
 }
+.select-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-bottom: 12px;
+  background-color: white;
+  background-position: right 12px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.select-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
 
 .button-row {
   display: flex;

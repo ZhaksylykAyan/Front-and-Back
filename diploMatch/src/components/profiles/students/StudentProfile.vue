@@ -20,10 +20,10 @@
           <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
           <a href="#"> {{ profile.user_email }} </a>
           <p>
-            GPA: <strong> {{ profile.gpa }} </strong>
+            <strong>GPA:</strong>  {{ profile.gpa }} 
           </p>
           <p v-if="profile.specialization">
-            <strong>Specialization:</strong> {{ profile.specialization }}
+            <strong>Major:</strong> {{ profile.specialization }}
           </p>
           <p v-if="profile.portfolio">
             <strong>

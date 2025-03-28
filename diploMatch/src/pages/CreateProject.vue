@@ -8,7 +8,23 @@
           v-model="project.title"
           type="text"
           class="form-input"
-          placeholder="Project Title"
+          placeholder="Project Title (English)"
+          required
+        />
+
+        <input
+          v-model="project.title_kz"
+          type="text"
+          class="form-input"
+          placeholder="Project Title (Kazakh)"
+          required
+        />
+
+        <input
+          v-model="project.title_ru"
+          type="text"
+          class="form-input"
+          placeholder="Project Title (Russian)"
           required
         />
 
@@ -40,6 +56,7 @@
   </div>
 </template>
 
+
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -51,6 +68,8 @@ const router = useRouter();
 
 const project = ref({
   title: "",
+  title_kz: "",
+  title_ru: "",
   description: "",
 });
 
@@ -98,6 +117,8 @@ const submitProject = async () => {
       "http://127.0.0.1:8000/api/topics/create/",
       {
         title: project.value.title,
+        title_kz: project.value.title_kz,
+        title_ru: project.value.title_ru,
         description: project.value.description,
         required_skills: selectedSkills.value,
       },

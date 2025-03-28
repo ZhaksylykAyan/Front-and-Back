@@ -8,7 +8,7 @@
 
     <div class="footer-center">
       <ul>
-        <li><router-link to="/projects">Projects</router-link></li>
+        <li><router-link to="/dashboard">Projects</router-link></li>
         <li><router-link to="/professors">Professors</router-link></li>
         <li><router-link to="/orders">Requests</router-link></li>
         <li><router-link to="/about">About Us</router-link></li>

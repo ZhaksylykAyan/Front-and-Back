@@ -14,7 +14,12 @@ export const useAuthStore = defineStore("auth", {
   }),
 
   actions: {
-    async register(email: string, password: string, confirmPassword: string, role: string) {
+    async register(
+      email: string,
+      password: string,
+      confirmPassword: string,
+      role: string
+    ) {
       try {
         const response = await axios.post(`${API_URL}register/`, {
           email,
@@ -38,18 +43,21 @@ export const useAuthStore = defineStore("auth", {
 
     async login(email: string, password: string) {
       try {
-        const response = await axios.post(`${API_URL}login/`, { email, password });
-    
+        const response = await axios.post(`${API_URL}login/`, {
+          email,
+          password,
+        });
+
         // Make sure this actually exists in your backend response
         if (!response.data.access) throw new Error("Access token missing");
-    
+
         this.token = response.data.access;
         localStorage.setItem("token", this.token);
-    
+
         const userResponse = await axios.get(`${API_URL}me/`, {
           headers: { Authorization: `Bearer ${this.token}` },
         });
-    
+
         this.user = userResponse.data;
         return true;
       } catch (error) {
@@ -58,7 +66,6 @@ export const useAuthStore = defineStore("auth", {
         );
       }
     },
-    
 
     async fetchUser() {
       if (!this.token) {
@@ -84,24 +91,33 @@ export const useAuthStore = defineStore("auth", {
     },
     async fetchTeamStatus() {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/profiles/complete-profile/", {
+        const res = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
           headers: { Authorization: `Bearer ${this.token}` },
         });
     
-        console.log("🚨 Profile response:", res.data); // Добавь для проверки
-        this.userHasTeam = !!res.data?.team?.id; // ✅ Надежная проверка
+        // ✅ Проверка для случая: объект с id
+        if (res.data && typeof res.data === "object" && "id" in res.data) {
+          this.userHasTeam = true;
+        } else if (Array.isArray(res.data) && res.data.length > 0) {
+          // если массив команд — тоже true
+          this.userHasTeam = true;
+        } else {
+          this.userHasTeam = false;
+        }
       } catch (err) {
-        console.error("Failed to fetch team status:", err);
+        console.error("❌ Failed to fetch team:", err);
         this.userHasTeam = false;
       }
     },
-    
 
     async fetchPendingRequest() {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/teams/my-join-request/", {
-          headers: { Authorization: `Bearer ${this.token}` },
-        });
+        const res = await axios.get(
+          "http://127.0.0.1:8000/api/teams/my-join-request/",
+          {
+            headers: { Authorization: `Bearer ${this.token}` },
+          }
+        );
         this.userHasPendingRequest = res.data.status === "pending";
       } catch {
         this.userHasPendingRequest = false;
@@ -146,7 +162,7 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     },
-    
+
     logout() {
       this.user = null;
       this.token = null;
@@ -158,11 +174,19 @@ export const useAuthStore = defineStore("auth", {
         await axios.post(`${API_URL}forgot-password/`, { email });
         return { success: true, message: "Reset link sent to your email." };
       } catch (error: any) {
-        return { success: false, message: error.response?.data?.error || "Reset failed." };
+        return {
+          success: false,
+          message: error.response?.data?.error || "Reset failed.",
+        };
       }
     },
 
-    async resetPassword(uid: string, token: string, newPassword: string, confirmPassword: string) {
+    async resetPassword(
+      uid: string,
+      token: string,
+      newPassword: string,
+      confirmPassword: string
+    ) {
       try {
         await axios.put(`${API_URL}reset-password/${uid}/${token}/`, {
           new_password: newPassword,
@@ -170,7 +194,10 @@ export const useAuthStore = defineStore("auth", {
         });
         return { success: true, message: "Password reset successful." };
       } catch (error: any) {
-        return { success: false, message: error.response?.data?.error || "Reset failed." };
+        return {
+          success: false,
+          message: error.response?.data?.error || "Reset failed.",
+        };
       }
     },
   },
