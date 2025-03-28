@@ -133,7 +133,7 @@
           <span
             v-for="skill in project.required_skills"
             :key="skill"
-            class="skill-pill"
+            :class="getSkillClass(skill)"
           >
             {{ skill }}
           </span>
@@ -159,6 +159,7 @@ const route = useRoute();
 const profile = ref({});
 const skills = ref([]);
 const selectedSkills = ref([]);
+const mySkills = ref([]);
 const myProjects = ref([]);
 const isViewingOther = computed(() => !!route.params.id);
 
@@ -212,7 +213,33 @@ const goToCreateProject = () => {
 const goToEdit = () => {
   router.push({ path: "/profile", query: { edit: "true" } });
 };
+const getSkillClass = (skillName) => {
+  const mySkillNames = mySkills.value
+    .filter((s) => s && s.name)
+    .map((s) => s.name.toLowerCase());
 
+  const skill = skillName?.toLowerCase?.() || "";
+
+  // Собираем все скиллы членов команды
+  const allCoveredSkills = new Set();
+  myProjects.value.forEach((project) => {
+    project.members?.forEach((member) => {
+      member.skills?.forEach((s) => {
+        if (s.name) {
+          allCoveredSkills.add(s.name.toLowerCase());
+        }
+      });
+    });
+  });
+
+  const isMySkill = mySkillNames.includes(skill);
+  const isCovered = allCoveredSkills.has(skill);
+
+  if (isMySkill && isCovered) return "skill-pill my-covered";
+  if (isMySkill) return "skill-pill my-unique";
+  if (isCovered) return "skill-pill covered";
+  return "skill-pill";
+};
 onMounted(async () => {
   await likeStore.fetchLikes();
 
@@ -224,6 +251,15 @@ onMounted(async () => {
       }
     );
     skills.value = skillsRes.data;
+    if (isViewingOther.value) {
+      const me = await axios.get(
+        "http://127.0.0.1:8000/api/profiles/complete-profile/",
+        {
+          headers: { Authorization: `Bearer ${authStore.token}` },
+        }
+      );
+      mySkills.value = me.data.skills || [];
+    }
 
     if (isViewingOther.value) {
       const profileRes = await axios.get(
@@ -372,7 +408,7 @@ onMounted(async () => {
 .project-count {
   background: #adadad;
   padding: 6px 12px;
-  color:white;
+  color: white;
   border-radius: 12px;
   font-size: 14px;
 }
@@ -464,15 +500,15 @@ onMounted(async () => {
 
 /* Цвета */
 .green {
-  background-color: #2EAD2B;
+  background-color: #2ead2b;
 }
 
 .gray {
-  background-color: #A8A8A8;
+  background-color: #a8a8a8;
 }
 
 .red {
-  background-color: #C23434;
+  background-color: #c23434;
 }
 
 /* Hover (необязательно) */
@@ -499,6 +535,20 @@ onMounted(async () => {
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;
+}
+.skill-pill.covered {
+  background: #b1d0e9;
+  color: #898787;
+}
+
+.skill-pill.my-unique {
+  background: #83d481;
+  color: black;
+}
+
+.skill-pill.my-covered {
+  background: #9ede9c;
+  color: #898787;
 }
 
 .team-members {

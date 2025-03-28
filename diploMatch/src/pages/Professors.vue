@@ -17,7 +17,9 @@
             ><br />
             <span v-if="prof.degree">{{ prof.degree }}</span
             ><br />
-            <small>Compatibility: {{ prof.compatibility || "N/A" }}%</small>
+            <small :class="getCompatibilityClass(prof.skills)">
+              Compatibility: {{ calculateCompatibility(prof.skills) }}
+            </small>
           </div>
         </div>
 
@@ -32,7 +34,11 @@
       </div>
 
       <div class="skills">
-        <span v-for="skill in prof.skills" :key="skill.id" class="skill-pill">
+        <span
+          v-for="skill in prof.skills"
+          :key="skill.id"
+          :class="getSkillColorClass(skill.name)"
+        >
           {{ skill.name }}
         </span>
       </div>
@@ -47,10 +53,38 @@ import { useAuthStore } from "../store/auth";
 
 const authStore = useAuthStore();
 const professors = ref([]);
+const myProjectSkills = ref([]);
 const isSupervisor = computed(() => authStore.user?.role === "Supervisor");
 const isOwner = ref(false);
 const defaultAvatar = new URL("../icons/default-avatar.png", import.meta.url)
   .href;
+
+const calculateCompatibility = (professorSkills) => {
+  if (!myProjectSkills.value.length) return "N/A";
+
+  const profSkills = professorSkills.map((s) => s.name?.toLowerCase?.() || "");
+  const common = myProjectSkills.value.filter((skill) =>
+    profSkills.includes(skill)
+  );
+  const percent = (common.length / myProjectSkills.value.length) * 100;
+
+  return `${Math.round(percent)}%`;
+};
+const getCompatibilityClass = (skills) => {
+  const percentStr = calculateCompatibility(skills);
+  const percent = parseInt(percentStr);
+
+  if (isNaN(percent)) return "compatibility-na";
+  if (percent >= 67) return "compatibility-good";
+  if (percent >= 33) return "compatibility-medium";
+  return "compatibility-low";
+};
+const getSkillColorClass = (skill) => {
+  const normalized = skill.toLowerCase();
+  return myProjectSkills.value.includes(normalized)
+    ? "skill-pill match"
+    : "skill-pill";
+};
 
 // Получить список супервизоров с фильтрацией по is_profile_completed
 const fetchProfessors = async () => {
@@ -77,15 +111,20 @@ const fetchTeamData = async () => {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
 
-    // 💡 Проверка на массив или объект
-    if (Array.isArray(res.data)) {
-      isOwner.value = res.data.some((team) => team.owner === authStore.user.id);
-    } else {
-      isOwner.value =
-        res.data.is_owner === true || res.data.owner === authStore.user.id;
+    let teamData = res.data;
+    if (Array.isArray(teamData)) {
+      teamData = teamData.find((team) => team.owner === authStore.user.id);
+    }
+
+    if (teamData) {
+      isOwner.value = teamData.owner === authStore.user.id;
+      myProjectSkills.value = teamData.required_skills.map((s) =>
+        s.toLowerCase()
+      );
     }
   } catch (err) {
     isOwner.value = false;
+    myProjectSkills.value = [];
   }
 };
 
@@ -182,11 +221,16 @@ onMounted(async () => {
 }
 
 .skill-pill {
-  background-color: #007bff;
-  color: white;
+  background-color: #80C5FF;
+  color: black;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;
+}
+
+.skill-pill.match {
+  background-color: #83D481;
+  color: black;
 }
 
 .request-btn {
@@ -198,6 +242,24 @@ onMounted(async () => {
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s ease;
+}
+.compatibility-good {
+  color: #2ead2b; /* зелёный */
+  font-weight: 600;
+}
+
+.compatibility-medium {
+  color: #e6a800; /* оранжевый */
+  font-weight: 600;
+}
+
+.compatibility-low {
+  color: #d62d2d; /* красный */
+  font-weight: 600;
+}
+
+.compatibility-na {
+  color: #888;
 }
 
 .request-btn:hover {

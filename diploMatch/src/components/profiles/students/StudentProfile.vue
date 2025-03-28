@@ -19,9 +19,7 @@
         <div class="profile-info">
           <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
           <a href="#"> {{ profile.user_email }} </a>
-          <p>
-            <strong>GPA:</strong>  {{ profile.gpa }} 
-          </p>
+          <p><strong>GPA:</strong> {{ profile.gpa }}</p>
           <p v-if="profile.specialization">
             <strong>Major:</strong> {{ profile.specialization }}
           </p>
@@ -114,7 +112,7 @@
           <span
             v-for="skill in team.required_skills"
             :key="skill.id"
-            class="skill-pill"
+            :class="getSkillClass(skill, team)"
           >
             {{ skill }}
           </span>
@@ -135,6 +133,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const team = ref(null);
 const profile = ref({});
+const mySkills = ref([]);
 const skills = ref([]);
 const selectedSkills = ref([]);
 const defaultAvatar = new URL(
@@ -198,6 +197,23 @@ const getPhoto = (user) => {
   }
   return defaultAvatar;
 };
+const getSkillClass = (skillName) => {
+  const mySkillNames = mySkills.value
+    .filter((s) => s && s.name) // добавим проверку
+    .map((s) => s.name.toLowerCase());
+
+  const skill = skillName?.toLowerCase?.() || "";
+
+  const isMySkill = mySkillNames.includes(skill);
+  const isCovered = team.value?.members?.some((member) =>
+    member.skills?.some((s) => s.name?.toLowerCase() === skill)
+  );
+
+  if (isMySkill && isCovered) return "skill-pill my-covered";
+  if (isMySkill) return "skill-pill my-unique";
+  if (isCovered) return "skill-pill covered";
+  return "skill-pill";
+};
 
 onMounted(async () => {
   await likeStore.fetchLikes();
@@ -209,6 +225,15 @@ onMounted(async () => {
       }
     );
     skills.value = skillsRes.data;
+    if (isViewingOther.value) {
+      const myProfile = await axios.get(
+        "http://127.0.0.1:8000/api/profiles/complete-profile/",
+        {
+          headers: { Authorization: `Bearer ${authStore.token}` },
+        }
+      );
+      mySkills.value = myProfile.data.skills || [];
+    }
 
     if (
       props.viewedUserId &&
@@ -410,6 +435,20 @@ const goToCreateProject = () => {
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 13px;
+}
+.skill-pill.covered {
+  background: #b1d0e9;
+  color: #898787;
+}
+
+.skill-pill.my-unique {
+  background: #83d481;
+  color: black;
+}
+
+.skill-pill.my-covered {
+  background: #9ede9c;
+  color: #898787;
 }
 
 .project-section {
