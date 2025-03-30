@@ -76,20 +76,31 @@
               }}
             </button>
           </div>
-          <div v-if="isOwnerOfTeam" class="project-actions">
+          <div
+            class="project-actions"
+            v-if="
+              !isViewingOther &&
+              (isOwnerOfTeam || authStore.user?.role === 'Student')
+            "
+          >
+            <!-- Кнопка Edit только для owner'а -->
             <button
+              v-if="isOwnerOfTeam"
               class="action-btn gray"
               title="Edit Project"
               @click="editProject"
             >
               <i class="fa-solid fa-pen"></i>
             </button>
+
+            <!-- Кнопка Leave только для студентов -->
             <button
+              v-if="authStore.user?.role === 'Student'"
               class="action-btn red"
-              title="Delete"
-              @click="deleteProject"
+              title="Leave team"
+              @click="leaveTeam"
             >
-              <i class="fa-solid fa-trash"></i>
+              <i class="fa-solid fa-right-from-bracket"></i>
             </button>
           </div>
         </div>
@@ -136,6 +147,15 @@
       </div>
     </div>
   </div>
+  <div v-if="showLeaveConfirm" class="modal-overlay">
+    <div class="modal-box">
+      <p>Are you sure you want to leave the team?</p>
+      <div class="modal-actions">
+        <button @click="confirmLeave" class="confirm-btn">Yes</button>
+        <button @click="cancelLeave" class="cancel-btn">No</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -152,6 +172,7 @@ const profile = ref({});
 const mySkills = ref([]);
 const skills = ref([]);
 const selectedSkills = ref([]);
+const showLeaveConfirm = ref(false);
 const defaultAvatar = new URL(
   "../../../icons/default-avatar.png",
   import.meta.url
@@ -186,7 +207,32 @@ const applyToTeam = async (teamId) => {
     alert(err.response?.data?.error || "Failed to apply");
   }
 };
+const leaveTeam = () => {
+  showLeaveConfirm.value = true;
+};
 
+const cancelLeave = () => {
+  showLeaveConfirm.value = false;
+};
+
+const confirmLeave = async () => {
+  try {
+    await axios.post(
+      "http://127.0.0.1:8000/api/teams/leave/",
+      {},
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+    alert("You left the team.");
+    router.go(); // обновить страницу
+  } catch (err) {
+    console.error("Failed to leave team:", err);
+    alert("Failed to leave the team.");
+  } finally {
+    showLeaveConfirm.value = false;
+  }
+};
 // Если открываем чужой профиль — загружаем профиль этого пользователя
 const isViewingOther = computed(
   () =>
@@ -571,5 +617,52 @@ const editProject = () => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.confirm-btn {
+  background: #c23434;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #ccc;
+  color: black;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>

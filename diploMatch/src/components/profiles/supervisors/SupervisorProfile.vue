@@ -277,6 +277,7 @@ onMounted(async () => {
       profile.value = profileRes.data;
       selectedSkills.value = profile.value.skills?.map((s) => s.id) || [];
       myProjects.value = profile.value.projects || [];
+      await authStore.refreshTeamAndRequestStatus();
     } else {
       const profileRes = await axios.get(
         "http://127.0.0.1:8000/api/profiles/complete-profile/",

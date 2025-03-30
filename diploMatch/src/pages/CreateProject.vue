@@ -54,12 +54,50 @@
           {{ isEditMode ? "Update" : "Create" }}
         </button>
       </form>
+      <div v-if="isEditMode && teamMembers.length" class="team-members-section">
+        <h3>Team Members</h3>
+        <ul class="member-list">
+          <li
+            v-for="member in teamMembers"
+            :key="member.user"
+            class="member-item"
+          >
+            <router-link
+              :to="`/students/${member.user}`"
+              class="member-info"
+              title="View profile"
+            >
+              <img :src="getPhoto(member)" alt="Avatar" class="member-avatar" />
+              <span class="member-name">
+                {{ member.first_name }} {{ member.last_name }}
+              </span>
+            </router-link>
+
+            <button
+              v-if="(isOwner || isSupervisor) && member.user !== currentUser.id"
+              class="remove-btn"
+              @click="confirmRemoveMember(member)"
+            >
+              🗑 Remove
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div v-if="showRemoveModal" class="modal-overlay">
+    <div class="modal">
+      <p>Are you sure you want to remove {{ memberToRemove.first_name }}?</p>
+      <div class="modal-actions">
+        <button class="cancel-btn" @click="showRemoveModal = false">No</button>
+        <button class="confirm-btn" @click="removeMember">Yes</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import { useAuthStore } from "../store/auth";
 import { useRouter, useRoute } from "vue-router";
@@ -67,12 +105,25 @@ import { useRouter, useRoute } from "vue-router";
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
-
+const team = ref(null);
+const teamMembers = ref([]);
+const showRemoveModal = ref(false);
+const memberToRemove = ref(null);
 const isEditMode = ref(false);
+const currentUser = authStore.user;
+const isOwner = ref(false);
+const projectOwnerId = ref(null);
+const isSupervisor = ref(currentUser?.role === "Supervisor");
 const allSkills = ref([]);
 const selectedSkills = ref([]);
 const projectId = ref(null);
-
+const getPhoto = (member) => {
+  const photo = member.photo || member.user?.photo;
+  if (!photo) {
+    return new URL("../icons/default-avatar.png", import.meta.url).href;
+  }
+  return photo.startsWith("http") ? photo : `http://127.0.0.1:8000${photo}`;
+};
 const project = ref({
   title: "",
   title_kz: "",
@@ -80,33 +131,73 @@ const project = ref({
   description: "",
 });
 
-// Загрузка скиллов и если редактируем — загрузка данных проекта
-onMounted(async () => {
+const loadTeam = async (topicId) => {
   try {
-    const skillsRes = await axios.get("http://127.0.0.1:8000/api/profiles/skills/", {
+    const res = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
-    allSkills.value = skillsRes.data;
 
-    if (route.query.edit === "true" && route.query.projectId) {
-      isEditMode.value = true;
-      projectId.value = route.query.projectId;
+    let teamData = null;
 
-      const projectRes = await axios.get(`http://127.0.0.1:8000/api/topics/${projectId.value}/`, {
-        headers: { Authorization: `Bearer ${authStore.token}` },
-      });
+    // 🔍 Если супервизор — будет массив команд
+    if (Array.isArray(res.data)) {
+      teamData = res.data.find(
+        (team) => team.thesis_topic?.id === Number(topicId)
+      );
+    } else {
+      // 👤 Если студент — это объект одной команды
+      teamData = res.data;
+    }
 
-      const data = projectRes.data;
-      project.value.title = data.title;
-      project.value.title_kz = data.title_kz;
-      project.value.title_ru = data.title_ru;
-      project.value.description = data.description;
-      selectedSkills.value = data.required_skills.map((id) => Number(id));
+    if (teamData) {
+      team.value = teamData;
+
+      // ✅ Фильтруем себя из списка, если ты студент-оунер
+      const isCurrentUserStudent =
+        currentUser?.role?.toLowerCase() === "student";
+      const filteredMembers = isCurrentUserStudent
+        ? teamData.members.filter((m) => m.user !== currentUser.id)
+        : teamData.members;
+
+      teamMembers.value = filteredMembers;
+      isOwner.value = teamData.is_owner;
+
+      console.log("✅ Team loaded:", team.value);
+      console.log("✅ Members:", teamMembers.value);
+      console.log("✅ isOwner:", isOwner.value);
+    } else {
+      console.warn("⚠️ No matching team found for topic:", topicId);
     }
   } catch (err) {
-    console.error("Failed to load data", err);
+    console.error("❌ Error loading team:", err);
   }
-});
+};
+
+const confirmRemoveMember = (member) => {
+  console.log("Selected member:", member);
+  memberToRemove.value = member;
+  showRemoveModal.value = true;
+};
+
+const removeMember = async () => {
+  try {
+    await axios.post(
+      `http://127.0.0.1:8000/api/teams/${team.value.id}/remove-member/${memberToRemove.value.user}/`,
+      {},
+      { headers: { Authorization: `Bearer ${authStore.token}` } }
+    );
+    // Обновляем список участников
+    teamMembers.value = teamMembers.value.filter(
+      (m) => m.user !== memberToRemove.value.user
+    );
+    showRemoveModal.value = false;
+    alert("Member removed successfully.");
+  } catch (err) {
+    console.error("Remove failed:", err);
+    alert("Failed to remove member.");
+  }
+};
+// Загрузка скиллов и если редактируем — загрузка данных проекта
 
 // Выбор скиллов
 const toggleSkill = (id) => {
@@ -165,8 +256,44 @@ const submitProject = async () => {
     alert("Failed to submit project");
   }
 };
-</script>
+onMounted(async () => {
+  try {
+    const skillsRes = await axios.get(
+      "http://127.0.0.1:8000/api/profiles/skills/",
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+    allSkills.value = skillsRes.data;
 
+    if (route.query.edit === "true" && route.query.projectId) {
+      isEditMode.value = true;
+      projectId.value = route.query.projectId;
+
+      const projectRes = await axios.get(
+        `http://127.0.0.1:8000/api/topics/${projectId.value}/`,
+        {
+          headers: { Authorization: `Bearer ${authStore.token}` },
+        }
+      );
+
+      const data = projectRes.data;
+      project.value.title = data.title;
+      project.value.title_kz = data.title_kz;
+      project.value.title_ru = data.title_ru;
+      project.value.description = data.description;
+      selectedSkills.value = data.required_skills.map((id) => Number(id));
+      projectOwnerId.value = data.owner || null;
+      isOwner.value = data.is_owner;
+
+      await loadTeam(projectId.value);
+      console.log("Team members loaded:", teamMembers.value);
+    }
+  } catch (err) {
+    console.error("Failed to load data", err);
+  }
+});
+</script>
 
 <style scoped>
 .project-container {
@@ -252,5 +379,97 @@ h2 {
 
 .create-btn:hover {
   background: #0056b3;
+}
+.team-members-section {
+  margin-top: 30px;
+}
+.member-list {
+  list-style: none;
+  padding: 0;
+}
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.member-info {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 12px;
+  color: #333;
+}
+
+.member-info:hover .member-name {
+  text-decoration: underline;
+}
+
+.member-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #007bff;
+}
+
+.member-name {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.remove-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.remove-btn:hover {
+  background: #b02a37;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.modal {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.cancel-btn,
+.confirm-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+}
+.confirm-btn {
+  background: #dc3545;
+  color: white;
 }
 </style>

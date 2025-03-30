@@ -109,10 +109,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import { useAuthStore } from "../store/auth";
 import { useLikeStore } from "../store/likes";
+import { useRouter, useRoute } from "vue-router";
 import Footer from "../components/Footer/Footer.vue";
 
 const authStore = useAuthStore();
@@ -121,10 +122,18 @@ const user = authStore.user;
 const mySkills = ref([]);
 const projects = ref([]);
 const showModal = ref(false);
+const route = useRoute();
+const router = useRouter();
 const userHasTeam = computed(() => authStore.userHasTeam);
 const userHasPendingRequest = computed(() => authStore.userHasPendingRequest);
 // ✅ Pagination
-const currentPage = ref(1);
+const currentPage = ref(parseInt(route.query.page) || 1);
+watch(
+  () => route.query.page,
+  (newPage) => {
+    currentPage.value = parseInt(newPage) || 1;
+  }
+);
 const projectsPerPage = 5;
 const totalPages = computed(() =>
   Math.ceil(projects.value.length / projectsPerPage)
@@ -136,22 +145,20 @@ const paginatedProjects = computed(() => {
 
 const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
+    router.push({ path: "/dashboard", query: { page: page } });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 };
 
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    goToPage(currentPage.value + 1);
   }
 };
 
 const prevPage = () => {
   if (currentPage.value > 1) {
-    currentPage.value--;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    goToPage(currentPage.value - 1);
   }
 };
 const toggleLike = async (projectId) => {
@@ -394,7 +401,6 @@ onMounted(async () => {
 
 .owner-avatar {
   border: 2px solid #28a745 !important;
-
 }
 
 .supervisor-avatar {
@@ -410,24 +416,24 @@ onMounted(async () => {
 
 .skill-pill {
   background: #80c5ff;
-  font-family: Arial, sans-serif, 'Segoe UI';
+  font-family: Arial, sans-serif, "Segoe UI";
   color: black;
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
 }
 .skill-pill.covered {
-  background: #B1D0E9;
+  background: #b1d0e9;
   color: #898787;
 }
 
 .skill-pill.my-unique {
-  background: #83D481;
+  background: #83d481;
   color: black;
 }
 
 .skill-pill.my-covered {
-  background: #9EDE9C;
+  background: #9ede9c;
   color: #898787;
 }
 .pagination {
