@@ -50,21 +50,28 @@
           </div>
         </div>
 
-        <button type="submit" class="create-btn">Create</button>
+        <button type="submit" class="create-btn">
+          {{ isEditMode ? "Update" : "Create" }}
+        </button>
       </form>
     </div>
   </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useAuthStore } from "../store/auth";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
+
+const isEditMode = ref(false);
+const allSkills = ref([]);
+const selectedSkills = ref([]);
+const projectId = ref(null);
 
 const project = ref({
   title: "",
@@ -73,18 +80,31 @@ const project = ref({
   description: "",
 });
 
-const allSkills = ref([]);
-const selectedSkills = ref([]);
-
-// Загрузка всех скиллов
+// Загрузка скиллов и если редактируем — загрузка данных проекта
 onMounted(async () => {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/api/profiles/skills/", {
+    const skillsRes = await axios.get("http://127.0.0.1:8000/api/profiles/skills/", {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
-    allSkills.value = res.data;
+    allSkills.value = skillsRes.data;
+
+    if (route.query.edit === "true" && route.query.projectId) {
+      isEditMode.value = true;
+      projectId.value = route.query.projectId;
+
+      const projectRes = await axios.get(`http://127.0.0.1:8000/api/topics/${projectId.value}/`, {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      });
+
+      const data = projectRes.data;
+      project.value.title = data.title;
+      project.value.title_kz = data.title_kz;
+      project.value.title_ru = data.title_ru;
+      project.value.description = data.description;
+      selectedSkills.value = data.required_skills.map((id) => Number(id));
+    }
   } catch (err) {
-    console.error("Failed to load skills", err);
+    console.error("Failed to load data", err);
   }
 });
 
@@ -112,27 +132,41 @@ const submitProject = async () => {
     return;
   }
 
+  const payload = {
+    title: project.value.title,
+    title_kz: project.value.title_kz,
+    title_ru: project.value.title_ru,
+    description: project.value.description,
+    required_skills: selectedSkills.value,
+  };
+
   try {
-    await axios.post(
-      "http://127.0.0.1:8000/api/topics/create/",
-      {
-        title: project.value.title,
-        title_kz: project.value.title_kz,
-        title_ru: project.value.title_ru,
-        description: project.value.description,
-        required_skills: selectedSkills.value,
-      },
-      {
+    if (isEditMode.value && projectId.value) {
+      // Редактирование (PATCH)
+      await axios.patch(
+        `http://127.0.0.1:8000/api/topics/${projectId.value}/edit/`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${authStore.token}` },
+        }
+      );
+      alert("Project updated!");
+    } else {
+      // Создание (POST)
+      await axios.post("http://127.0.0.1:8000/api/topics/create/", payload, {
         headers: { Authorization: `Bearer ${authStore.token}` },
-      }
-    );
+      });
+      alert("Project created!");
+    }
+
     router.push("/profile");
   } catch (err) {
-    console.error("Failed to create project", err.response?.data || err);
-    alert("Failed to create project");
+    console.error("Failed to submit project", err.response?.data || err);
+    alert("Failed to submit project");
   }
 };
 </script>
+
 
 <style scoped>
 .project-container {

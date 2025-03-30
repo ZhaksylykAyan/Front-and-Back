@@ -59,7 +59,11 @@
               <img :src="requestIcon" alt="Approve" class="icon" />
             </button>
 
-            <button class="action-btn gray" title="Edit">
+            <button
+              class="action-btn gray"
+              title="Edit"
+              @click="goToEditProject(project.id)"
+            >
               <i class="fa-solid fa-pen"></i>
             </button>
 
@@ -209,7 +213,9 @@ const getPhoto = (member) => {
 const goToCreateProject = () => {
   router.push("/create-project");
 };
-
+const goToEditProject = (projectId) => {
+  router.push({ path: "/create-project", query: { edit: "true", projectId } });
+};
 const goToEdit = () => {
   router.push({ path: "/profile", query: { edit: "true" } });
 };

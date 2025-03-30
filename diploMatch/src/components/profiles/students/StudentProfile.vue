@@ -76,6 +76,22 @@
               }}
             </button>
           </div>
+          <div v-if="isOwnerOfTeam" class="project-actions">
+            <button
+              class="action-btn gray"
+              title="Edit Project"
+              @click="editProject"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button
+              class="action-btn red"
+              title="Delete"
+              @click="deleteProject"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
         </div>
         <p class="project-description">{{ team.thesis_description }}</p>
         <div class="team-members">
@@ -150,7 +166,9 @@ const userHasPendingRequest = computed(() => authStore.userHasPendingRequest);
 const toggleLike = async (projectId) => {
   await likeStore.toggleLike(projectId);
 };
-
+const isOwnerOfTeam = computed(() => {
+  return team.value?.owner === authStore.user?.id && !isViewingOther.value;
+});
 const applyToTeam = async (teamId) => {
   if (userHasTeam.value || userHasPendingRequest.value) return;
   try {
@@ -285,6 +303,15 @@ const goToEdit = () => {
 
 const goToCreateProject = () => {
   router.push("/create-project");
+};
+const editProject = () => {
+  router.push({
+    path: "/create-project",
+    query: {
+      edit: "true",
+      projectId: team.value?.thesis_topic?.id,
+    },
+  });
 };
 </script>
 
@@ -482,7 +509,34 @@ const goToCreateProject = () => {
   font-size: 14px;
   margin-bottom: 15px;
 }
+.project-actions {
+  display: flex;
+  gap: 8px;
+}
 
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.action-btn i {
+  color: white;
+}
+
+.action-btn.gray {
+  background-color: #a8a8a8;
+}
+.action-btn.red {
+  background-color: #c23434;
+}
 .team-members {
   display: flex;
   gap: 10px;
