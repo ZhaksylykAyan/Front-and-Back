@@ -16,10 +16,11 @@ class TeamSerializer(serializers.ModelSerializer):
     thesis_name = serializers.CharField(source='thesis_topic.title', read_only=True)
     thesis_description = serializers.CharField(source='thesis_topic.description', read_only=True)
     required_skills = serializers.SerializerMethodField(read_only=True)
+    thesis_id = serializers.IntegerField(source='thesis_topic.id', read_only=True)
 
     class Meta:
         model = Team
-        fields = ['id', 'thesis_topic', 'thesis_name', 'thesis_description', 'owner', 'members', 'status', 'supervisor', 'required_skills']
+        fields = ['id','thesis_id', 'thesis_topic', 'thesis_name', 'thesis_description', 'owner', 'members', 'status', 'supervisor', 'required_skills']
 
     def get_required_skills(self, obj):
         return [skill.name for skill in obj.thesis_topic.required_skills.all()]
