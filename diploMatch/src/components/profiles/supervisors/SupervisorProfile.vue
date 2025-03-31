@@ -62,12 +62,16 @@
             <button
               class="action-btn gray"
               title="Edit"
-              @click="goToEditProject(project.id)"
+              @click="goToEditProject(project.thesis_id)"
             >
               <i class="fa-solid fa-pen"></i>
             </button>
 
-            <button class="action-btn red" title="Delete">
+            <button
+              class="action-btn red"
+              title="Delete"
+              @click="confirmSupervisorDelete(project)"
+            >
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -145,6 +149,27 @@
       </div>
     </div>
   </div>
+  <!-- ❌ Modal: Cannot Delete (team has members) -->
+  <div v-if="showBlockedModal" class="modal-overlay">
+    <div class="modal">
+      <p>You cannot delete this team while it has members.</p>
+      <div class="modal-actions">
+        <button class="cancel-btn" @click="showBlockedModal = false">
+          Okay
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="showDeleteModal" class="modal-overlay">
+    <div class="modal">
+      <p>Are you sure you want to delete this team and its project?</p>
+      <div class="modal-actions">
+        <button class="cancel-btn" @click="cancelDelete">Cancel</button>
+        <button class="confirm-btn" @click="deleteTeam">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -161,6 +186,9 @@ const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 const profile = ref({});
+const showDeleteModal = ref(false);
+const showBlockedModal = ref(false);
+const teamToDelete = ref(null);
 const skills = ref([]);
 const selectedSkills = ref([]);
 const mySkills = ref([]);
@@ -209,7 +237,38 @@ const getPhoto = (member) => {
   }
   return new URL("../../../icons/default-avatar.png", import.meta.url).href;
 };
+const confirmSupervisorDelete = (project) => {
+  if (project.members && project.members.length > 0) {
+    // ❌ Показываем окно, что удаление невозможно
+    showBlockedModal.value = true;
+  } else {
+    // ✅ Показываем окно подтверждения удаления
+    showDeleteModal.value = true;
+    teamToDelete.value = project.id;
+  }
+};
 
+
+const cancelDelete = () => {
+  showDeleteModal.value = false;
+  teamToDelete.value = null;
+};
+
+const deleteTeam = async () => {
+  try {
+    await axios.delete(
+      `http://127.0.0.1:8000/api/teams/${teamToDelete.value}/supervisor-delete/`,
+      { headers: { Authorization: `Bearer ${authStore.token}` } }
+    );
+    alert("Team deleted successfully.");
+    myProjects.value = myProjects.value.filter(
+      (p) => p.id !== teamToDelete.value
+    );
+    cancelDelete();
+  } catch (err) {
+    alert(err.response?.data?.error || "Failed to delete");
+  }
+};
 const goToCreateProject = () => {
   router.push("/create-project");
 };
@@ -575,5 +634,46 @@ onMounted(async () => {
 }
 .supervisor-avatar {
   border: 2px solid #28a745 !important; /* зеленая рамка */
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.modal {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.cancel-btn,
+.confirm-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+}
+.confirm-btn {
+  background: #dc3545;
+  color: white;
 }
 </style>
