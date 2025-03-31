@@ -607,11 +607,11 @@ const editProject = () => {
   border: 2px solid #007bff;
 }
 .supervisor-avatar {
-  border: 2px solid #28a745 !important;
-}
-.owner-avatar {
   border: 3px solid gold !important;
   box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+}
+.owner-avatar {
+  border: 2px solid #28a745 !important;
 }
 .project-skills {
   display: flex;

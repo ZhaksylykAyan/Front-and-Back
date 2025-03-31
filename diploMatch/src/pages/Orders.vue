@@ -11,12 +11,19 @@
         style="border-left: 4px solid #007bff"
       >
         <div class="request-header">
-          <h3 class="project-title">{{ mySupervisorRequest.team.thesis_name }}</h3>
-          <span class="status-tag" :class="mySupervisorRequest.status.toLowerCase()">
+          <h3 class="project-title">
+            {{ mySupervisorRequest.team.thesis_name }}
+          </h3>
+          <span
+            class="status-tag"
+            :class="mySupervisorRequest.status.toLowerCase()"
+          >
             {{ mySupervisorRequest.status }}
           </span>
         </div>
-        <p class="project-description">{{ mySupervisorRequest.team.thesis_description }}</p>
+        <p class="project-description">
+          {{ mySupervisorRequest.team.thesis_description }}
+        </p>
         <div class="project-skills">
           <span
             v-for="skill in mySupervisorRequest.team.required_skills"
@@ -38,7 +45,9 @@
       <div v-for="req in requests" :key="req.id" class="request-card">
         <div class="request-header">
           <h3 class="project-title">{{ req.team.thesis_name }}</h3>
-          <span class="status-tag" :class="req.status.toLowerCase()">{{ req.status }}</span>
+          <span class="status-tag" :class="req.status.toLowerCase()">{{
+            req.status
+          }}</span>
         </div>
         <p class="project-description">{{ req.team.thesis_description }}</p>
         <div class="project-skills">
@@ -74,9 +83,25 @@
             <p class="project-description">{{ req.team.thesis_description }}</p>
           </div>
           <div class="owner-actions">
-            <button v-if="req.status === 'pending'" class="accept-btn" @click="acceptSupervisorRequest(req.id)">✔</button>
-            <button v-if="req.status === 'pending'" class="reject-btn" @click="rejectSupervisorRequest(req.id)">✖</button>
-            <span v-if="req.status !== 'pending'" class="status-tag" :class="req.status.toLowerCase()">
+            <button
+              v-if="req.status === 'pending'"
+              class="accept-btn"
+              @click="acceptSupervisorRequest(req.id)"
+            >
+              ✔
+            </button>
+            <button
+              v-if="req.status === 'pending'"
+              class="reject-btn"
+              @click="rejectSupervisorRequest(req.id)"
+            >
+              ✖
+            </button>
+            <span
+              v-if="req.status !== 'pending'"
+              class="status-tag"
+              :class="req.status.toLowerCase()"
+            >
               {{ req.status }}
             </span>
           </div>
@@ -96,28 +121,58 @@
         <div class="project-skills">
           <span
             v-for="skill in req.team.required_skills"
-            :key="skill"
-            class="skill-pill"
+            :key="typeof skill === 'object' ? skill.id || skill.name : skill"
+            :class="
+              getSupervisorSkillClass(skill?.name || skill, req.team.members)
+            "
           >
-            {{ skill }}
+            {{ skill?.name || skill }}
           </span>
+        </div>
+
+        <div
+          class="compatibility-text"
+          :class="
+            getCompatibilityClass(req.team.required_skills, req.team.members)
+          "
+        >
+          Compatibility:
+          {{ getCompatibility(req.team.required_skills, req.team.members) }}%
         </div>
       </div>
     </div>
 
     <!-- ===== OWNER VIEW: Incoming Join Requests ===== -->
-    <div v-if="(isOwner || userRole === 'Student') && incomingJoinRequests.length > 0">
+    <div
+      v-if="
+        (isOwner || userRole === 'Student') && incomingJoinRequests.length > 0
+      "
+    >
       <h2 class="section-title">Incoming Join Requests</h2>
 
-      <div v-for="req in incomingJoinRequests" :key="req.id" class="request-card">
+      <div
+        v-for="req in incomingJoinRequests"
+        :key="req.id"
+        class="request-card"
+      >
         <div class="request-header">
           <h3 class="project-title">
             {{ req.student.first_name }} {{ req.student.last_name }}
           </h3>
           <div class="owner-actions">
             <template v-if="req.status === 'pending'">
-              <button class="accept-btn" @click="acceptJoinRequest(req.team.id, req.student.user, req)">✔</button>
-              <button class="reject-btn" @click="rejectJoinRequest(req.team.id, req.student.user, req)">✖</button>
+              <button
+                class="accept-btn"
+                @click="acceptJoinRequest(req.team.id, req.student.user, req)"
+              >
+                ✔
+              </button>
+              <button
+                class="reject-btn"
+                @click="rejectJoinRequest(req.team.id, req.student.user, req)"
+              >
+                ✖
+              </button>
             </template>
             <span v-else class="status-tag" :class="req.status.toLowerCase()">
               {{ req.status }}
@@ -140,11 +195,17 @@
           </a>
         </div>
 
-        <div class="project-skills">
+        <div class="skills-grid">
           <span
             v-for="skill in req.student.skills"
             :key="skill.id"
-            class="skill-pill"
+            :class="
+              getRequestSkillClass(
+                skill.name,
+                req.team_members,
+                req.team.required_skills
+              )
+            "
           >
             {{ skill.name }}
           </span>
@@ -154,7 +215,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -162,7 +222,7 @@ import { useAuthStore } from "../store/auth";
 
 const authStore = useAuthStore();
 const userRole = authStore.user?.role;
-
+const mySkills = ref([]);
 const requests = ref([]);
 const supervisorRequests = ref([]);
 const isOwner = ref(false);
@@ -242,7 +302,6 @@ const fetchRequests = async () => {
   }
 };
 
-
 const fetchMySupervisorRequest = async () => {
   try {
     const res = await axios.get(
@@ -303,7 +362,6 @@ const cancelRequest = async (id) => {
   }
 };
 
-
 const acceptSupervisorRequest = async (requestId) => {
   try {
     await axios.post(
@@ -355,9 +413,99 @@ const rejectJoinRequest = async (teamId, studentId, req) => {
     console.error("Failed to reject join request", err);
   }
 };
+const getRequestSkillClass = (
+  skillName,
+  teamMembersSnapshot,
+  requiredSkills
+) => {
+  const skill = skillName?.toLowerCase?.() || "";
 
-onMounted(() => {
+  // Приводим required skills в lowercase
+  const required = requiredSkills.map((s) => s?.toLowerCase?.() || "");
+
+  // Собираем все скиллы уже принятых участников команды (snapshot на момент заявки)
+  const allTeamSkills = new Set();
+  teamMembersSnapshot?.forEach((member) => {
+    member.skills?.forEach((s) => {
+      if (s?.name) {
+        allTeamSkills.add(s.name.toLowerCase());
+      }
+    });
+  });
+
+  const isRequired = required.includes(skill);
+  const isAlreadyCovered = allTeamSkills.has(skill);
+
+  // 🟩 Полезный и ещё не покрыт
+  if (isRequired && !isAlreadyCovered) return "skill-pill my-unique";
+
+  // 🟢 Полезный, но уже покрыт кем-то
+  if (isRequired && isAlreadyCovered) return "skill-pill my-covered";
+
+  // 🟦 У него есть этот скилл, но он не нужен
+  if (!isRequired) return "skill-pill";
+
+  // 🔵 Просто по умолчанию
+  return "skill-pill";
+};
+const getSupervisorSkillClass = (skillName, teamMembers) => {
+  const skill = skillName?.toLowerCase?.() || "";
+
+  // Все скиллы студентов
+  const studentSkills = new Set();
+  teamMembers.forEach((member) => {
+    member.skills?.forEach((s) => {
+      if (s.name) studentSkills.add(s.name.toLowerCase());
+    });
+  });
+
+  // Все твои скиллы
+  const professorSkills = mySkills.value.map((s) => s.name.toLowerCase());
+
+  const isCoveredByStudent = studentSkills.has(skill);
+  const isCoveredByProfessor = professorSkills.includes(skill);
+
+  if (isCoveredByProfessor && isCoveredByStudent)
+    return "skill-pill my-covered"; // 🟢 серо-зеленый
+  if (isCoveredByProfessor) return "skill-pill my-unique"; // 🟢 зеленый
+  if (isCoveredByStudent) return "skill-pill covered"; // 🟦 серо-синий
+  return "skill-pill"; // 🔵 обычный
+};
+
+const getCompatibility = (requiredSkills, teamMembers) => {
+  const required = requiredSkills
+    .map((s) => s.name?.toLowerCase() || s?.toLowerCase())
+    .filter(Boolean);
+
+  const professorSkills = new Set(
+    mySkills.value.map((s) => s.name.toLowerCase())
+  );
+
+  // Считаем сколько required скиллов покрывает профессор
+  const coveredByProfessor = required.filter((skill) =>
+    professorSkills.has(skill)
+  );
+
+  return Math.round((coveredByProfessor.length / required.length) * 100);
+};
+const getCompatibilityClass = (requiredSkills, teamMembers) => {
+  const percent = getCompatibility(requiredSkills, teamMembers);
+
+  if (isNaN(percent)) return "compatibility-na";
+  if (percent >= 67) return "compatibility-good";
+  if (percent >= 33) return "compatibility-medium";
+  return "compatibility-low";
+};
+
+onMounted(async () => {
   fetchRequests();
+  const res = await axios.get(
+    "http://127.0.0.1:8000/api/profiles/complete-profile/",
+    {
+      headers: { Authorization: `Bearer ${authStore.token}` },
+    }
+  );
+  mySkills.value = res.data.skills || [];
 });
 </script>
 
@@ -438,13 +586,59 @@ onMounted(() => {
   gap: 10px;
   margin-bottom: 8px;
 }
-.skill-pill {
-  background: #80C5FF;
-  color: black;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
 }
+.skill-pill {
+  background: #80c5ff;
+  font-family: Arial, sans-serif, "Segoe UI";
+  color: black;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.skill-pill.my-unique {
+  background: #83d481;
+  color: black;
+}
+
+.skill-pill.my-covered {
+  background: #9ede9c;
+  color: #898787;
+}
+
+.skill-pill.covered {
+  background: #b1d0e9;
+  color: #898787;
+}
+
+/* .skill-pill.extra {
+  background: #c8e1ff;
+  color: #333;
+} */
+.compatibility-good {
+  color: #28a745; /* зелёный */
+  font-weight: bold;
+}
+
+.compatibility-medium {
+  color: #ffc107; /* жёлтый */
+  font-weight: bold;
+}
+
+.compatibility-low {
+  color: #dc3545; /* красный */
+  font-weight: bold;
+}
+
+.compatibility-na {
+  color: #6c757d; /* серый */
+}
+
 .cancel-btn {
   background-color: #dc3545;
   color: white;
