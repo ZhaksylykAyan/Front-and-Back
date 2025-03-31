@@ -3,7 +3,8 @@ from .views import TeamCreateView, TeamListView, TeamDetailView, \
     MyTeamView, JoinTeamView, AcceptJoinRequestView, RejectJoinRequestView, MyJoinRequestView, \
     MyJoinRequestsView, MyTeamJoinRequestsView, CreateSupervisorRequestView, IncomingSupervisorRequestsView, \
     AcceptSupervisorRequestView, RejectSupervisorRequestView, CancelSupervisorRequestView, SupervisorProjectsView, \
-    MySupervisorRequestView, LikedProjectsView, LikeToggleView, LeaveTeamView, RemoveTeamMemberView
+    MySupervisorRequestView, LikedProjectsView, LikeToggleView, LeaveTeamView, RemoveTeamMemberView, \
+    SupervisorDeleteTeamView
 
 urlpatterns = [
     path('create/', TeamCreateView.as_view(), name='create-team'),
@@ -30,5 +31,6 @@ urlpatterns = [
     path('likes/', LikedProjectsView.as_view(), name='liked-projects'),
     path('likes/toggle/<int:team_id>/', LikeToggleView.as_view(), name='like-toggle'),
     path('leave/', LeaveTeamView.as_view(), name='leave-team'),
+    path('<int:pk>/supervisor-delete/', SupervisorDeleteTeamView.as_view(), name='supervisor-delete-team'),
     path('<int:pk>/remove-member/<int:student_id>/', RemoveTeamMemberView.as_view(), name='remove-member'),
 ]

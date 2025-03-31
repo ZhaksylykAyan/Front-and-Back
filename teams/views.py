@@ -448,6 +448,32 @@ class LeaveTeamView(APIView):
 
         return Response({"message": "You left the team successfully."})
 
+class SupervisorDeleteTeamView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        user = request.user
+
+        # Проверка: это точно супервизор?
+        if not hasattr(user, "supervisor_profile"):
+            return Response({"error": "Only supervisors can delete."}, status=403)
+
+        try:
+            team = Team.objects.get(pk=pk)
+        except Team.DoesNotExist:
+            return Response({"error": "Team not found."}, status=404)
+
+        if team.supervisor is None or team.supervisor.user != user:
+            return Response({"error": "You are not the supervisor of this team."}, status=403)
+
+        if team.members.exists():
+            return Response({"error": "You cannot delete the team while it has members."}, status=400)
+
+        thesis = team.thesis_topic
+        team.delete()
+        thesis.delete()
+
+        return Response({"message": "Team and project deleted."}, status=200)
 
 class RemoveTeamMemberView(APIView):
     """ Позволяет owner'у или supervisor'у удалить участника из команды """
