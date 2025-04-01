@@ -1,4 +1,6 @@
 from rest_framework import generics, permissions
+
+from teams.models import Team
 from .models import ThesisTopic
 from .serializers import ThesisTopicSerializer
 from rest_framework.exceptions import PermissionDenied
@@ -32,15 +34,8 @@ class ThesisTopicUpdateView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         obj = super().get_object()
         user = self.request.user
-
+        team = Team.objects.filter(thesis_topic=obj).first()
         # Проверка, что только owner может редактировать
-        if hasattr(user, 'student_profile'):
-            if obj.created_by_student != user.student_profile:
-                raise PermissionDenied("You do not own this topic.")
-        elif hasattr(user, 'supervisor_profile'):
-            if obj.created_by_supervisor != user.supervisor_profile:
-                raise PermissionDenied("You do not own this topic.")
-        else:
-            raise PermissionDenied("Invalid user.")
-
+        if not team or team.owner != user:
+            raise PermissionDenied("You do not own this topic.")
         return obj

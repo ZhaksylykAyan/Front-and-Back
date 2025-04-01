@@ -4,7 +4,7 @@ from .views import TeamCreateView, TeamListView, TeamDetailView, \
     MyJoinRequestsView, MyTeamJoinRequestsView, CreateSupervisorRequestView, IncomingSupervisorRequestsView, \
     AcceptSupervisorRequestView, RejectSupervisorRequestView, CancelSupervisorRequestView, SupervisorProjectsView, \
     MySupervisorRequestView, LikedProjectsView, LikeToggleView, LeaveTeamView, RemoveTeamMemberView, \
-    SupervisorDeleteTeamView
+    SupervisorDeleteTeamView, ApproveTeamView, ApprovedTeamsForDeanView, ExportApprovedTeamsExcelView
 
 urlpatterns = [
     path('create/', TeamCreateView.as_view(), name='create-team'),
@@ -33,4 +33,7 @@ urlpatterns = [
     path('leave/', LeaveTeamView.as_view(), name='leave-team'),
     path('<int:pk>/supervisor-delete/', SupervisorDeleteTeamView.as_view(), name='supervisor-delete-team'),
     path('<int:pk>/remove-member/<int:student_id>/', RemoveTeamMemberView.as_view(), name='remove-member'),
+    path('<int:pk>/approve/', ApproveTeamView.as_view(), name='approve-team'),
+    path('approved/', ApprovedTeamsForDeanView.as_view(), name='approved-teams'),
+    path('export-excel/', ExportApprovedTeamsExcelView.as_view(), name='export-approved-teams-excel'),
 ]

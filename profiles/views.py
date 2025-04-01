@@ -104,3 +104,4 @@ class SupervisorProfileDetailView(generics.RetrieveAPIView):
     queryset = SupervisorProfile.objects.all()
     serializer_class = SupervisorProfileSerializer
     permission_classes = [permissions.AllowAny]  # Публичный доступ
+

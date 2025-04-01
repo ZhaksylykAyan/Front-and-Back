@@ -13,7 +13,9 @@ from notifications.models import Notification
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-
+from .utils.export_excel import generate_excel_for_approved_teams
+from datetime import datetime
+from django.http import HttpResponse
 
 def send_notification(user, message):
     """ Sends a notification to a user (DB + WebSocket) """
@@ -283,8 +285,6 @@ class RejectJoinRequestView(APIView):
             return Response({"error": "Team or join request not found."}, status=404)
 
 
-# teams/views.py
-
 class CreateSupervisorRequestView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -533,3 +533,50 @@ class RemoveTeamMemberView(APIView):
         send_notification(student.user, f"You were removed from the team '{team.thesis_topic.title}'.")
 
         return Response({"message": "Student removed from the team."}, status=200)
+
+
+class ApproveTeamView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        user = request.user
+
+        if user.role != "Supervisor" or not hasattr(user, "supervisor_profile"):
+            return Response({"error": "Only supervisors can approve."}, status=403)
+
+        try:
+            team = Team.objects.get(pk=pk)
+        except Team.DoesNotExist:
+            return Response({"error": "Team not found."}, status=404)
+
+        try:
+            team.approve_team(user.supervisor_profile)
+            return Response({"success": "Team approved."})
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+
+class ApprovedTeamsForDeanView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = TeamSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role != "Dean Office":
+            return Team.objects.none()
+        return Team.objects.filter(status="approved")
+
+
+class ExportApprovedTeamsExcelView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # ✅ Разрешено только деканату
+        if user.role != "Dean Office":
+            return Response({"error": "Only Dean Office can export."}, status=403)
+
+        # ✅ Просто передаем request, teams уже внутри собираются
+        excel_response = generate_excel_for_approved_teams(request)
+        return excel_response

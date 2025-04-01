@@ -44,9 +44,10 @@ class Team(models.Model):
 
     def approve_team(self, supervisor):
         """ Supervisor approves the team and becomes the new owner """
-        if self.status != "pending":
-            raise ValueError("Only pending teams can be approved.")
-        if supervisor.teams.count() >= 10:
+        # if self.status != "pending":
+        #     raise ValueError("Only pending teams can be approved.")
+        from teams.models import Team  # если ты вдруг в другом файле
+        if Team.objects.filter(supervisor=supervisor).count() >= 10:
             raise ValueError("Supervisor cannot own more than 10 teams.")
         self.supervisor = supervisor
         self.owner = supervisor.user
