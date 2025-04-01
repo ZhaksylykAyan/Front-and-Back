@@ -18,7 +18,9 @@
 
         <div class="profile-info">
           <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
-          <a href="#"> {{ profile.user_email }} </a>
+          <a v-if="profile.user_email" :href="`mailto:${profile.user_email}`">
+            {{ profile.user_email }}
+          </a>
           <p><strong>GPA:</strong> {{ profile.gpa }}</p>
           <p v-if="profile.specialization">
             <strong>Major:</strong> {{ profile.specialization }}

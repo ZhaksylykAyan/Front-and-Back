@@ -20,7 +20,9 @@
           <h3 class="user-name">
             {{ profile.first_name }} {{ profile.last_name }}
           </h3>
-          <a v-if="profile.user"> {{ profile.user_email }} </a>
+          <a v-if="profile.user_email" :href="`mailto:${profile.user_email}`">
+            {{ profile.user_email }}
+          </a>
           <div class="info-section">
             <p>{{ profile.degree }}</p>
           </div>
@@ -731,7 +733,7 @@ onMounted(async () => {
   .profile-container {
     padding: 30px 20px;
   }
-  
+
   .profile-body {
     flex-direction: column;
     align-items: center;

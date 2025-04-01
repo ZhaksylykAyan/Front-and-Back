@@ -8,7 +8,13 @@
 
     <!-- 🟦 Desktop Navigation -->
     <nav class="nav-menu" v-if="!isMobile">
-      <router-link to="/professors" class="nav-item">Professors</router-link>
+      <router-link
+        v-if="userRole !== 'Supervisor'"
+        to="/professors"
+        class="nav-item"
+      >
+        Professors
+      </router-link>
       <router-link to="/dashboard" class="nav-item">Projects</router-link>
       <router-link to="/orders" class="nav-item">Requests</router-link>
       <router-link to="/liked" class="icon">
@@ -33,11 +39,17 @@
 
     <!-- 📱 Mobile Dropdown -->
     <div class="mobile-menu" v-if="burgerOpen">
-      <router-link to="/professors" @click="closeMenu">Professors</router-link>
+      <router-link
+        v-if="userRole !== 'Supervisor'"
+        to="/professors"
+        @click="closeMenu"
+      >
+        Professors
+      </router-link>
+      <router-link to="/profile" @click="closeMenu">Profile</router-link>
       <router-link to="/dashboard" @click="closeMenu">Projects</router-link>
       <router-link to="/orders" @click="closeMenu">Requests</router-link>
       <router-link to="/liked" @click="closeMenu">Favorites ❤️</router-link>
-      <router-link to="/profile" @click="closeMenu">Profile</router-link>
       <button @click="logout">Logout</button>
     </div>
   </header>
@@ -48,10 +60,9 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
 import NotificationBell from "../components/notification/NotificationBell.vue";
-
 const router = useRouter();
 const authStore = useAuthStore();
-
+const userRole = authStore.user?.role;
 const dropdownOpen = ref(false);
 const profileMenu = ref(null);
 const burgerOpen = ref(false);
@@ -202,7 +213,7 @@ onBeforeUnmount(() => {
 /* Mobile Menu */
 .mobile-menu {
   position: fixed; /* was: absolute */
-  top: 70px;       /* чуть ниже header */
+  top: 70px; /* чуть ниже header */
   right: 10px;
   left: 10px;
   background: white;
