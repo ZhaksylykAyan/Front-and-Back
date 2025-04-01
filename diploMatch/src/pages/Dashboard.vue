@@ -1,112 +1,119 @@
 <template>
-  <div class="dashboard-container">
-    <div v-if="!user?.is_profile_completed && showModal" class="modal-overlay">
-      <div class="modal-box">
-        <h3>Complete your profile</h3>
-        <p class="modal-text">
-          To continue using the platform, please complete your profile.
-        </p>
-        <router-link to="/profile?edit=true" class="modal-btn">
-          Complete Now
-        </router-link>
-      </div>
-    </div>
-
-    <h2 class="section-title">Projects for you</h2>
-
-    <div
-      v-for="project in paginatedProjects"
-      :key="project.id"
-      class="project-card"
-    >
-      <div class="project-header">
-        <h3 class="project-title">{{ project.thesis_name }}</h3>
-        <div class="actions">
-          <i
-            :class="[
-              'heart-icon',
-              likeStore.likedProjectIds.includes(project.id)
-                ? 'fa-solid fa-heart'
-                : 'fa-regular fa-heart',
-            ]"
-            @click="toggleLike(project.id)"
-            title="Add to favorites"
-          ></i>
-          <button
-            class="apply-btn"
-            :disabled="userHasTeam || userHasPendingRequest"
-            @click="applyToTeam(project.id)"
-          >
-            {{
-              userHasTeam
-                ? "Already in a team"
-                : userHasPendingRequest
-                ? "Applied"
-                : "Apply"
-            }}
-          </button>
+  <div class="dashboard-wrapper">
+    <div class="dashboard-container">
+      <div v-if="!user?.is_profile_completed && showModal" class="modal-overlay">
+        <div class="modal-box">
+          <h3>Complete your profile</h3>
+          <p class="modal-text">
+            To continue using the platform, please complete your profile.
+          </p>
+          <router-link to="/profile?edit=true" class="modal-btn">
+            Complete Now
+          </router-link>
         </div>
       </div>
 
-      <p class="project-description">{{ project.thesis_description }}</p>
+      <h2 class="section-title">Projects for you</h2>
 
-      <div class="project-members">
-        <router-link
-          v-if="project.supervisor"
-          :to="`/supervisors/${project.supervisor.id}`"
-          :title="`${project.supervisor.first_name} ${project.supervisor.last_name} (Supervisor)`"
-        >
-          <img
-            :src="getPhoto(project.supervisor)"
-            class="avatar supervisor-avatar"
-            alt="Supervisor"
-          />
-        </router-link>
-
-        <router-link
-          v-for="member in getSortedMembers(project)"
-          :key="member.id"
-          :to="`/students/${member.user}`"
-          :title="member.first_name + ' ' + member.last_name"
-        >
-          <img
-            :src="getPhoto(member)"
-            class="avatar"
-            :class="{ 'owner-avatar': member.user === project.owner }"
-            :alt="member.first_name"
-          />
-        </router-link>
-      </div>
-
-      <div class="project-skills">
-        <span
-          v-for="skill in project.required_skills"
-          :key="skill"
-          :class="getSkillClass(skill, project)"
-        >
-          {{ skill }}
-        </span>
-      </div>
-    </div>
-
-    <!-- ✅ Pagination Controls -->
-    <div v-if="totalPages > 1" class="pagination">
-      <button @click="prevPage" :disabled="currentPage === 1">‹</button>
-      <button
-        v-for="page in totalPages"
-        :key="page"
-        @click="goToPage(page)"
-        :class="{ active: currentPage === page }"
+      <div
+        v-for="project in paginatedProjects"
+        :key="project.id"
+        class="project-card"
       >
-        {{ page }}
-      </button>
-      <button @click="nextPage" :disabled="currentPage === totalPages">
-        ›
-      </button>
+        <div class="project-header">
+          <h3 class="project-title">{{ project.thesis_name }}</h3>
+          <div class="actions">
+            <i
+              :class="[
+                'heart-icon',
+                likeStore.likedProjectIds.includes(project.id)
+                  ? 'fa-solid fa-heart'
+                  : 'fa-regular fa-heart',
+              ]"
+              @click="toggleLike(project.id)"
+              title="Add to favorites"
+            ></i>
+            <button
+              class="apply-btn"
+              :disabled="userHasTeam || userHasPendingRequest || isTeamFull(project)"
+              @click="applyToTeam(project.id)"
+            >
+              {{
+                isTeamFull(project)
+                  ? "Team is full"
+                  : userHasTeam
+                  ? "Already in a team"
+                  : userHasPendingRequest
+                  ? "Applied"
+                  : "Apply"
+              }}
+            </button>
+          </div>
+        </div>
+
+        <p class="project-description">{{ project.thesis_description }}</p>
+
+        <div class="project-members">
+          <router-link
+            v-if="project.supervisor"
+            :to="`/supervisors/${project.supervisor.id}`"
+            :title="`${project.supervisor.first_name} ${project.supervisor.last_name} (Supervisor)`"
+          >
+            <img
+              :src="getPhoto(project.supervisor)"
+              class="avatar supervisor-avatar"
+              alt="Supervisor"
+            />
+          </router-link>
+
+          <router-link
+            v-for="member in getSortedMembers(project)"
+            :key="member.id"
+            :to="`/students/${member.user}`"
+            :title="member.first_name + ' ' + member.last_name"
+          >
+            <img
+              :src="getPhoto(member)"
+              class="avatar"
+              :class="{ 'owner-avatar': member.user === project.owner }"
+              :alt="member.first_name"
+            />
+          </router-link>
+        </div>
+
+        <div class="project-skills">
+          <span
+            v-for="skill in project.required_skills"
+            :key="skill"
+            :class="getSkillClass(skill, project)"
+          >
+            {{ skill }}
+          </span>
+        </div>
+      </div>
+
+      <!-- ✅ Pagination Controls -->
+      <div v-if="totalPages > 1" class="pagination">
+        <button @click="prevPage" :disabled="currentPage === 1">‹</button>
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="goToPage(page)"
+          :class="{ active: currentPage === page }"
+        >
+          {{ page }}
+        </button>
+        <button @click="nextPage" :disabled="currentPage === totalPages">
+          ›
+        </button>
+      </div>
     </div>
+
+    <!-- ✅ Футер будет всегда снизу -->
+    <Footer />
   </div>
-  <Footer />
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
@@ -118,6 +125,7 @@ import Footer from "../components/Footer/Footer.vue";
 
 const authStore = useAuthStore();
 const likeStore = useLikeStore();
+const isTeamFull = (project) => project?.members?.length >= 4;
 const user = authStore.user;
 const mySkills = ref([]);
 const projects = ref([]);
@@ -246,7 +254,13 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 .dashboard-container {
+  flex: 1;
   max-width: 900px;
   margin: 0 auto;
   padding: 50px 20px;

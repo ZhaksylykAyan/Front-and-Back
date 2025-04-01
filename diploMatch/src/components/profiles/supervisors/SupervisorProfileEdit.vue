@@ -153,9 +153,7 @@ const updateProfile = async () => {
       }
     });
     formData.append("user", user.id);
-    if (!user.is_profile_completed) {
-      selectedSkills.value.forEach((id) => formData.append("skill_ids", id));
-    }
+    selectedSkills.value.forEach((id) => formData.append("skill_ids", id));
     if (imageFile.value) {
       formData.append("photo", imageFile.value);
     }

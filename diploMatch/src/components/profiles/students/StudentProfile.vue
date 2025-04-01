@@ -23,13 +23,11 @@
           <p v-if="profile.specialization">
             <strong>Major:</strong> {{ profile.specialization }}
           </p>
-          <p v-if="profile.portfolio">
-            <strong>
-              <a :href="profile.portfolio" target="_blank">
-                {{ profile.portfolio }}
-              </a>
-            </strong>
-          </p>
+          <div v-if="profile.portfolio" class="portfolio-link">
+            <a :href="profile.portfolio" target="_blank" rel="noopener">
+              {{ profile.portfolio }}
+            </a>
+          </div>
 
           <div class="section-title">Skills</div>
           <div class="skills-box">
@@ -64,11 +62,13 @@
             ></i>
             <button
               class="apply-btn"
-              :disabled="userHasTeam || userHasPendingRequest"
+              :disabled="userHasTeam || userHasPendingRequest || isTeamFull"
               @click="applyToTeam(team.id)"
             >
               {{
-                userHasTeam
+                isTeamFull
+                  ? "Team is full"
+                  : userHasTeam
                   ? "Already in a team"
                   : userHasPendingRequest
                   ? "Applied"
@@ -173,6 +173,9 @@ const mySkills = ref([]);
 const skills = ref([]);
 const selectedSkills = ref([]);
 const showLeaveConfirm = ref(false);
+const isTeamFull = computed(() => {
+  return team.value?.members?.length >= 4;
+});
 const defaultAvatar = new URL(
   "../../../icons/default-avatar.png",
   import.meta.url
@@ -201,7 +204,7 @@ const applyToTeam = async (teamId) => {
       }
     );
     alert("Join request sent!");
-    userHasPendingRequest.value = true;
+    await authStore.refreshTeamAndRequestStatus();
   } catch (err) {
     console.error("Failed to apply:", err);
     alert(err.response?.data?.error || "Failed to apply");
@@ -261,6 +264,7 @@ const getPhoto = (user) => {
   }
   return defaultAvatar;
 };
+
 const getSkillClass = (skillName) => {
   const mySkillNames = mySkills.value
     .filter((s) => s && s.name) // добавим проверку
@@ -296,8 +300,18 @@ onMounted(async () => {
           headers: { Authorization: `Bearer ${authStore.token}` },
         }
       );
-      mySkills.value = myProfile.data.skills || [];
     }
+    // 📌 Загружаем профиль текущего пользователя
+    const profileRes = await axios.get(
+      "http://127.0.0.1:8000/api/profiles/complete-profile/",
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+
+    profile.value = profileRes.data;
+    selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
+    mySkills.value = profileRes.data.skills || []; // <-- вот сюда добавь!
 
     if (
       props.viewedUserId &&
@@ -423,7 +437,6 @@ const editProject = () => {
   cursor: not-allowed;
   color: #666;
 }
-
 .apply-btn:hover {
   background-color: #0056b3;
 }
@@ -664,5 +677,68 @@ const editProject = () => {
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .profile-main {
+    flex-direction: column;
+    align-items: center;
+  }
+  .portfolio-link {
+    word-break: break-word;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    max-width: 100%;
+  }
+
+  .portfolio-link a {
+    color: #007bff;
+    text-decoration: underline;
+    word-break: break-all;
+  }
+
+  .photo-section,
+  .profile-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .actions {
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px;
+}
+
+  .actions button,
+  .actions i {
+    width: 100%;
+    text-align: center;
+  }
+  .project-skills {
+    justify-content: center;
+  }
+  .skill-pill {
+  word-break: break-word;
+  text-align: center;
+}
+  .team-members {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .profile-container {
+    padding: 20px 10px;
+  }
+
+  .skills-box {
+    justify-content: center;
+  }
 }
 </style>

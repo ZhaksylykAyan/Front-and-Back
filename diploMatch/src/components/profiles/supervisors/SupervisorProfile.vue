@@ -90,14 +90,18 @@
             ></i>
             <button
               class="apply-btn"
-              :disabled="userHasTeam || userHasPendingRequest"
-              @click="applyToTeam(project.id)"
+              :disabled="
+                userHasTeam || userHasPendingRequest || isTeamFull(project)
+              "
+              @click="applyToTeam(team.id)"
             >
               {{
                 userHasTeam
                   ? "Already in a team"
                   : userHasPendingRequest
                   ? "Applied"
+                  : isTeamFull
+                  ? "Team is full"
                   : "Apply"
               }}
             </button>
@@ -136,12 +140,20 @@
             />
           </router-link>
         </div>
+        <div
+          v-if="!isViewingOther"
+          class="compatibility-text"
+          :class="getCompatibilityClass(project.required_skills)"
+        >
+          Compatibility:
+          {{ calculateCompatibility(project.required_skills) }}%
+        </div>
 
         <div class="project-skills">
           <span
             v-for="skill in project.required_skills"
             :key="skill"
-            :class="getSkillClass(skill)"
+            :class="getSkillClass(skill, project)"
           >
             {{ skill }}
           </span>
@@ -194,7 +206,7 @@ const selectedSkills = ref([]);
 const mySkills = ref([]);
 const myProjects = ref([]);
 const isViewingOther = computed(() => !!route.params.id);
-
+const isTeamFull = (project) => project?.members?.length >= 4;
 const toggleLike = async (projectId) => {
   await likeStore.toggleLike(projectId);
 };
@@ -248,7 +260,6 @@ const confirmSupervisorDelete = (project) => {
   }
 };
 
-
 const cancelDelete = () => {
   showDeleteModal.value = false;
   teamToDelete.value = null;
@@ -278,32 +289,57 @@ const goToEditProject = (projectId) => {
 const goToEdit = () => {
   router.push({ path: "/profile", query: { edit: "true" } });
 };
-const getSkillClass = (skillName) => {
-  const mySkillNames = mySkills.value
-    .filter((s) => s && s.name)
-    .map((s) => s.name.toLowerCase());
-
+const getSkillClass = (skillName, project) => {
   const skill = skillName?.toLowerCase?.() || "";
+  const mySkillNames = mySkills.value.map((s) => s.name.toLowerCase());
 
-  // Собираем все скиллы членов команды
-  const allCoveredSkills = new Set();
-  myProjects.value.forEach((project) => {
-    project.members?.forEach((member) => {
-      member.skills?.forEach((s) => {
-        if (s.name) {
-          allCoveredSkills.add(s.name.toLowerCase());
-        }
-      });
+  // 👥 Скиллы, покрытые студентами — только для текущего проекта
+  const coveredByStudents = new Set();
+  project?.members?.forEach((member) => {
+    member.skills?.forEach((s) => {
+      if (s.name) coveredByStudents.add(s.name.toLowerCase());
     });
   });
 
-  const isMySkill = mySkillNames.includes(skill);
-  const isCovered = allCoveredSkills.has(skill);
+  const isMine = mySkillNames.includes(skill);
+  const isStudentCovered = coveredByStudents.has(skill);
 
-  if (isMySkill && isCovered) return "skill-pill my-covered";
-  if (isMySkill) return "skill-pill my-unique";
-  if (isCovered) return "skill-pill covered";
+  if (!isViewingOther.value) {
+    if (isMine && isStudentCovered) return "skill-pill my-covered";
+    if (isMine) return "skill-pill my-unique";
+    if (isStudentCovered) return "skill-pill covered";
+    return "skill-pill";
+  }
+
+  if (isMine && isStudentCovered) return "skill-pill my-covered";
+  if (isMine) return "skill-pill my-unique";
+  if (isStudentCovered) return "skill-pill covered";
   return "skill-pill";
+};
+
+const calculateCompatibility = (requiredSkills) => {
+  const required = requiredSkills.map((s) =>
+    typeof s === "string" ? s.toLowerCase() : s.name?.toLowerCase()
+  );
+
+  const mySkillNames = mySkills.value.map((s) =>
+    typeof s === "string" ? s.toLowerCase() : s.name?.toLowerCase()
+  );
+
+  console.log("🧩 Required skills:", required);
+  console.log("🎓 My professor skills:", mySkillNames);
+
+  const matched = required.filter((skill) => mySkillNames.includes(skill));
+  console.log("✅ Matched:", matched);
+
+  return Math.round((matched.length / required.length) * 100);
+};
+
+const getCompatibilityClass = (skills) => {
+  const percent = calculateCompatibility(skills);
+  if (percent >= 67) return "compatibility-good";
+  if (percent >= 33) return "compatibility-medium";
+  return "compatibility-low";
 };
 onMounted(async () => {
   await likeStore.fetchLikes();
@@ -346,6 +382,7 @@ onMounted(async () => {
       );
       profile.value = profileRes.data;
       selectedSkills.value = profile.value.skills?.map((s) => s.id) || [];
+      mySkills.value = profile.value.skills || [];
 
       const projectsRes = await axios.get(
         "http://127.0.0.1:8000/api/teams/my/",
@@ -616,7 +653,20 @@ onMounted(async () => {
   background: #9ede9c;
   color: #898787;
 }
+.compatibility-text {
+  font-size: 14px;
+  font-weight: bold;
+}
 
+.compatibility-good {
+  color: #28a745;
+}
+.compatibility-medium {
+  color: orange;
+}
+.compatibility-low {
+  color: #dc3545;
+}
 .team-members {
   display: flex;
   align-items: center;
@@ -676,5 +726,54 @@ onMounted(async () => {
 .confirm-btn {
   background: #dc3545;
   color: white;
+}
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 30px 20px;
+  }
+  
+  .profile-body {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .left-column,
+  .right-column {
+    width: 100%;
+  }
+
+  .profile-image {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+  }
+
+  .projects-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .project-actions,
+  .actions {
+    align-self: flex-start;
+  }
+
+  .team-members {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .skills-grid,
+  .project-skills {
+    justify-content: center;
+  }
 }
 </style>

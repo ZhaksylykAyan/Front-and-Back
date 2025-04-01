@@ -395,6 +395,7 @@ const acceptJoinRequest = async (teamId, studentId, req) => {
       {},
       { headers: { Authorization: `Bearer ${authStore.token}` } }
     );
+    await fetchRequests();
     req.status = "accepted";
   } catch (err) {
     console.error("Failed to accept join request", err);
@@ -408,6 +409,7 @@ const rejectJoinRequest = async (teamId, studentId, req) => {
       {},
       { headers: { Authorization: `Bearer ${authStore.token}` } }
     );
+    await fetchRequests();
     req.status = "rejected";
   } catch (err) {
     console.error("Failed to reject join request", err);
@@ -498,7 +500,7 @@ const getCompatibilityClass = (requiredSkills, teamMembers) => {
 };
 
 onMounted(async () => {
-  fetchRequests();
+  await fetchRequests();
   const res = await axios.get(
     "http://127.0.0.1:8000/api/profiles/complete-profile/",
     {
