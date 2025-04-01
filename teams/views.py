@@ -232,14 +232,29 @@ class AcceptJoinRequestView(APIView):
             team = Team.objects.get(pk=pk)
             if team.owner != request.user:
                 return Response({"error": "Only the owner can accept requests."}, status=403)
-
+            if team.members.count() >= 4:
+                return Response({"error": "Team is already full."}, status=400)
             join_request = JoinRequest.objects.get(team=team, student_id=student_id, status='pending')
             team.members.add(join_request.student)
             join_request.status = 'accepted'
             join_request.save()
 
-            send_notification(join_request.student.user,
-                              f"Your request to join '{team.thesis_topic.title}' was accepted.")
+            # Уведомляем принятого студента
+            send_notification(
+                join_request.student.user,
+                f"Your request to join '{team.thesis_topic.title}' was accepted."
+            )
+
+            # 💡 Если после добавления в команде уже 4 человека — удаляем все остальные pending заявки
+            if team.members.count() >= 4:
+                other_requests = JoinRequest.objects.filter(team=team, status="pending").exclude(student=student_id)
+                for req in other_requests:
+                    send_notification(
+                        req.student.user,
+                        f"Your request to join '{team.thesis_topic.title}' was automatically rejected because the team is now full."
+                    )
+                other_requests.delete()
+
             return Response({"message": "Student added to the team."}, status=200)
 
         except (Team.DoesNotExist, JoinRequest.DoesNotExist):
@@ -448,6 +463,7 @@ class LeaveTeamView(APIView):
 
         return Response({"message": "You left the team successfully."})
 
+
 class SupervisorDeleteTeamView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -474,6 +490,7 @@ class SupervisorDeleteTeamView(APIView):
         thesis.delete()
 
         return Response({"message": "Team and project deleted."}, status=200)
+
 
 class RemoveTeamMemberView(APIView):
     """ Позволяет owner'у или supervisor'у удалить участника из команды """
