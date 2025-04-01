@@ -1,7 +1,10 @@
 <template>
   <div class="dashboard-wrapper">
     <div class="dashboard-container">
-      <div v-if="!user?.is_profile_completed && showModal" class="modal-overlay">
+      <div
+        v-if="!user?.is_profile_completed && showModal"
+        class="modal-overlay"
+      >
         <div class="modal-box">
           <h3>Complete your profile</h3>
           <p class="modal-text">
@@ -13,7 +16,12 @@
         </div>
       </div>
 
-      <h2 class="section-title">Projects for you</h2>
+      <h2 class="section-title">
+        {{ isDean ? "Approved Projects" : "Projects for you" }}
+        <button v-if="isDean" class="excel-btn" @click="downloadExcel">
+          📥 Download .xlsx
+        </button>
+      </h2>
 
       <div
         v-for="project in paginatedProjects"
@@ -22,7 +30,7 @@
       >
         <div class="project-header">
           <h3 class="project-title">{{ project.thesis_name }}</h3>
-          <div class="actions">
+          <div class="actions" v-if="user?.role !== 'Dean Office'">
             <i
               :class="[
                 'heart-icon',
@@ -35,7 +43,9 @@
             ></i>
             <button
               class="apply-btn"
-              :disabled="userHasTeam || userHasPendingRequest || isTeamFull(project)"
+              :disabled="
+                userHasTeam || userHasPendingRequest || isTeamFull(project)
+              "
               @click="applyToTeam(project.id)"
             >
               {{
@@ -114,7 +124,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
@@ -129,6 +138,7 @@ const isTeamFull = (project) => project?.members?.length >= 4;
 const user = authStore.user;
 const mySkills = ref([]);
 const projects = ref([]);
+const isDean = computed(() => user?.role === "Dean Office");
 const showModal = ref(false);
 const route = useRoute();
 const router = useRouter();
@@ -230,15 +240,46 @@ const applyToTeam = async (teamId) => {
     alert(err.response?.data?.error || "Failed to apply");
   }
 };
+const downloadExcel = async () => {
+  try {
+    const res = await axios.get(
+      "http://127.0.0.1:8000/api/teams/export-excel/",
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+        responseType: "blob",
+      }
+    );
 
+    const blob = new Blob([res.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `diploma_projects_${new Date()
+      .toLocaleDateString()
+      .replaceAll("/", "_")}.xlsx`;
+    link.click();
+  } catch (err) {
+    console.error("❌ Failed to download Excel:", err);
+    alert("Something went wrong when downloading the file.");
+  }
+};
 onMounted(async () => {
   try {
     if (!user?.is_profile_completed) showModal.value = true;
     await likeStore.fetchLikes();
     await authStore.refreshTeamAndRequestStatus();
-    const res = await axios.get("http://127.0.0.1:8000/api/teams/", {
+    let endpoint = "http://127.0.0.1:8000/api/teams/";
+    if (user?.role === "Dean Office") {
+      endpoint = "http://127.0.0.1:8000/api/teams/approved/";
+    }
+
+    const res = await axios.get(endpoint, {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
+    projects.value = res.data;
+
     projects.value = res.data;
     const profileRes = await axios.get(
       "http://127.0.0.1:8000/api/profiles/complete-profile/",
@@ -262,6 +303,7 @@ onMounted(async () => {
 .dashboard-container {
   flex: 1;
   max-width: 900px;
+  width: 100%;
   margin: 0 auto;
   padding: 50px 20px;
   text-align: center;
@@ -394,7 +436,21 @@ onMounted(async () => {
   gap: 10px;
   margin-bottom: 12px;
 }
-
+.excel-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+  margin-left: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+.excel-btn:hover {
+  background: #218838;
+}
 .project-members a {
   display: inline-block;
   cursor: pointer;

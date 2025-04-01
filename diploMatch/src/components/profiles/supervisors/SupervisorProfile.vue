@@ -57,7 +57,12 @@
           <h3 class="project-title">{{ project.thesis_name }}</h3>
           <!-- Actions for owner -->
           <div class="project-actions" v-if="!isViewingOther">
-            <button class="action-btn green" title="Approve">
+            <!-- Кнопка -->
+            <button
+              class="action-btn green"
+              title="Approve"
+              @click="approveProject(project.id)"
+            >
               <img :src="requestIcon" alt="Approve" class="icon" />
             </button>
 
@@ -95,14 +100,14 @@
               :disabled="
                 userHasTeam || userHasPendingRequest || isTeamFull(project)
               "
-              @click="applyToTeam(team.id)"
+              @click="applyToTeam(project.id)"
             >
               {{
                 userHasTeam
                   ? "Already in a team"
                   : userHasPendingRequest
                   ? "Applied"
-                  : isTeamFull
+                  : isTeamFull(project)
                   ? "Team is full"
                   : "Apply"
               }}
@@ -282,6 +287,24 @@ const deleteTeam = async () => {
     alert(err.response?.data?.error || "Failed to delete");
   }
 };
+const approveProject = async (projectId) => {
+  try {
+    await axios.post(
+      `http://127.0.0.1:8000/api/teams/${projectId}/approve/`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      }
+    );
+    alert("Project successfully approved and sent to dean office!");
+  } catch (err) {
+    alert(err.response?.data?.error || "Failed to approve");
+    console.error(err);
+  }
+};
+
 const goToCreateProject = () => {
   router.push("/create-project");
 };
