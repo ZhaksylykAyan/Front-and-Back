@@ -321,9 +321,8 @@ input:focus {
 }
 
 .skill-item.selected {
-  background-color: #007bff;
-  color: white;
-  font-weight: 500;
+  background: #80c5ff;
+  color: black;
 }
 .select-input {
   width: 100%;

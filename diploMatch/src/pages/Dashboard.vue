@@ -381,6 +381,7 @@ onMounted(async () => {
 .project-title {
   font-size: 16px;
   font-weight: bold;
+  margin: 0px;
 }
 
 .actions {
@@ -393,6 +394,7 @@ onMounted(async () => {
   font-size: 20px;
   color: #ccc;
   cursor: pointer;
+  padding-left: 10px;
   transition: color 0.3s ease;
 }
 
@@ -410,6 +412,7 @@ onMounted(async () => {
   border: none;
   padding: 8px 16px;
   border-radius: 20px;
+  white-space: nowrap;
   font-size: 13px;
   cursor: pointer;
   transition: 0.2s ease;

@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("auth", {
     token: localStorage.getItem("token") || null,
     userHasTeam: false,
     userHasPendingRequest: false,
+    fullProfile: null,
   }),
 
   actions: {
@@ -40,33 +41,6 @@ export const useAuthStore = defineStore("auth", {
         throw new Error(error.response?.data?.detail || "Registration failed");
       }
     },
-
-    async login(email: string, password: string) {
-      try {
-        const response = await axios.post(`${API_URL}login/`, {
-          email,
-          password,
-        });
-
-        // Make sure this actually exists in your backend response
-        if (!response.data.access) throw new Error("Access token missing");
-
-        this.token = response.data.access;
-        localStorage.setItem("token", this.token);
-
-        const userResponse = await axios.get(`${API_URL}me/`, {
-          headers: { Authorization: `Bearer ${this.token}` },
-        });
-
-        this.user = userResponse.data;
-        return true;
-      } catch (error) {
-        throw new Error(
-          error.response?.data?.detail || error.message || "Invalid credentials"
-        );
-      }
-    },
-
     async fetchUser() {
       if (!this.token) {
         console.warn("No token found");
@@ -89,12 +63,42 @@ export const useAuthStore = defineStore("auth", {
         this.logout();
       }
     },
+    async login(email: string, password: string) {
+      try {
+        const response = await axios.post(`${API_URL}login/`, {
+          email,
+          password,
+        });
+    
+        if (!response.data.access) throw new Error("Access token missing");
+    
+        this.token = response.data.access;
+        localStorage.setItem("token", this.token);
+    
+        // Fetch basic user info
+        const userResponse = await axios.get(`${API_URL}me/`, {
+          headers: { Authorization: `Bearer ${this.token}` },
+        });
+        this.user = userResponse.data;
+    
+        // ⬇️ Fetch full profile data here
+        await this.fetchFullProfile();
+    
+        return true;
+      } catch (error) {
+        throw new Error(
+          error.response?.data?.detail || error.message || "Invalid credentials"
+        );
+      }
+    },
+    
+
     async fetchTeamStatus() {
       try {
         const res = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
           headers: { Authorization: `Bearer ${this.token}` },
         });
-    
+
         // ✅ Проверка для случая: объект с id
         if (res.data && typeof res.data === "object" && "id" in res.data) {
           this.userHasTeam = true;
@@ -146,7 +150,16 @@ export const useAuthStore = defineStore("auth", {
         throw new Error("Failed to update profile");
       }
     },
-
+    async fetchFullProfile() {
+      try {
+        const res = await axios.get(PROFILE_URL, {
+          headers: { Authorization: `Bearer ${this.token}` },
+        });
+        this.fullProfile = res.data;
+      } catch (error) {
+        console.error("Failed to fetch full profile:", error);
+      }
+    },
     async restoreUser() {
       const token = localStorage.getItem("token");
       if (token) {
@@ -156,6 +169,7 @@ export const useAuthStore = defineStore("auth", {
             headers: { Authorization: `Bearer ${token}` },
           });
           this.user = response.data;
+          await this.fetchFullProfile();
         } catch (error) {
           console.error("Session expired. Logging out.");
           this.logout();

@@ -171,7 +171,7 @@ const updateProfile = async () => {
 
     successMessage.value = "Profile updated successfully!";
     authStore.user.is_profile_completed = true;
-    setTimeout(() => router.push("/profile"), 1500);
+    router.push("/profile");
   } catch (error) {
     errorMessage.value = "Error updating profile.";
   }
@@ -333,9 +333,8 @@ input:focus {
 }
 
 .skill-card.selected {
-  background: #007bff;
-  color: white;
-  font-weight: 600;
+  background: #80c5ff;
+  color: black;
 }
 
 .btn-group {

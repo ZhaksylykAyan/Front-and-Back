@@ -2,7 +2,7 @@
   <div class="profile-container">
     <div class="profile-card">
       <div class="profile-header">
-        <h2>My Profile</h2>
+        <h2 v-if="!isViewingOther">{{ "My Profile" }}</h2>
         <div class="actions" v-if="!props.readonly">
           <button class="edit-btn" @click="goToEdit">✏️ Edit Profile</button>
           <button class="create-btn" @click="goToCreateProject">
@@ -395,7 +395,6 @@ const editProject = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .profile-header h2 {
@@ -429,6 +428,7 @@ const editProject = () => {
   color: white;
   border: none;
   padding: 8px 16px;
+  white-space: nowrap;
   border-radius: 20px;
   font-size: 13px;
   cursor: pointer;
@@ -446,7 +446,7 @@ const editProject = () => {
 .actions button {
   margin-left: 10px;
   padding: 8px 14px;
-  border-radius: 6px;
+  border-radius: 20px;
   font-size: 14px;
   border: none;
   cursor: pointer;
@@ -496,7 +496,7 @@ const editProject = () => {
 .profile-info h3 {
   font-size: 26px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-top: 0px;
 }
 
 .profile-info p {
@@ -522,7 +522,7 @@ const editProject = () => {
   color: black;
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .skill-pill.covered {
   background: #b1d0e9;
@@ -541,16 +541,17 @@ const editProject = () => {
 
 .project-section {
   padding-left: 30px;
-  max-width: 1000px;
+  max-width: 1100px;
+  margin-bottom: 16px;
   width: 100%;
 }
-
+.project-section h2{
+  margin-bottom: 30px;
+}
 .project-card {
-  width: 100%;
   background: #e6f0ff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  border-radius: 16px;
   margin-bottom: 20px;
 }
 
@@ -561,13 +562,14 @@ const editProject = () => {
 }
 
 .project-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+  margin: 0px;
 }
 
 .project-description {
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 15px;
 }
 .project-actions {

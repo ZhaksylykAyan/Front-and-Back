@@ -33,22 +33,28 @@
             {{ skill }}
           </span>
         </div>
-        <button
-          v-if="mySupervisorRequest.status === 'pending'"
-          class="cancel-btn"
-          @click="cancelSupervisorRequest"
-        >
-          Cancel Request
-        </button>
       </div>
 
       <div v-for="req in requests" :key="req.id" class="request-card">
         <div class="request-header">
-          <h3 class="project-title">{{ req.team.thesis_name }}</h3>
-          <span class="status-tag" :class="req.status.toLowerCase()">{{
-            req.status
-          }}</span>
+          <div>
+            <h3 class="project-title">{{ req.team.thesis_name }}</h3>
+          </div>
+
+          <div class="status-with-button">
+            <span class="status-tag" :class="req.status.toLowerCase()">
+              {{ req.status }}
+            </span>
+            <button
+              v-if="req.status === 'pending'"
+              class="cancel-btn"
+              @click="cancelRequest(req.id)"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
+
         <p class="project-description">{{ req.team.thesis_description }}</p>
         <div class="project-skills">
           <span
@@ -59,13 +65,13 @@
             {{ skill }}
           </span>
         </div>
-        <button
+        <!-- <button
           v-if="req.status === 'pending'"
           class="cancel-btn"
           @click="cancelRequest(req.id)"
         >
           Cancel Request
-        </button>
+        </button> -->
       </div>
     </div>
 
@@ -558,24 +564,30 @@ onMounted(async () => {
   font-size: 18px;
   font-weight: bold;
 }
+.status-with-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
 .status-tag {
   padding: 6px 12px;
-  border-radius: 16px;
+  border-radius: 20px;
   font-size: 13px;
   font-weight: bold;
   text-transform: capitalize;
 }
 .status-tag.pending {
-  background-color: orange;
-  color: white;
+  border: 2px solid orange;
+  color: orange;
 }
 .status-tag.accepted {
-  background-color: #28a745;
-  color: white;
+  border: 2px solid #28a745;
+  color: #28a745;
 }
 .status-tag.rejected {
-  background-color: #dc3545;
-  color: white;
+  border: 2px solid #dc3545;
+  color: #dc3545;
 }
 .project-description {
   font-size: 15px;
@@ -646,7 +658,7 @@ onMounted(async () => {
   color: white;
   border: none;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
 }

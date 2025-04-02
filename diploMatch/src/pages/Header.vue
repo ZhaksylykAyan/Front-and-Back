@@ -23,7 +23,8 @@
       <NotificationBell />
       <div class="profile-menu" ref="profileMenu">
         <button class="profile-button" @click="toggleDropdown">
-          <i class="fas fa-user"></i> Profile
+          <i class="fas fa-user"></i>
+          <span>{{ authStore.fullProfile?.first_name || 'Profile' }}</span>
         </button>
         <div v-if="dropdownOpen" class="dropdown-menu">
           <button @click="goToProfile">View Profile</button>
@@ -183,7 +184,6 @@ onBeforeUnmount(() => {
 .dropdown-menu {
   position: absolute;
   top: 40px;
-  right: 0;
   background: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 6px;

@@ -1,29 +1,32 @@
 <template>
   <div class="profile-container">
     <div class="profile-card">
-      <div class="header">
-        <h2>My Profile</h2>
-      </div>
+      <h2 class="section-title">My Profile</h2>
+
       <div class="profile-body">
-        <div class="left">
-          <div class="avatar-wrapper" @click="triggerUpload">
-            <img :src="profile.photo || defaultAvatar" class="profile-image" />
-            <div class="overlay">
-              <i class="fas fa-camera"></i>
-            </div>
-            <input type="file" ref="fileInput" class="hidden" @change="uploadAvatar" />
+        <div class="avatar-wrapper" @click="triggerUpload">
+          <img :src="profile.photo || defaultAvatar" class="profile-image" />
+          <div class="overlay">
+            <i class="fas fa-camera"></i>
           </div>
+          <input type="file" ref="fileInput" class="hidden" @change="uploadAvatar" />
         </div>
 
-        <div class="right">
+        <div class="profile-info">
           <h3 class="name">{{ profile.first_name }} {{ profile.last_name }}</h3>
-          <p class="role"> {{ capitalize(profile.job_role) }}</p>
+          <p class="role">{{ capitalize(profile.job_role) }}</p>
           <a href="#" class="email">{{ authStore.user.email }}</a>
         </div>
+      </div>
+
+      <div class="download-section">
+        <h3>Download approved projects?</h3>
+        <button class="download-btn">Download xlsx</button>
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { onMounted, ref } from 'vue';
@@ -85,78 +88,60 @@ const editProfile = () => {
 
 <style scoped>
 .profile-container {
-  padding-top: 30px;
   display: flex;
   flex-direction: column;
   gap: 30px;
+  padding: 30px;
 }
 
 .profile-card {
-  width: 100%;
-  max-width: 900px;
   padding: 30px;
   border-radius: 16px;
+  width: 100%;
+  max-width: 1000px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-}
-
-.edit-btn {
-  padding: 8px 16px;
-  background: #007bff;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 30px;
 }
 
 .profile-body {
   display: flex;
-  gap: 20px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 40px;
 }
 
-.left {
-  flex-shrink: 0;
+.avatar-wrapper {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #1c97fe;
+  cursor: pointer;
 }
 
 .profile-image {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #007bff;
-}
-.avatar-wrapper {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.4);
   color: white;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
-  font-size: 22px;
+  transition: 0.3s ease;
 }
 
 .avatar-wrapper:hover .overlay {
@@ -167,22 +152,46 @@ const editProfile = () => {
   display: none;
 }
 
-.right {
+.profile-info {
   flex-grow: 1;
 }
 
 .name {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
 .role {
-  color: #898787
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 10px;
 }
 
 .email {
+  color: #1c97fe;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.download-section h3 {
+  font-size: 18px;
   margin-bottom: 10px;
-  color: #1C97FE
+}
+
+.download-btn {
+  padding: 8px 16px;
+  border: 1px solid #1c97fe;
+  background: white;
+  color: #1c97fe;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.download-btn:hover {
+  background: #1c97fe;
+  color: white;
 }
 </style>

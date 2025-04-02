@@ -2,7 +2,7 @@
   <div class="profile-container">
     <div class="profile-card">
       <div class="profile-header">
-        <h2 class="section-title">My Profile</h2>
+        <h2 class="section-title" v-if="!isViewingOther">{{ "My Profile" }}</h2>
         <div class="profile-actions" v-if="!isViewingOther && !editing">
           <button class="edit-btn" @click="goToEdit">✏️ Edit Profile</button>
           <button class="create-btn" @click="goToCreateProject">
@@ -49,7 +49,7 @@
         <h2 class="section-title">
           {{ isViewingOther ? "Supervised Projects" : "My Projects" }}
         </h2>
-        <div class="project-count">{{ myProjects.length }} out of 10 left</div>
+        <div class="project-count">{{10 - myProjects.length }} out of 10 left</div>
       </div>
 
       <div v-for="project in myProjects" :key="project.id" class="project-card">
@@ -60,7 +60,7 @@
             <!-- Кнопка -->
             <button
               class="action-btn green"
-              title="Approve"
+              title="Send to Dean's Office"
               @click="approveProject(project.id)"
             >
               <img :src="requestIcon" alt="Approve" class="icon" />
@@ -480,9 +480,9 @@ onMounted(async () => {
   margin-top: 30px;
 }
 
-.left-column {
+/* .left-column {
   flex: 1;
-}
+} */
 
 .profile-image {
   width: 160px;
@@ -499,7 +499,7 @@ onMounted(async () => {
 .user-name {
   font-size: 26px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-top: 0px;
 }
 
 .info-section {
@@ -558,12 +558,14 @@ onMounted(async () => {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 6px;
+  margin: 0px;
 }
 
 .heart-icon {
   font-size: 20px;
   color: #ccc;
   margin-right: 10px;
+  padding-left: 10px;
   cursor: pointer;
   transition: color 0.3s ease;
 }
@@ -577,6 +579,7 @@ onMounted(async () => {
   background: #007bff;
   color: white;
   border: none;
+  white-space: nowrap;
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 13px;
@@ -638,7 +641,11 @@ onMounted(async () => {
 .red {
   background-color: #c23434;
 }
-
+.actions {
+  display: flex;
+  align-items: center; /* 💥 ключ! */
+  gap: 10px;
+}
 /* Hover (необязательно) */
 .action-btn:hover {
   opacity: 0.9;
