@@ -14,13 +14,25 @@
           <h3 class="project-title">
             {{ mySupervisorRequest.team.thesis_name }}
           </h3>
-          <span
-            class="status-tag"
-            :class="mySupervisorRequest.status.toLowerCase()"
-          >
-            {{ mySupervisorRequest.status }}
-          </span>
+
+          <div class="status-with-button">
+            <span
+              class="status-tag"
+              :class="mySupervisorRequest.status.toLowerCase()"
+            >
+              {{ mySupervisorRequest.status }}
+            </span>
+
+            <button
+              v-if="mySupervisorRequest.status === 'pending'"
+              class="cancel-btn"
+              @click="cancelSupervisorRequest"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
+
         <p class="project-description">
           {{ mySupervisorRequest.team.thesis_description }}
         </p>
@@ -65,13 +77,6 @@
             {{ skill }}
           </span>
         </div>
-        <!-- <button
-          v-if="req.status === 'pending'"
-          class="cancel-btn"
-          @click="cancelRequest(req.id)"
-        >
-          Cancel Request
-        </button> -->
       </div>
     </div>
 
@@ -346,6 +351,7 @@ const cancelSupervisorRequest = async () => {
       }
     );
     mySupervisorRequest.value = null;
+    await fetchRequests();
   } catch (err) {
     console.error("Failed to cancel supervisor request", err);
   }

@@ -9,6 +9,7 @@
           type="text"
           class="form-input"
           placeholder="Project Title (English)"
+          :readonly="isDean"
           required
         />
 
@@ -17,6 +18,7 @@
           type="text"
           class="form-input"
           placeholder="Project Title (Kazakh)"
+          :readonly="isDean"
           required
         />
 
@@ -25,6 +27,7 @@
           type="text"
           class="form-input"
           placeholder="Project Title (Russian)"
+          :readonly="isDean"
           required
         />
 
@@ -32,25 +35,27 @@
           v-model="project.description"
           class="form-textarea"
           placeholder="Project Description"
+          :readonly="isDean"
           required
         ></textarea>
-
-        <h3 class="skill-title">Choose skills you need:</h3>
-        <div class="skills-grid">
-          <div
-            v-for="skill in allSkills"
-            :key="skill.id"
-            :class="[
-              'skill-card',
-              { selected: selectedSkills.includes(skill.id) },
-            ]"
-            @click="toggleSkill(skill.id)"
-          >
-            {{ skill.name }}
+        <div v-if="!isDean">
+          <h3 class="skill-title">Choose skills you need:</h3>
+          <div class="skills-grid">
+            <div
+              v-for="skill in allSkills"
+              :key="skill.id"
+              :readonly="isDean"
+              :class="[
+                'skill-card',
+                { selected: selectedSkills.includes(skill.id) },
+              ]"
+              @click="toggleSkill(skill.id)"
+            >
+              {{ skill.name }}
+            </div>
           </div>
         </div>
-
-        <button type="submit" class="create-btn">
+        <button type="submit" class="create-btn" v-if="!isDean">
           {{ isEditMode ? "Update" : "Create" }}
         </button>
       </form>
@@ -74,7 +79,7 @@
             </router-link>
 
             <button
-              v-if="(isOwner || isSupervisor) && member.user !== currentUser.id"
+              v-if="(isDean || isOwner || isSupervisor) && member.user !== currentUser.id"
               class="remove-btn"
               @click="confirmRemoveMember(member)"
             >
@@ -112,6 +117,7 @@ const memberToRemove = ref(null);
 const isEditMode = ref(false);
 const currentUser = authStore.user;
 const isOwner = ref(false);
+const isDean = computed(() => currentUser?.role === "Dean Office");
 const projectOwnerId = ref(null);
 const isSupervisor = ref(currentUser?.role === "Supervisor");
 const allSkills = ref([]);
@@ -133,26 +139,37 @@ const project = ref({
 
 const loadTeam = async (topicId) => {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
-      headers: { Authorization: `Bearer ${authStore.token}` },
-    });
-
+    let endpoint = "http://127.0.0.1:8000/api/teams/my/";
+    let response = null;
     let teamData = null;
 
-    // 🔍 Если супервизор — будет массив команд
-    if (Array.isArray(res.data)) {
-      teamData = res.data.find(
+    if (isDean.value) {
+      // 👨‍🎓 Dean → получаем все команды и ищем по topicId
+      response = await axios.get("http://127.0.0.1:8000/api/teams/approved/", {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      });
+
+      teamData = response.data.find(
         (team) => team.thesis_topic?.id === Number(topicId)
       );
     } else {
-      // 👤 Если студент — это объект одной команды
-      teamData = res.data;
+      // 👤 Supervisor, Student, Owner → как раньше
+      response = await axios.get(endpoint, {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      });
+
+      if (Array.isArray(response.data)) {
+        teamData = response.data.find(
+          (team) => team.thesis_topic?.id === Number(topicId)
+        );
+      } else {
+        teamData = response.data;
+      }
     }
 
     if (teamData) {
       team.value = teamData;
 
-      // ✅ Фильтруем себя из списка, если ты студент-оунер
       const isCurrentUserStudent =
         currentUser?.role?.toLowerCase() === "student";
       const filteredMembers = isCurrentUserStudent
@@ -160,11 +177,9 @@ const loadTeam = async (topicId) => {
         : teamData.members;
 
       teamMembers.value = filteredMembers;
-      isOwner.value = teamData.is_owner;
+      isOwner.value = teamData.is_owner ?? false;
 
       console.log("✅ Team loaded:", team.value);
-      console.log("✅ Members:", teamMembers.value);
-      console.log("✅ isOwner:", isOwner.value);
     } else {
       console.warn("⚠️ No matching team found for topic:", topicId);
     }
@@ -172,6 +187,7 @@ const loadTeam = async (topicId) => {
     console.error("❌ Error loading team:", err);
   }
 };
+
 
 const confirmRemoveMember = (member) => {
   console.log("Selected member:", member);

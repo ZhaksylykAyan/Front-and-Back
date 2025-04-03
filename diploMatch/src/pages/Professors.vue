@@ -12,11 +12,13 @@
           <router-link :to="`/supervisors/${prof.user}`" class="avatar-link">
             <img :src="getPhoto(prof)" class="avatar" :alt="prof.first_name" />
           </router-link>
-          <div>
-            <strong>{{ prof.first_name }} {{ prof.last_name }}</strong
-            ><br />
-            <span v-if="prof.degree">{{ prof.degree }}</span
-            ><br />
+
+          <div class="text-info">
+            <div class="name-degree">
+              <strong>{{ prof.first_name }} {{ prof.last_name }}</strong
+              ><br />
+              <span v-if="prof.degree" class="degree">{{ prof.degree }}</span>
+            </div>
             <small :class="getCompatibilityClass(prof.skills)">
               Compatibility: {{ calculateCompatibility(prof.skills) }}
             </small>
@@ -166,6 +168,22 @@ onMounted(async () => {
   padding: 40px 20px;
   text-align: center;
 }
+.professor-main {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.text-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.name-degree {
+  line-height: 1.2;
+}
 
 .section-title {
   font-size: 24px;
@@ -194,6 +212,10 @@ onMounted(async () => {
   align-items: center;
   margin-bottom: 12px;
 }
+.degree {
+  display: inline-block;
+  margin-top: 4px; /* или padding-top */
+}
 
 .avatar-link {
   display: inline-block;
@@ -221,7 +243,7 @@ onMounted(async () => {
 }
 
 .skill-pill {
-  background-color: #80C5FF;
+  background-color: #80c5ff;
   color: black;
   padding: 6px 14px;
   border-radius: 20px;
@@ -229,7 +251,7 @@ onMounted(async () => {
 }
 
 .skill-pill.match {
-  background-color: #83D481;
+  background-color: #83d481;
   color: black;
 }
 
@@ -238,7 +260,7 @@ onMounted(async () => {
   color: white;
   border: none;
   padding: 10px 16px;
-  border-radius: 10px;
+  border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s ease;

@@ -30,6 +30,16 @@
       >
         <div class="project-header">
           <h3 class="project-title">{{ project.thesis_name }}</h3>
+          <div class="project-actions" v-if="isDean">
+            <button
+              class="action-btn gray"
+              title="Edit this project"
+              @click="goToEditProject(project.thesis_id)"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+          </div>
+
           <div class="actions" v-if="user?.role !== 'Dean Office'">
             <i
               :class="[
@@ -140,6 +150,7 @@ const mySkills = ref([]);
 const projects = ref([]);
 const isDean = computed(() => user?.role === "Dean Office");
 const showModal = ref(false);
+const editingProjectId = ref(null);
 const route = useRoute();
 const router = useRouter();
 const userHasTeam = computed(() => authStore.userHasTeam);
@@ -166,6 +177,9 @@ const goToPage = (page) => {
     router.push({ path: "/dashboard", query: { page: page } });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+};
+const goToEditProject = (projectId) => {
+  router.push({ path: "/create-project", query: { edit: "true", projectId } });
 };
 
 const nextPage = () => {
@@ -462,6 +476,30 @@ onMounted(async () => {
 
 .project-members a:hover {
   transform: scale(1.05);
+}
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.action-btn i {
+  color: white;
+}
+
+.gray {
+  background-color: #a8a8a8;
+}
+
+.action-btn:hover {
+  opacity: 0.9;
 }
 
 .avatar {
