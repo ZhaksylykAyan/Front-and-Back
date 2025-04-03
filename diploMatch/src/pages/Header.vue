@@ -118,16 +118,16 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
   align-items: center;
 }
-
 /* Logo */
 .logo {
   text-decoration: none;
+  font-family: 'Sora', sans-serif;
+  color: black;
   font-size: 22px;
   font-weight: bold;
-  color: black;
 }
 .blue {
-  color: #0056b3;
+  color: #002D9E;
 }
 
 /* Desktop Menu */
@@ -166,7 +166,6 @@ onBeforeUnmount(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .profile-button {
   background: none;
   border: none;
