@@ -4,9 +4,13 @@
       <div class="profile-header">
         <h2 v-if="!isViewingOther">{{ "My Profile" }}</h2>
         <div class="actions" v-if="!props.readonly">
-          <button class="edit-btn" @click="goToEdit">✏️ Edit Profile</button>
+          <button class="edit-btn" @click="goToEdit">
+            <i class="fa-solid fa-pen" style="margin-right: 6px"></i>
+            Edit Profile
+          </button>
           <button class="create-btn" @click="goToCreateProject">
-            + Create Project
+            <i class="fa-solid fa-plus"></i>
+            Create Project
           </button>
         </div>
       </div>
@@ -388,7 +392,7 @@ const editProject = () => {
   padding: 30px;
   border-radius: 16px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
 }
 
 .profile-header {
@@ -456,10 +460,30 @@ const editProject = () => {
 .edit-btn {
   background: #28a745;
   color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .edit-btn:hover {
   background: #218838;
+}
+
+.edit-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Анимация при наведении на кнопку */
+.edit-btn:hover .edit-icon {
+  transform: rotate(-5deg) scale(1.1);
+  color: #fffacd; /* мягкий желтоватый оттенок */
 }
 
 .create-btn {
@@ -468,17 +492,14 @@ const editProject = () => {
 }
 
 .create-btn:hover {
-  background: #0056b3;
+  background-color: #5bb1ff; /* немного темнее/насыщеннее */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* мягкая тень */
 }
 
 .profile-main {
   display: flex;
   gap: 30px;
   margin-top: 30px;
-}
-
-.photo-section {
-  flex: 1;
 }
 
 .profile-img {
@@ -489,10 +510,6 @@ const editProject = () => {
   border: 3px solid #007bff;
 }
 
-.profile-info {
-  flex: 2;
-}
-
 .profile-info h3 {
   font-size: 26px;
   font-weight: bold;
@@ -501,7 +518,7 @@ const editProject = () => {
 
 .profile-info p {
   margin-bottom: 6px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .section-title {
@@ -545,7 +562,7 @@ const editProject = () => {
   margin-bottom: 16px;
   width: 100%;
 }
-.project-section h2{
+.project-section h2 {
   margin-bottom: 30px;
 }
 .project-card {
@@ -715,10 +732,10 @@ const editProject = () => {
   }
 
   .actions {
-  flex-direction: row !important;
-  align-items: center !important;
-  gap: 10px;
-}
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px;
+  }
 
   .actions button,
   .actions i {
@@ -729,9 +746,9 @@ const editProject = () => {
     justify-content: center;
   }
   .skill-pill {
-  word-break: break-word;
-  text-align: center;
-}
+    word-break: break-word;
+    text-align: center;
+  }
   .team-members {
     flex-wrap: wrap;
     justify-content: center;

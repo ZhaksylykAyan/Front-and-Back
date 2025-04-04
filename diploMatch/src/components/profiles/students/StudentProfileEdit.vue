@@ -1,6 +1,7 @@
 <template>
   <div class="profile-edit-container">
     <div class="profile-card">
+      <h2 class="edit-title">Edit Profile</h2>
       <div class="profile-header">
         <div class="form-grid">
           <input type="text" v-model="profile.first_name" placeholder="Name" />
@@ -10,11 +11,11 @@
             placeholder="Surname"
           />
         </div>
-        <div class="photo-section">
-          <img :src="imagePreview || defaultAvatar" class="profile-img" />
-          <label class="upload-icon" v-if="editing">
-            <input type="file" @change="handleImageUpload" />
-            <span class="camera-icon">📷</span>
+        <div class="image-wrapper">
+          <img :src="imagePreview || defaultAvatar" class="profile-image" />
+          <label class="upload-btn" v-if="editing">
+            <input type="file" accept="image/*" @change="handleImageUpload" />
+            <i class="fas fa-camera"></i>
           </label>
         </div>
       </div>
@@ -206,19 +207,52 @@ const saveProfile = async () => {
 }
 
 .profile-card {
-  background: #f0f6fb;
-  padding: 30px 25px;
-  border-radius: 14px;
-  width: 440px;
-  max-width: 95%;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  background: #eaf3fb; /* единый цвет */
+  padding: 40px 32px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px; /* одинаковый размер */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
 }
 
 .edit-title {
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.image-wrapper {
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #007bff;
+}
+
+.upload-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #007bff;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+}
+
+.upload-btn input {
+  display: none;
 }
 
 .profile-header {
@@ -233,13 +267,6 @@ const saveProfile = async () => {
   flex-direction: column;
   width: 65%;
   gap: 10px;
-}
-
-.photo-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 35%;
 }
 
 .profile-img {
@@ -342,7 +369,6 @@ input:focus {
   outline: none;
 }
 
-
 .button-row {
   display: flex;
   justify-content: center;
@@ -353,13 +379,13 @@ input:focus {
 .save-btn,
 .cancel-btn {
   min-width: 120px;
-  padding: 10px 16px;
+  padding: 12px;
   font-size: 14px;
   border: none;
-
-  border-radius: 8px;
+  font-weight: 600;
+  border-radius: 10px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .save-btn {

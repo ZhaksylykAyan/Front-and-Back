@@ -1,44 +1,58 @@
 <template>
-    <div class="auth-container">
-      <div class="auth-box">
-        <img src="../assets/logo.png" alt="Diplomatch Logo" class="logo"/>
-        <p class="tagline"><strong>Match. Collaborate. Graduate.</strong></p>
-        <h2>Login</h2>
-        <form @submit.prevent="handleLogin">
-          <input type="email" v-model="email" placeholder="E-mail" required />
-          <input type="password" v-model="password" placeholder="Password" required />
-          <button type="submit" class="btn">Login</button>
-        </form>
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-        <router-link to="/forgot-password" class="switch-link">Forgot password?</router-link>
-        <router-link to="/register" class="switch-link">Don't have an account? Register</router-link>
-      </div>
+  <div class="auth-container">
+    <div class="auth-box">
+      <img src="../assets/logo.png" alt="Diplomatch Logo" class="logo" />
+      <p class="tagline"><strong>Match. Collaborate. Graduate.</strong></p>
+      <h2>Login</h2>
+      <form @submit.prevent="handleLogin">
+        <input type="email" v-model="email" placeholder="E-mail" required />
+        <input
+          type="password"
+          v-model="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit" class="btn">Login</button>
+      </form>
+      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <router-link to="/forgot-password" class="switch-link"
+        >Forgot password?</router-link
+      >
+      <router-link to="/register" class="switch-link"
+        >Don't have an account? Register</router-link
+      >
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref } from "vue";
-  import { useAuthStore } from "../store/auth";
-  import { useRouter } from "vue-router";
-  
-  const email = ref("");
-  const password = ref("");
-  const authStore = useAuthStore();
-  const router = useRouter();
-  const errorMessage = ref("");
-  
-  const handleLogin = async () => {
-    try {
-      await authStore.login(email.value, password.value);
-      router.push("/dashboard");
-    } catch (error) {
-      errorMessage.value = error.message;
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+import { useAuthStore } from "../store/auth";
+import { useRouter } from "vue-router";
+
+const email = ref("");
+const password = ref("");
+const authStore = useAuthStore();
+const router = useRouter();
+const errorMessage = ref("");
+
+const handleLogin = async () => {
+  try {
+    await authStore.login(email.value, password.value);
+    router.push("/dashboard");
+  } catch (error: any) {
+    // 💥 Показываем точную ошибку с бэка
+    if (error.response && error.response.data && error.response.data.detail) {
+      errorMessage.value = error.response.data.detail;
+    } else {
+      errorMessage.value = "Something went wrong. Try again";
     }
-  };
-  </script>
-  
-  <style scoped>
-  /* === General Styles === */
+  }
+};
+</script>
+
+<style scoped>
+/* === General Styles === */
 * {
   margin: 0;
   padding: 0;
@@ -69,7 +83,6 @@ body {
   margin-bottom: 1.5rem;
 }
 
-
 .auth-box {
   background: white;
   padding: 40px;
@@ -87,7 +100,7 @@ body {
 .auth-box h2 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #144A77;
+  color: #144a77;
 }
 
 /* === Input Fields === */
@@ -136,6 +149,4 @@ body {
   font-size: 14px;
   margin-top: 10px;
 }
-
-  </style>
-  
+</style>

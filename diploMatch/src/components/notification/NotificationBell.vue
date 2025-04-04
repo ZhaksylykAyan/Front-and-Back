@@ -8,15 +8,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import axios from "axios";
 import { useAuthStore } from "../../store/auth";
-
+import { useNotificationStore } from "../../store/notifications";
+import { useRoute } from "vue-router";
+const route = useRoute();
 const authStore = useAuthStore();
-const unreadCount = ref(0);
+const notificationStore = useNotificationStore();
 let socket = null;
 
-// 🔥 Функция для загрузки количества непрочитанных уведомлений
+
 const fetchUnread = async () => {
   try {
     const res = await axios.get(
@@ -25,7 +27,7 @@ const fetchUnread = async () => {
         headers: { Authorization: `Bearer ${authStore.token}` },
       }
     );
-    unreadCount.value = res.data.unread_count;
+    notificationStore.setCount(res.data.unread_count);
   } catch (err) {
     console.error("Failed to fetch unread notifications:", err);
   }
@@ -74,6 +76,7 @@ onUnmounted(() => {
     socket.close();
   }
 });
+const unreadCount = computed(() => notificationStore.unreadCount);
 </script>
 
 <style scoped>

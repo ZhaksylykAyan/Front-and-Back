@@ -4,9 +4,13 @@
       <div class="profile-header">
         <h2 class="section-title" v-if="!isViewingOther">{{ "My Profile" }}</h2>
         <div class="profile-actions" v-if="!isViewingOther && !editing">
-          <button class="edit-btn" @click="goToEdit">✏️ Edit Profile</button>
+          <button class="edit-btn" @click="goToEdit">
+            <i class="fa-solid fa-pen" style="margin-right: 6px"></i>
+            Edit Profile
+          </button>
           <button class="create-btn" @click="goToCreateProject">
-            ➕ Create Project
+            <i class="fa-solid fa-plus" style="margin-right: 6px"></i>
+            Create Project
           </button>
         </div>
       </div>
@@ -49,7 +53,9 @@
         <h2 class="section-title">
           {{ isViewingOther ? "Supervised Projects" : "My Projects" }}
         </h2>
-        <div class="project-count">{{10 - myProjects.length }} out of 10 left</div>
+        <div class="project-count">
+          {{ 10 - myProjects.length }} out of 10 left
+        </div>
       </div>
 
       <div v-for="project in myProjects" :key="project.id" class="project-card">
@@ -456,23 +462,37 @@ onMounted(async () => {
 
 .edit-btn,
 .create-btn {
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
   border: none;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
 }
 
 .edit-btn {
-  background-color: #28a745;
+  background: #28a745;
   color: white;
 }
 
+.edit-btn:hover {
+  background: #218838;
+}
+
 .create-btn {
-  background-color: #007bff;
+  background: #80c5ff;
   color: white;
 }
+
+.create-btn:hover {
+  background: #5bb1ff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
 
 .profile-body {
   display: flex;

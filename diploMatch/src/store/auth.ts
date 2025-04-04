@@ -75,22 +75,19 @@ export const useAuthStore = defineStore("auth", {
         this.token = response.data.access;
         localStorage.setItem("token", this.token);
     
-        // Fetch basic user info
         const userResponse = await axios.get(`${API_URL}me/`, {
           headers: { Authorization: `Bearer ${this.token}` },
         });
         this.user = userResponse.data;
     
-        // ⬇️ Fetch full profile data here
         await this.fetchFullProfile();
     
         return true;
       } catch (error) {
-        throw new Error(
-          error.response?.data?.detail || error.message || "Invalid credentials"
-        );
+        throw error; // 👈 просто пробрасываем оригинальный error
       }
     },
+    
     
 
     async fetchTeamStatus() {
@@ -177,11 +174,32 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    logout() {
+    async logout() {
+      try {
+        // отправляем logout-запрос на бэкенд
+        await axios.post(
+          `${API_URL}logout/`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.warn("Logout on server failed or already logged out:", error);
+      }
+    
+      // локальная очистка токена
       this.user = null;
       this.token = null;
       localStorage.removeItem("token");
+    
+      // редирект по желанию
+      const router = useRouter();
+      router.push("/login");
     },
+    
 
     async requestPasswordReset(email: string) {
       try {
