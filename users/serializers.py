@@ -3,7 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.db import transaction
-
+from rest_framework.exceptions import AuthenticationFailed
+from django.utils import timezone
+from users.models import CustomUser
 from profiles.models import StudentProfile, SupervisorProfile, DeanOfficeProfile
 
 User = get_user_model()
@@ -16,6 +18,42 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['role'] = user.role
         token['is_profile_completed'] = user.is_profile_completed
         return token
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password = attrs.get("password")
+
+        try:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            raise AuthenticationFailed("User with given email does not exist")
+
+        now = timezone.now()
+        if user.blocked_until and now < user.blocked_until:
+            remaining = (user.blocked_until - now).seconds // 60
+            raise AuthenticationFailed(f"Account is blocked for {remaining} minute(s)")
+
+        if not user.check_password(password):
+            user.failed_login_attempts += 1
+
+            if user.failed_login_attempts >= 3:
+                user.blocked_until = timezone.now() + timezone.timedelta(minutes=user.block_duration)
+                user.block_duration += 5
+                user.failed_login_attempts = 0
+                user.save()
+                raise AuthenticationFailed(f"Account is blocked for {user.block_duration - 5} minutes")
+            else:
+                attempts_left = 3 - user.failed_login_attempts
+                user.save()
+                raise AuthenticationFailed(f"Incorrect password. Attempts left: {attempts_left}")
+
+        # Успешный вход — сброс
+        user.failed_login_attempts = 0
+        user.blocked_until = None
+        user.block_duration = 5
+        user.save()
+
+        return super().validate(attrs)
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

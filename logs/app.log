@@ -1,0 +1,682 @@
+2025-04-05 01:08:40,336 [INFO] users.views - JWT-вход: am_suleimenova@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:08:40,745 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 01:08:53,870 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 01:10:55,751 [WARNING] django.request - Bad Request: /api/users/forgot-password/
+2025-04-05 01:11:08,638 [INFO] users.views - JWT-вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:11:23,866 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 01:11:31,203 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 01:13:42,551 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 01:14:53,719 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:14:53,719 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:14:53,720 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:14:53,720 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:14:58,408 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 01:15:06,088 [INFO] users.views - JWT-вход: aya.zhks@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:15:06,694 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 01:17:57,460 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 01:18:25,000 [INFO] users.views - JWT-вход: asd-123@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:18:25,294 [WARNING] django.request - Bad Request: /api/teams/my/
+2025-04-05 01:18:25,334 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 01:18:41,839 [INFO] users.views - JWT-выход: asd-123@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:29:09,560 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 01:29:11,147 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:29:11,147 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:29:11,147 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:29:11,148 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:29:18,190 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 01:29:34,335 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:29:34,335 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:29:34,336 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:29:34,336 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:32:01,602 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 01:32:07,078 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:32:07,078 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:32:07,078 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:32:07,079 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:38:24,476 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 01:38:34,320 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:38:34,320 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:38:34,321 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:38:34,321 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:40:13,833 [WARNING] users.views - Новый IP входа: 127.0.0.1 для a_khalelov@kbtu.kz
+2025-04-05 01:40:13,836 [INFO] users.views - JWT-вход: a_khalelov@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:40:14,034 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 01:40:15,742 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 01:41:17,724 [INFO] daphne.server - Killed 1 pending application instances
+2025-04-05 01:41:26,368 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:41:26,368 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:41:26,368 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:41:26,369 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:42:04,053 [ERROR] django.request - Internal Server Error: /admin/users/customuser/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\options.py", line 718, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 229, in inner
+    if not self.has_permission(request):
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 202, in has_permission
+    return request.user.is_active and request.user.is_staff
+                                      ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\functional.py", line 253, in inner
+    return func(_wrapped, *args)
+AttributeError: 'CustomUser' object has no attribute 'is_staff'
+2025-04-05 01:42:32,862 [INFO] daphne.server - Killed 1 pending application instances
+2025-04-05 01:42:53,694 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:42:53,694 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:42:53,695 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:42:53,695 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:44:21,041 [INFO] users.views - JWT-выход: a_khalelov@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:44:49,634 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 01:45:17,022 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:45:17,022 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:45:17,022 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:45:17,023 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:45:20,543 [ERROR] django.request - Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 444, in login
+    return LoginView.as_view(**defaults)(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 89, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\edit.py", line 151, in post
+    return self.form_valid(form)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 108, in form_valid
+    auth_login(self.request, form.get_user())
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 152, in login
+    user_logged_in.send(sender=user.__class__, request=request, user=user)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "D:\DTest\users\signals.py", line 10, in log_login
+    logger.info(f"Вход: {user.username} (IP: {ip})")
+                         ^^^^^^^^^^^^^
+AttributeError: 'CustomUser' object has no attribute 'username'
+2025-04-05 01:46:12,503 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 01:46:38,856 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:46:38,857 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:46:38,857 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:46:38,858 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:46:42,111 [WARNING] django.security.csrf - Forbidden (CSRF token from POST incorrect.): /admin/login/
+2025-04-05 01:47:04,614 [ERROR] django.request - Internal Server Error: /admin/logout/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 260, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 405, in logout
+    return LogoutView.as_view(**defaults)(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 137, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 141, in post
+    auth_logout(request)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 170, in logout
+    user_logged_out.send(sender=user.__class__, request=request, user=user)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "D:\DTest\users\signals.py", line 15, in log_logout
+    logger.info(f"Выход: {user.username} (IP: {ip})")
+                          ^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\functional.py", line 253, in inner
+    return func(_wrapped, *args)
+AttributeError: 'CustomUser' object has no attribute 'username'
+2025-04-05 01:47:07,643 [ERROR] django.request - Internal Server Error: /admin/logout/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 260, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 405, in logout
+    return LogoutView.as_view(**defaults)(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 137, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 141, in post
+    auth_logout(request)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 170, in logout
+    user_logged_out.send(sender=user.__class__, request=request, user=user)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "D:\DTest\users\signals.py", line 15, in log_logout
+    logger.info(f"Выход: {user.username} (IP: {ip})")
+                          ^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\functional.py", line 253, in inner
+    return func(_wrapped, *args)
+AttributeError: 'CustomUser' object has no attribute 'username'
+2025-04-05 01:47:09,370 [ERROR] django.request - Internal Server Error: /admin/logout/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 260, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 405, in logout
+    return LogoutView.as_view(**defaults)(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 137, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 141, in post
+    auth_logout(request)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 170, in logout
+    user_logged_out.send(sender=user.__class__, request=request, user=user)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "D:\DTest\users\signals.py", line 15, in log_logout
+    logger.info(f"Выход: {user.username} (IP: {ip})")
+                          ^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\functional.py", line 253, in inner
+    return func(_wrapped, *args)
+AttributeError: 'CustomUser' object has no attribute 'username'
+2025-04-05 01:47:52,514 [WARNING] users.views - Новый IP входа: 127.0.0.1 для a_nusip@kbtu.kz
+2025-04-05 01:47:52,517 [INFO] users.views - JWT-вход: a_nusip@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:47:52,932 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 01:48:25,759 [ERROR] django.request - Internal Server Error: /admin/logout/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 260, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\admin\sites.py", line 405, in logout
+    return LogoutView.as_view(**defaults)(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 137, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\views.py", line 141, in post
+    auth_logout(request)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\contrib\auth\__init__.py", line 170, in logout
+    user_logged_out.send(sender=user.__class__, request=request, user=user)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "D:\DTest\users\signals.py", line 15, in log_logout
+    logger.info(f"Выход: {user.username} (IP: {ip})")
+                          ^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\utils\functional.py", line 253, in inner
+    return func(_wrapped, *args)
+AttributeError: 'CustomUser' object has no attribute 'username'
+2025-04-05 01:48:29,342 [INFO] daphne.server - Killed 1 pending application instances
+2025-04-05 01:48:31,301 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:48:31,301 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:48:31,302 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:48:31,302 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 01:48:34,828 [WARNING] django.request - Not Found: /
+2025-04-05 01:49:44,478 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 01:49:45,836 [INFO] users.views - JWT-выход: a_nusip@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 01:50:33,750 [WARNING] users.views - Неудачный вход: a_nusip@kbtu.kz (IP: 127.0.0.1) — No active account found with the given credentials
+2025-04-05 01:50:33,756 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 01:58:53,465 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 01:58:55,084 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:58:55,084 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 01:58:55,084 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 01:58:55,085 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 02:00:09,031 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 02:00:18,648 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 02:00:23,588 [WARNING] users.views - Неудачный вход: a_rakhymzhan@kbtu.kz (IP: 127.0.0.1) — Неверный пароль. Осталось попыток: 2
+2025-04-05 02:00:23,592 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 02:02:22,528 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 02:02:23,654 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 02:02:30,721 [WARNING] users.views - Неудачный вход: a_ugay@kbtu.kz (IP: 127.0.0.1) — Неверный пароль. Осталось попыток: 2
+2025-04-05 02:02:30,725 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 02:05:32,582 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 02:05:34,197 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 02:05:34,198 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 02:05:34,198 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 02:05:34,198 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 02:05:36,120 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 02:05:44,396 [ERROR] django.request - Internal Server Error: /api/users/login/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\DTest\users\views.py", line 41, in post
+    user = User.objects.get(email=email)
+  File "D:\DTest\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\db\models\query.py", line 649, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+users.models.CustomUser.DoesNotExist: CustomUser matching query does not exist.
+2025-04-05 02:06:25,300 [WARNING] users.views - Неудачный вход: am_suleimenova@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 02:06:25,303 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 02:06:33,200 [ERROR] django.request - Internal Server Error: /api/users/login/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\DTest\users\views.py", line 41, in post
+    user = User.objects.get(email=email)
+  File "D:\DTest\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\db\models\query.py", line 649, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+users.models.CustomUser.DoesNotExist: CustomUser matching query does not exist.
+2025-04-05 02:08:52,934 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 02:08:55,108 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 02:08:55,108 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 02:08:55,108 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 02:08:55,109 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 02:08:59,486 [ERROR] django.request - Internal Server Error: /api/users/login/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\DTest\users\views.py", line 41, in post
+    user = User.objects.get(email=email)
+  File "D:\DTest\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\db\models\query.py", line 649, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+users.models.CustomUser.DoesNotExist: CustomUser matching query does not exist.
+2025-04-05 02:09:00,631 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 02:09:08,193 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 02:09:15,644 [ERROR] django.request - Internal Server Error: /api/users/login/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\DTest\users\views.py", line 41, in post
+    user = User.objects.get(email=email)
+  File "D:\DTest\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\django\db\models\query.py", line 649, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+users.models.CustomUser.DoesNotExist: CustomUser matching query does not exist.
+2025-04-05 02:10:05,771 [INFO] daphne.server - Killed 0 pending application instances

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from profiles.models import StudentProfile, SupervisorProfile, DeanOfficeProfile
-
+from django.utils import timezone
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -31,6 +31,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_profile_completed = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    failed_login_attempts = models.PositiveIntegerField(default=0)
+    is_blocked = models.BooleanField(default=False)
+    blocked_until = models.DateTimeField(null=True, blank=True)
+    block_duration = models.IntegerField(default=5)
+    last_login_ip = models.GenericIPAddressField(null=True, blank=True)
 
     objects = CustomUserManager()
 
@@ -49,3 +54,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.email} ({self.role})"
+
+class AccessLog(models.Model):
+    ACTION_CHOICES = [
+        ('login', 'Login'),
+        ('logout', 'Logout'),
+    ]
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    action = models.CharField(max_length=10, choices=ACTION_CHOICES)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(null=True, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.user.email} — {self.action.upper()} @ {self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"

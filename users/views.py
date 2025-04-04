@@ -1,25 +1,124 @@
+import logging
 from django.db import transaction
-from rest_framework import generics, status
 from django.contrib.auth import get_user_model
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
 from django.conf import settings
-
+from .models import AccessLog
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
+from datetime import timedelta
+from django.utils import timezone
+from rest_framework.exceptions import AuthenticationFailed
 from .serializers import (
     UserRegistrationSerializer, CustomTokenObtainPairSerializer,
     UserSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer
 )
+from rest_framework_simplejwt.views import TokenRefreshView
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    return x_forwarded_for.split(",")[0] if x_forwarded_for else request.META.get("REMOTE_ADDR")
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email", "")
+        ip = get_client_ip(request)
+
+        try:
+            user = User.objects.get(email=email)
+            now = timezone.now()
+
+            # Проверка на временную блокировку
+            if user.blocked_until and now < user.blocked_until:
+                remaining = (user.blocked_until - now).seconds // 60
+                logger.warning(f"⛔ Заблокирован: {email} до {user.blocked_until}")
+                raise AuthenticationFailed(f"Account is temporarily blocked. Try again in {remaining} minutes.")
+
+            # Если время блокировки прошло — сбрасываем
+            if user.blocked_until and now >= user.blocked_until:
+                user.blocked_until = None
+                user.failed_login_attempts = 0
+                user.save()
+
+            response = super().post(request, *args, **kwargs)
+
+            if response.status_code == 200:
+                user.failed_login_attempts = 0
+                user.block_duration = 5  # сбрасываем прогрессивную блокировку
+                user.blocked_until = None
+
+                if user.last_login_ip != ip:
+                    logger.warning(f"Новый IP входа: {ip} для {email}")
+                user.last_login_ip = ip
+                user.save()
+
+                logger.info(f"JWT-вход: {email} (IP: {ip})")
+                AccessLog.objects.create(
+                    user=user,
+                    action='login',
+                    ip_address=ip,
+                    user_agent=request.META.get('HTTP_USER_AGENT', '')
+                )
+
+            return response
+
+        except AuthenticationFailed as e:
+            logger.warning(f"Неудачный вход: {email} (IP: {ip}) — {str(e)}")
+
+            try:
+                user = User.objects.get(email=email)
+                user.failed_login_attempts += 1
+
+                if user.failed_login_attempts >= 3:
+                    user.blocked_until = timezone.now() + timedelta(minutes=user.block_duration)
+                    logger.warning(f"🛡 Пользователь {email} заблокирован на {user.block_duration} минут")
+                    user.block_duration += 5  # увеличим блокировку в будущем
+                    user.failed_login_attempts = 0  # сбрасываем счётчик
+
+                user.save()
+            except User.DoesNotExist:
+                logger.warning(f"Попытка входа с несуществующим email: {email} (IP: {ip})")
+
+            raise
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        if response.status_code == 200:
+            logger.info(f"Обновление токена (IP: {get_client_ip(request)})")
+
+        return response
+
+
+class ManualLogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        ip = get_client_ip(request)
+        logger.info(f"JWT-выход: {user.email} (IP: {ip})")
+        AccessLog.objects.create(
+            user=user,
+            action='logout',
+            ip_address=ip,
+            user_agent=request.META.get('HTTP_USER_AGENT', '')
+        )
+        return Response({"message": "Logout logged"})
 
 
 class RegisterView(generics.CreateAPIView):
@@ -34,8 +133,11 @@ class RegisterView(generics.CreateAPIView):
         try:
             with transaction.atomic():
                 user = serializer.save()
-                return Response({"message": "User registered successfully.", "role": user.role}, status=status.HTTP_201_CREATED)
+                logger.info(f"Успешная регистрация: {user.email}")
+                return Response({"message": "User registered successfully.", "role": user.role},
+                                status=status.HTTP_201_CREATED)
         except Exception as e:
+            logger.error("Ошибка регистрации пользователя: %s", e)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -59,6 +161,7 @@ class PasswordResetRequestView(generics.GenericAPIView):
         user = User.objects.filter(email=email).first()
 
         if not user:
+            logger.warning(f"Запрос сброса пароля: email не найден — {email}")
             return Response({"error": "User with this email does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
         token = default_token_generator.make_token(user)
@@ -73,8 +176,10 @@ class PasswordResetRequestView(generics.GenericAPIView):
                 recipient_list=[email],
                 fail_silently=False,
             )
+            logger.info(f"Отправлен email сброса пароля пользователю: {user.email}")
             return Response({"message": "If your email is registered, you will receive a password reset link."})
         except Exception as e:
+            logger.error("Ошибка при отправке письма для сброса пароля: %s", e)
             return Response({"error": f"Failed to send email: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -88,6 +193,7 @@ class PasswordResetConfirmView(generics.GenericAPIView):
             user = User.objects.get(pk=uid)
 
             if not default_token_generator.check_token(user, token):
+                logger.warning("Невалидный токен сброса пароля для UID: %s", uid)
                 return Response({"error": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)
 
             serializer = self.get_serializer(data=request.data)
@@ -95,8 +201,10 @@ class PasswordResetConfirmView(generics.GenericAPIView):
             user.set_password(serializer.validated_data["new_password"])
             user.save()
 
+            logger.info(f"Пароль сброшен пользователем: {user.email} (IP: {get_client_ip(request)})")
             return Response({"message": "Password has been reset successfully."})
-        except Exception:
+        except Exception as e:
+            logger.error("Ошибка подтверждения сброса пароля: %s", e)
             return Response({"error": "Invalid token or user not found"}, status=status.HTTP_400_BAD_REQUEST)
 
 
