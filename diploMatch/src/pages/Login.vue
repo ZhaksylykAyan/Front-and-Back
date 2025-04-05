@@ -12,7 +12,7 @@
           placeholder="Password"
           required
         />
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" class="btn" :disabled="loading">Login</button>
       </form>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       <router-link to="/forgot-password" class="switch-link"
@@ -34,19 +34,26 @@ const email = ref("");
 const password = ref("");
 const authStore = useAuthStore();
 const router = useRouter();
+const loading = ref(false);
 const errorMessage = ref("");
 
 const handleLogin = async () => {
+  if (loading.value) return; // блокируем повторный вызов
+  console.log("🔥 handleLogin called");
+  loading.value = true;
+  errorMessage.value = "";
+
   try {
     await authStore.login(email.value, password.value);
     router.push("/dashboard");
   } catch (error: any) {
-    // 💥 Показываем точную ошибку с бэка
     if (error.response && error.response.data && error.response.data.detail) {
       errorMessage.value = error.response.data.detail;
     } else {
       errorMessage.value = "Something went wrong. Try again";
     }
+  } finally {
+    loading.value = false;
   }
 };
 </script>

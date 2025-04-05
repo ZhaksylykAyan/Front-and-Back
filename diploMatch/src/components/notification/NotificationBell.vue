@@ -66,9 +66,12 @@ const connectWebSocket = () => {
 
 // 🔥 Автоматическая загрузка уведомлений при загрузке компонента
 onMounted(() => {
-  fetchUnread();
-  connectWebSocket();
+  if (authStore.token && authStore.user) {
+    fetchUnread();
+    connectWebSocket();
+  }
 });
+
 
 // Очистка при размонтировании
 onUnmounted(() => {

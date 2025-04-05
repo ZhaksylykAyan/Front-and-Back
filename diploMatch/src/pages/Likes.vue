@@ -17,6 +17,7 @@
           ></i>
           <button
             class="apply-btn"
+            v-if="!isSupervisor"
             :disabled="userHasTeam || userHasPendingRequest"
             @click="applyToTeam(project.id)"
           >
@@ -37,7 +38,7 @@
         <router-link
           v-if="project.supervisor"
           :to="`/supervisors/${project.supervisor.user}`"
-          :title="`${project.supervisor.first_name} ${project.supervisor.last_name}`"
+          :title="`${project.supervisor.first_name} ${project.supervisor.last_name} (Supervisor)`"
         >
           <img
             :src="getPhoto(project.supervisor)"
@@ -63,7 +64,7 @@
         <span
           v-for="skill in project.required_skills"
           :key="skill.id || skill"
-          class="skill-pill"
+          :class="getSkillClass(skill, project)"
         >
           {{ skill.name || skill }}
         </span>
@@ -73,15 +74,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import { useAuthStore } from "../store/auth";
 import { useLikeStore } from "../store/likes";
-const likeStore = useLikeStore();
-const userHasTeam = ref(false);
-const userHasPendingRequest = ref(false);
+
 const authStore = useAuthStore();
+const likeStore = useLikeStore();
+const mySkills = ref([]);
+const user = authStore.user;
 const projects = ref([]);
+
+const userHasTeam = computed(() => authStore.userHasTeam);
+const userHasPendingRequest = computed(() => authStore.userHasPendingRequest);
+const isSupervisor = computed(() => user?.role === "Supervisor");
 
 const getPhoto = (person) => {
   const photoPath = person?.photo || person?.user?.photo;
@@ -104,7 +110,7 @@ const applyToTeam = async (teamId) => {
       }
     );
     alert("Join request sent!");
-    userHasPendingRequest.value = true;
+    await authStore.refreshTeamAndRequestStatus();
   } catch (err) {
     console.error("Failed to apply:", err);
     alert(err.response?.data?.error || "Failed to apply");
@@ -122,12 +128,33 @@ const getSortedMembers = (project) => {
 };
 
 const toggleLike = async (teamId) => {
-  await likeStore.toggleLike(teamId); // вызов глобального метода
-  projects.value = projects.value.filter((p) => p.id !== teamId); // удалить из UI
+  await likeStore.toggleLike(teamId);
+  projects.value = projects.value.filter((p) => p.id !== teamId);
 };
+const getSkillClass = (skillName, project) => {
+  const mySkillNames = mySkills.value
+    .filter((s) => s && s.name)
+    .map((s) => s.name.toLowerCase());
 
+  const skill =
+    skillName?.name?.toLowerCase?.() || skillName?.toLowerCase?.() || "";
+
+  const isMySkill = mySkillNames.includes(skill);
+  const isCovered = project.members?.some((member) =>
+    member.skills?.some((s) => s.name?.toLowerCase() === skill)
+  );
+
+  if (isMySkill && isCovered) return "skill-pill my-covered";
+  if (isMySkill) return "skill-pill my-unique";
+  if (isCovered) return "skill-pill covered";
+  return "skill-pill";
+};
 onMounted(async () => {
   try {
+    if (!user) {
+      await authStore.fetchUser();
+    }
+
     const res = await axios.get("http://127.0.0.1:8000/api/teams/likes/", {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
@@ -138,7 +165,8 @@ onMounted(async () => {
         headers: { Authorization: `Bearer ${authStore.token}` },
       }
     );
-    userHasTeam.value = profileRes.data?.team !== null;
+    mySkills.value = profileRes.data.skills || [];
+    await authStore.refreshTeamAndRequestStatus();
   } catch (err) {
     console.error("Failed to load liked projects:", err);
   }
@@ -233,11 +261,11 @@ onMounted(async () => {
   border: 2px solid #007bff;
 }
 .owner-avatar {
-  border: 3px solid gold !important;
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+  border: 2px solid #28a745 !important;
 }
 .supervisor-avatar {
-  border: 2px solid #28a745 !important;
+  border: 3px solid gold !important;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
 }
 .project-skills {
   display: flex;
@@ -251,4 +279,19 @@ onMounted(async () => {
   border-radius: 20px;
   font-size: 12px;
 }
+.skill-pill.my-unique {
+  background: #83d481;
+  color: black;
+}
+
+.skill-pill.covered {
+  background: #b1d0e9;
+  color: #898787;
+}
+
+.skill-pill.my-covered {
+  background: #9ede9c;
+  color: #898787;
+}
+
 </style>

@@ -68,6 +68,7 @@
             ></i>
             <button
               class="apply-btn"
+              v-if="isViewingOther && !isViewedSupervisor"
               :disabled="userHasTeam || userHasPendingRequest || isTeamFull"
               @click="applyToTeam(team.id)"
             >
@@ -171,6 +172,9 @@ import { useAuthStore } from "../../../store/auth";
 import axios from "axios";
 import { useLikeStore } from "../../../store/likes";
 const likeStore = useLikeStore();
+const isViewedSupervisor = computed(() => {
+  return isViewingOther.value && authStore.user?.role === "Supervisor";
+});
 const router = useRouter();
 const authStore = useAuthStore();
 const team = ref(null);

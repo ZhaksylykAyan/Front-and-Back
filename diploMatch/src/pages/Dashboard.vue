@@ -57,6 +57,7 @@
                 userHasTeam || userHasPendingRequest || isTeamFull(project)
               "
               @click="applyToTeam(project.id)"
+              v-if="!isSupervisor"
             >
               {{
                 isTeamFull(project)
@@ -149,6 +150,7 @@ const user = authStore.user;
 const mySkills = ref([]);
 const projects = ref([]);
 const isDean = computed(() => user?.role === "Dean Office");
+const isSupervisor = computed(() => user?.role === "Supervisor");
 const showModal = ref(false);
 const editingProjectId = ref(null);
 const route = useRoute();

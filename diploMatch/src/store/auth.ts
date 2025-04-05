@@ -12,6 +12,7 @@ export const useAuthStore = defineStore("auth", {
     userHasTeam: false,
     userHasPendingRequest: false,
     fullProfile: null,
+    isLoggingIn: false,
   }),
 
   actions: {
@@ -64,11 +65,9 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     async login(email: string, password: string) {
+      this.isLoggingIn = true;
       try {
-        const response = await axios.post(`${API_URL}login/`, {
-          email,
-          password,
-        });
+        const response = await axios.post(`${API_URL}login/`, { email, password });
     
         if (!response.data.access) throw new Error("Access token missing");
     
@@ -78,18 +77,22 @@ export const useAuthStore = defineStore("auth", {
         const userResponse = await axios.get(`${API_URL}me/`, {
           headers: { Authorization: `Bearer ${this.token}` },
         });
+    
         this.user = userResponse.data;
-    
+        console.log("🔥 authStore.login called");
         await this.fetchFullProfile();
-    
         return true;
-      } catch (error) {
-        throw error; // 👈 просто пробрасываем оригинальный error
+    
+      } catch (error: any) {
+        this.token = null;
+        localStorage.removeItem("token");
+        throw error;
+      } finally {
+        this.isLoggingIn = false;
       }
     },
     
     
-
     async fetchTeamStatus() {
       try {
         const res = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
@@ -159,18 +162,20 @@ export const useAuthStore = defineStore("auth", {
     },
     async restoreUser() {
       const token = localStorage.getItem("token");
-      if (token) {
-        this.token = token;
-        try {
-          const response = await axios.get(`${API_URL}me/`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          this.user = response.data;
-          await this.fetchFullProfile();
-        } catch (error) {
-          console.error("Session expired. Logging out.");
-          this.logout();
-        }
+    
+      if (!token || this.user) return; // 🛡 уже восстановлен
+    
+      this.token = token;
+    
+      try {
+        const response = await axios.get(`${API_URL}me/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        this.user = response.data;
+        await this.fetchFullProfile();
+      } catch (error) {
+        console.error("Session expired. Logging out.");
+        this.logout();
       }
     },
 
