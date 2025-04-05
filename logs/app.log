@@ -680,3 +680,538 @@ Traceback (most recent call last):
     )
 users.models.CustomUser.DoesNotExist: CustomUser matching query does not exist.
 2025-04-05 02:10:05,771 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:10:59,219 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:10:59,220 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:10:59,220 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:10:59,221 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:11:58,816 [WARNING] django.request - Not Found: /favicon.ico
+2025-04-05 15:17:10,498 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:17:33,757 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:17:33,757 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:17:33,757 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:17:33,758 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:17:38,428 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 15:17:48,609 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:17:48,613 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:17:50,381 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is blocked for 5 minutes
+2025-04-05 15:17:50,385 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:18:08,353 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 15:18:17,119 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 10:22:50.378868+00:00
+2025-04-05 15:18:17,119 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 4 minutes.
+2025-04-05 15:18:17,125 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:18:23,324 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 10:22:50.378868+00:00
+2025-04-05 15:18:23,324 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 4 minutes.
+2025-04-05 15:18:23,325 [WARNING] users.views - 🛡 Пользователь ay_zhaksylyk@kbtu.kz заблокирован на 10 минут
+2025-04-05 15:18:23,330 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:18:25,948 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 10:28:23.325624+00:00
+2025-04-05 15:18:25,948 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 9 minutes.
+2025-04-05 15:18:25,954 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:18:32,899 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 10:28:23.325624+00:00
+2025-04-05 15:18:32,899 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 9 minutes.
+2025-04-05 15:18:32,904 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:18:33,942 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 10:28:23.325624+00:00
+2025-04-05 15:18:33,942 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 9 minutes.
+2025-04-05 15:18:33,943 [WARNING] users.views - 🛡 Пользователь ay_zhaksylyk@kbtu.kz заблокирован на 15 минут
+2025-04-05 15:18:33,947 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:18:34,163 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 10:33:33.943251+00:00
+2025-04-05 15:18:34,163 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 14 minutes.
+2025-04-05 15:18:34,167 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:18:34,414 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 10:33:33.943251+00:00
+2025-04-05 15:18:34,414 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 14 minutes.
+2025-04-05 15:18:34,419 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:19:23,447 [WARNING] users.views - Неудачный вход: at-zh@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:19:23,451 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:19:30,162 [WARNING] users.views - Неудачный вход: at-zh@kbtu.kz (IP: 127.0.0.1) — Account is blocked for 5 minutes
+2025-04-05 15:19:30,166 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:26:00,814 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:26:02,289 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:26:02,290 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:26:02,290 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:26:02,291 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:26:15,147 [INFO] users.views - JWT-вход: a_khalelov@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:26:15,696 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 15:26:50,481 [INFO] users.views - JWT-выход: a_khalelov@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:26:55,293 [WARNING] users.views - Неудачный вход: a_khalelov@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:26:55,297 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:26:57,706 [WARNING] users.views - Неудачный вход: a_khalelov@kbtu.kz (IP: 127.0.0.1) — Account is blocked for 5 minutes
+2025-04-05 15:26:57,710 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:27:03,056 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 15:27:52,759 [WARNING] users.views - ⛔ Заблокирован: a_khalelov@kbtu.kz до 2025-04-05 10:31:57.704020+00:00
+2025-04-05 15:27:52,760 [WARNING] users.views - Неудачный вход: a_khalelov@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 4 minutes.
+2025-04-05 15:27:52,765 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:29:03,776 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:29:07,777 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:29:07,777 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:29:07,778 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:29:07,778 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:29:25,046 [WARNING] users.views - Новый IP входа: 127.0.0.1 для a_beisebaev@kbtu.kz
+2025-04-05 15:29:25,048 [INFO] users.views - JWT-вход: a_beisebaev@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:29:25,280 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 15:29:28,395 [INFO] users.views - JWT-выход: a_beisebaev@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:29:38,145 [WARNING] users.views - Неудачный вход: a_beisebaev@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:29:38,148 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:29:40,349 [WARNING] users.views - Неудачный вход: a_beisebaev@kbtu.kz (IP: 127.0.0.1) — Account is blocked for 5 minutes
+2025-04-05 15:29:40,353 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:31:06,230 [WARNING] django.request - Not Found: /favicon.ico
+2025-04-05 15:35:43,035 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:35:45,190 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:35:45,191 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:35:45,191 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:35:45,191 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:36:03,242 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:36:03,246 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:36:09,846 [WARNING] users.views - Новый IP входа: 127.0.0.1 для a.mustafaeva@kbtu.kz
+2025-04-05 15:36:09,848 [INFO] users.views - JWT-вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:36:10,234 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 15:36:12,303 [INFO] users.views - JWT-выход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:36:16,309 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:36:16,313 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:36:19,743 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Account is blocked for 5 minutes
+2025-04-05 15:36:19,747 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:36:38,805 [WARNING] users.views - ⛔ Заблокирован: a.mustafaeva@kbtu.kz до 2025-04-05 10:41:19.109159+00:00
+2025-04-05 15:36:38,805 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 4 minutes.
+2025-04-05 15:36:38,810 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:36:42,949 [WARNING] users.views - ⛔ Заблокирован: a.mustafaeva@kbtu.kz до 2025-04-05 10:41:19.109159+00:00
+2025-04-05 15:36:42,950 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 4 minutes.
+2025-04-05 15:36:42,951 [WARNING] users.views - 🛡 Пользователь a.mustafaeva@kbtu.kz заблокирован на 10 минут
+2025-04-05 15:36:42,955 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:36:46,063 [WARNING] users.views - ⛔ Заблокирован: a.mustafaeva@kbtu.kz до 2025-04-05 10:46:42.950989+00:00
+2025-04-05 15:36:46,063 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 9 minutes.
+2025-04-05 15:36:46,068 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:38:11,603 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 15:38:22,139 [WARNING] users.views - ⛔ Заблокирован: a.mustafaeva@kbtu.kz до 2025-04-05 10:46:42.950989+00:00
+2025-04-05 15:38:22,140 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 8 minutes.
+2025-04-05 15:38:22,145 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:41:04,809 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:41:06,561 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:41:06,561 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:41:06,561 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:41:06,562 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:41:22,440 [WARNING] users.views - Неудачный вход: a_rakhymzhan@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:41:22,444 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:41:25,768 [WARNING] users.views - Неудачный вход: a_rakhymzhan@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 15:41:25,772 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:43:03,490 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:43:05,066 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:43:05,067 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:43:05,067 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:43:05,067 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:43:22,094 [WARNING] users.views - Неудачный вход: as_ws@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:43:22,098 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:43:34,608 [WARNING] users.views - Неудачный вход: as_ws@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 15:43:34,612 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:45:56,741 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:45:58,762 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:45:58,763 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:45:58,763 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:45:58,763 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:46:15,751 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 15:46:24,413 [WARNING] users.views - Неудачный вход: asd-123@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:46:24,417 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:46:27,122 [WARNING] users.views - Неудачный вход: asd-123@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 15:46:27,126 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:47:44,718 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:47:46,296 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:47:46,296 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:47:46,296 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:47:46,297 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:48:00,352 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:48:00,357 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:02,836 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 0
+2025-04-05 15:48:02,837 [WARNING] users.views - 🛡 Пользователь ay_zhaksylyk@kbtu.kz заблокирован на 20 минут
+2025-04-05 15:48:02,840 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:12,532 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:08:02.837669+00:00
+2025-04-05 15:48:12,533 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 19 minutes.
+2025-04-05 15:48:12,538 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:26,235 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:08:02.837669+00:00
+2025-04-05 15:48:26,235 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 19 minutes.
+2025-04-05 15:48:26,241 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:34,579 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:08:02.837669+00:00
+2025-04-05 15:48:34,579 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 19 minutes.
+2025-04-05 15:48:34,580 [WARNING] users.views - 🛡 Пользователь ay_zhaksylyk@kbtu.kz заблокирован на 25 минут
+2025-04-05 15:48:34,584 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:35,263 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:13:34.580385+00:00
+2025-04-05 15:48:35,263 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 24 minutes.
+2025-04-05 15:48:35,268 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:35,933 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:13:34.580385+00:00
+2025-04-05 15:48:35,933 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 24 minutes.
+2025-04-05 15:48:35,938 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:36,403 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:13:34.580385+00:00
+2025-04-05 15:48:36,403 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 24 minutes.
+2025-04-05 15:48:36,404 [WARNING] users.views - 🛡 Пользователь ay_zhaksylyk@kbtu.kz заблокирован на 30 минут
+2025-04-05 15:48:36,408 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:36,653 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:18:36.404704+00:00
+2025-04-05 15:48:36,653 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 29 minutes.
+2025-04-05 15:48:36,658 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:36,849 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:18:36.404704+00:00
+2025-04-05 15:48:36,849 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 29 minutes.
+2025-04-05 15:48:36,855 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:37,034 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:18:36.404704+00:00
+2025-04-05 15:48:37,034 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 29 minutes.
+2025-04-05 15:48:37,035 [WARNING] users.views - 🛡 Пользователь ay_zhaksylyk@kbtu.kz заблокирован на 35 минут
+2025-04-05 15:48:37,039 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:37,234 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:23:37.035486+00:00
+2025-04-05 15:48:37,235 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 34 minutes.
+2025-04-05 15:48:37,240 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:37,419 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:23:37.035486+00:00
+2025-04-05 15:48:37,419 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 34 minutes.
+2025-04-05 15:48:37,424 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:48:37,607 [WARNING] users.views - ⛔ Заблокирован: ay_zhaksylyk@kbtu.kz до 2025-04-05 11:23:37.035486+00:00
+2025-04-05 15:48:37,608 [WARNING] users.views - Неудачный вход: ay_zhaksylyk@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 34 minutes.
+2025-04-05 15:48:37,608 [WARNING] users.views - 🛡 Пользователь ay_zhaksylyk@kbtu.kz заблокирован на 40 минут
+2025-04-05 15:48:37,613 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:54:00,595 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:54:02,440 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:54:02,441 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:54:02,441 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:54:02,441 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:54:21,326 [WARNING] users.views - Новый IP входа: 127.0.0.1 для a.borsikbaeva@kbtu.kz
+2025-04-05 15:54:21,328 [INFO] users.views - JWT-вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:54:21,598 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 15:54:23,542 [INFO] users.views - JWT-выход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:54:27,314 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:54:27,318 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:54:31,028 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 0
+2025-04-05 15:54:31,028 [WARNING] users.views - 🛡 Пользователь a.borsikbaeva@kbtu.kz заблокирован на 5 минут
+2025-04-05 15:54:31,032 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:58:13,647 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 15:58:15,273 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:58:15,274 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 15:58:15,274 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 15:58:15,275 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 15:58:28,475 [WARNING] users.views - ⛔ Заблокирован: a.borsikbaeva@kbtu.kz до 2025-04-05 10:59:31.028897+00:00
+2025-04-05 15:58:28,475 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 1 minutes.
+2025-04-05 15:58:28,480 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:58:45,694 [WARNING] users.views - Новый IP входа: 127.0.0.1 для a-imanbayev@kbtu.kz
+2025-04-05 15:58:45,696 [INFO] users.views - JWT-вход: a-imanbayev@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:58:45,993 [WARNING] django.request - Bad Request: /api/teams/my/
+2025-04-05 15:58:46,039 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 15:58:59,280 [INFO] users.views - JWT-выход: a-imanbayev@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 15:59:03,644 [WARNING] users.views - Неудачный вход: a-imanbayev@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 15:59:03,648 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 15:59:06,312 [WARNING] users.views - Неудачный вход: a-imanbayev@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 0
+2025-04-05 15:59:06,313 [WARNING] users.views - 🛡 Пользователь a-imanbayev@kbtu.kz заблокирован на 5 минут
+2025-04-05 15:59:06,317 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:00:11,783 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 16:00:22,345 [WARNING] users.views - Неудачный вход: affection.ayan@mail.ru (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:00:22,349 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:02:13,314 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 16:02:20,311 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 16:02:41,191 [WARNING] users.views - Неудачный вход: dasdjsa_sadkj@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:02:41,194 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:02:44,630 [WARNING] users.views - Неудачный вход: dasdjsa_sadkj@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 0
+2025-04-05 16:02:44,631 [WARNING] users.views - 🛡 Пользователь dasdjsa_sadkj@kbtu.kz заблокирован на 5 минут
+2025-04-05 16:02:44,634 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:03:51,309 [WARNING] users.views - Неудачный вход: f_bazargalieva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:03:51,313 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:03:53,496 [WARNING] users.views - Неудачный вход: f_bazargalieva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 0
+2025-04-05 16:03:53,497 [WARNING] users.views - 🛡 Пользователь f_bazargalieva@kbtu.kz заблокирован на 5 минут
+2025-04-05 16:03:53,500 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:05:28,403 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 16:05:36,344 [WARNING] users.views - Неудачный вход: hello_world@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:05:36,349 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:05:39,133 [WARNING] users.views - Неудачный вход: hello_world@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 0
+2025-04-05 16:05:39,133 [WARNING] users.views - 🛡 Пользователь hello_world@kbtu.kz заблокирован на 5 минут
+2025-04-05 16:05:39,137 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:05:57,832 [WARNING] users.views - ⛔ Заблокирован: hello_world@kbtu.kz до 2025-04-05 11:10:39.133878+00:00
+2025-04-05 16:05:57,832 [WARNING] users.views - Неудачный вход: hello_world@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 4 minutes.
+2025-04-05 16:05:57,837 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:09:47,646 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:09:50,541 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:09:50,542 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:09:50,542 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:09:50,543 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:10:36,976 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:10:38,311 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:10:38,311 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:10:38,311 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:10:38,312 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:10:54,406 [WARNING] users.serializers - [LOGIN FAIL] Incorrect password for m_saibekova@kbtu.kz. Attempts left: 2
+2025-04-05 16:10:54,407 [WARNING] users.views - Неудачный вход: m_saibekova@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:10:54,411 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:11:01,523 [ERROR] django.request - Internal Server Error: /api/users/login/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\DTest\users\views.py", line 56, in post
+    response = super().post(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework_simplejwt\views.py", line 44, in post
+    serializer.is_valid(raise_exception=True)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\serializers.py", line 223, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\serializers.py", line 445, in run_validation
+    value = self.validate(value)
+  File "D:\DTest\users\serializers.py", line 40, in validate
+    if user.last_failed_login and now - user.last_failed_login > timedelta(minutes=10):
+                                                                 ^^^^^^^^^
+NameError: name 'timedelta' is not defined
+2025-04-05 16:11:09,818 [ERROR] django.request - Internal Server Error: /api/users/login/
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "D:\DTest\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\DTest\users\views.py", line 56, in post
+    response = super().post(request, *args, **kwargs)
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework_simplejwt\views.py", line 44, in post
+    serializer.is_valid(raise_exception=True)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\serializers.py", line 223, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\serializers.py", line 445, in run_validation
+    value = self.validate(value)
+  File "D:\DTest\users\serializers.py", line 40, in validate
+    if user.last_failed_login and now - user.last_failed_login > timedelta(minutes=10):
+                                                                 ^^^^^^^^^
+NameError: name 'timedelta' is not defined
+2025-04-05 16:11:24,861 [INFO] users.serializers - [LOGIN SUCCESS] User n_zharkynbek@kbtu.kz successfully logged in.
+2025-04-05 16:11:25,496 [WARNING] users.views - Новый IP входа: 127.0.0.1 для n_zharkynbek@kbtu.kz
+2025-04-05 16:11:25,497 [INFO] users.views - JWT-вход: n_zharkynbek@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:11:54,043 [INFO] daphne.server - Killed 1 pending application instances
+2025-04-05 16:11:55,366 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:11:55,366 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:11:55,366 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:11:55,367 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:11:57,997 [INFO] users.views - JWT-выход: n_zharkynbek@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:12:01,387 [WARNING] django.request - Unauthorized: /api/notifications/unread/
+2025-04-05 16:12:04,506 [WARNING] users.serializers - [LOGIN FAIL] Incorrect password for n_zharkynbek@kbtu.kz. Attempts left: 2
+2025-04-05 16:12:04,506 [WARNING] users.views - Неудачный вход: n_zharkynbek@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:12:04,510 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:12:07,811 [WARNING] users.serializers - [BLOCKING] User n_zharkynbek@kbtu.kz has been blocked for 5 minutes
+2025-04-05 16:12:07,812 [WARNING] users.views - Неудачный вход: n_zharkynbek@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:12:07,815 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:15:17,547 [WARNING] users.serializers - [LOGIN FAIL] Incorrect password for t.zhaksalykov@kbtu.kz. Attempts left: 2
+2025-04-05 16:15:17,547 [WARNING] users.views - Неудачный вход: t.zhaksalykov@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:15:17,551 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:15:20,462 [WARNING] users.serializers - [BLOCKING] User t.zhaksalykov@kbtu.kz has been blocked for 5 minutes
+2025-04-05 16:15:20,462 [WARNING] users.views - Неудачный вход: t.zhaksalykov@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:15:20,466 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:17:25,303 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:17:26,900 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:17:26,901 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:17:26,901 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:17:26,901 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:17:41,664 [INFO] users.serializers - [LOGIN SUCCESS] User a.borsikbaeva@kbtu.kz successfully logged in.
+2025-04-05 16:17:42,295 [INFO] users.views - JWT-вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:17:42,780 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:17:44,326 [INFO] users.views - JWT-выход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:17:50,425 [WARNING] users.serializers - [LOGIN FAIL] Incorrect password for a.borsikbaeva@kbtu.kz. Attempts left: 2
+2025-04-05 16:17:50,426 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:17:50,429 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:17:53,009 [WARNING] users.serializers - [BLOCKING] User a.borsikbaeva@kbtu.kz has been blocked for 5 minutes
+2025-04-05 16:17:53,009 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:17:53,013 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:21:15,908 [WARNING] users.views - ⛔ Заблокирован: a.borsikbaeva@kbtu.kz до 2025-04-05 11:22:52.368220+00:00
+2025-04-05 16:21:15,908 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 1 minutes.
+2025-04-05 16:21:15,913 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:24:49,890 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:25:47,846 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:25:47,847 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:25:47,847 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:25:47,847 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:25:55,676 [INFO] users.serializers - [LOGIN SUCCESS] User a.borsikbaeva@kbtu.kz successfully logged in.
+2025-04-05 16:25:56,315 [INFO] users.views - JWT-вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:25:56,699 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:25:58,183 [INFO] users.views - JWT-выход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:26:18,188 [WARNING] users.serializers - [LOGIN FAIL] Incorrect password for a.borsikbaeva@kbtu.kz. Attempts left: 2
+2025-04-05 16:26:18,189 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:26:18,193 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:28:22,494 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:28:23,913 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:28:23,914 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:28:23,914 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:28:23,914 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:28:34,061 [INFO] users.views - JWT-вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:28:34,566 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:28:35,890 [INFO] users.views - JWT-выход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:28:45,054 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:28:45,058 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:28:48,514 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:28:48,517 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:31:16,462 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:31:17,891 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:31:17,892 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:31:17,892 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:31:17,892 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:31:30,015 [WARNING] users.views - ⛔ Заблокирован: a.borsikbaeva@kbtu.kz до 2025-04-05 11:33:47.862445+00:00
+2025-04-05 16:31:30,016 [WARNING] users.views - Неудачный вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 2 minutes.
+2025-04-05 16:31:30,022 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:31:47,076 [WARNING] users.views - Новый IP входа: 127.0.0.1 для a_ugay@kbtu.kz
+2025-04-05 16:31:47,077 [INFO] users.views - JWT-вход: a_ugay@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:31:48,720 [INFO] users.views - JWT-выход: a_ugay@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:32:00,166 [WARNING] users.views - Неудачный вход: a_ugay@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:32:00,170 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:32:06,570 [WARNING] users.views - Неудачный вход: a_ugay@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:32:06,574 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:33:40,140 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:33:42,163 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:33:42,163 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:33:42,163 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:33:42,164 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:33:55,000 [WARNING] users.views - ⛔ Заблокирован: a_ugay@kbtu.kz до 2025-04-05 11:37:05.909972+00:00
+2025-04-05 16:33:55,000 [WARNING] users.views - Неудачный вход: a_ugay@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 3 minutes.
+2025-04-05 16:33:55,006 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:34:18,882 [INFO] users.views - Успешная регистрация: das@kbtu.kz
+2025-04-05 16:34:41,675 [WARNING] users.views - Неудачный вход: das@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:34:41,679 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:34:50,973 [WARNING] users.views - Неудачный вход: das@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:34:50,976 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:36:57,247 [INFO] users.views - JWT-вход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:36:57,638 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:37:04,952 [INFO] users.views - JWT-выход: a.borsikbaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:37:09,469 [INFO] users.views - JWT-вход: a_beisebaev@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:37:09,800 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 16:37:15,157 [INFO] users.views - JWT-выход: a_beisebaev@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:37:25,336 [WARNING] users.views - Неудачный вход: a_beisebaev@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:37:25,340 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:37:31,524 [WARNING] users.views - Неудачный вход: a_beisebaev@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:37:31,528 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:38:51,035 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:42:30,143 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:42:30,144 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:42:30,144 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:42:30,144 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:42:32,859 [WARNING] users.views - Новый IP входа: 127.0.0.1 для at-zh@kbtu.kz
+2025-04-05 16:42:32,860 [INFO] users.views - JWT-вход: at-zh@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:42:33,139 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:43:17,471 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:43:21,774 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:46:31,025 [INFO] daphne.server - Killed 1 pending application instances
+2025-04-05 16:46:32,475 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:46:32,475 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:46:32,475 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:46:32,476 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:46:39,262 [INFO] users.views - JWT-выход: at-zh@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:46:49,439 [WARNING] users.serializers - [DEBUG] START a.mustafaeva@kbtu.kz — failed: 0, blocked: None, last_failed: None
+2025-04-05 16:46:50,739 [INFO] users.views - JWT-вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:46:51,004 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:46:52,190 [WARNING] django.request - Forbidden: /api/teams/my-join-request/
+2025-04-05 16:46:54,156 [INFO] users.views - JWT-выход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:46:59,938 [WARNING] users.serializers - [DEBUG] START a.mustafaeva@kbtu.kz — failed: 0, blocked: None, last_failed: None
+2025-04-05 16:47:00,594 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Too many login attempts. Please wait a moment.
+2025-04-05 16:47:00,599 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:47:08,124 [WARNING] users.serializers - [DEBUG] START a.mustafaeva@kbtu.kz — failed: 1, blocked: None, last_failed: None
+2025-04-05 16:47:08,765 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Too many login attempts. Please wait a moment.
+2025-04-05 16:47:08,771 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:47:25,012 [WARNING] users.serializers - [DEBUG] START a.mustafaeva@kbtu.kz — failed: 2, blocked: None, last_failed: None
+2025-04-05 16:47:25,677 [WARNING] users.views - Неудачный вход: a.mustafaeva@kbtu.kz (IP: 127.0.0.1) — Too many login attempts. Please wait a moment.
+2025-04-05 16:47:25,678 [WARNING] users.views - 🛡 Пользователь a.mustafaeva@kbtu.kz заблокирован на 5 минут
+2025-04-05 16:47:25,682 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:50:21,298 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:50:22,657 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:50:22,658 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:50:22,658 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:50:22,658 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:50:32,486 [WARNING] users.serializers - [DEBUG] START a_nusip@kbtu.kz — failed: 1, blocked: None, last_failed: None
+2025-04-05 16:50:33,754 [INFO] users.views - JWT-вход: a_nusip@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:50:34,088 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 16:50:35,873 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 16:50:36,615 [INFO] users.views - JWT-выход: a_nusip@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:50:43,502 [WARNING] users.serializers - [DEBUG] START a_nusip@kbtu.kz — failed: 0, blocked: None, last_failed: None
+2025-04-05 16:50:44,152 [WARNING] users.views - Неудачный вход: a_nusip@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:50:44,156 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:50:51,572 [WARNING] users.serializers - [DEBUG] START a_nusip@kbtu.kz — failed: 2, blocked: None, last_failed: 2025-04-05 11:50:43.502249+00:00
+2025-04-05 16:50:52,216 [WARNING] users.views - Неудачный вход: a_nusip@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:50:52,220 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:53:17,234 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 16:53:18,756 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:53:18,756 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 16:53:18,757 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 16:53:18,757 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 16:53:30,836 [WARNING] users.serializers - [DEBUG] START a_rakhymzhan@kbtu.kz — failed: 0, blocked: None, last_failed: None
+2025-04-05 16:53:31,473 [INFO] users.serializers - [LOGIN SUCCESS] a_rakhymzhan@kbtu.kz successfully logged in
+2025-04-05 16:53:32,115 [WARNING] users.views - Новый IP входа: 127.0.0.1 для a_rakhymzhan@kbtu.kz
+2025-04-05 16:53:32,116 [INFO] users.views - JWT-вход: a_rakhymzhan@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:53:38,920 [WARNING] django.request - Not Found: /api/teams/my-supervisor-request/
+2025-04-05 16:53:43,715 [INFO] users.views - JWT-выход: a_rakhymzhan@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 16:53:58,169 [WARNING] users.serializers - [DEBUG] START a_rakhymzhan@kbtu.kz — failed: 0, blocked: None, last_failed: None
+2025-04-05 16:53:58,818 [WARNING] users.serializers - [LOGIN FAIL] a_rakhymzhan@kbtu.kz — Attempts left: 2
+2025-04-05 16:53:58,818 [WARNING] users.views - Неудачный вход: a_rakhymzhan@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 16:53:58,822 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 16:54:06,593 [WARNING] users.serializers - [DEBUG] START a_rakhymzhan@kbtu.kz — failed: 2, blocked: None, last_failed: 2025-04-05 11:53:58.168970+00:00
+2025-04-05 16:54:07,229 [WARNING] users.serializers - [BLOCKED] a_rakhymzhan@kbtu.kz blocked for 5 minutes
+2025-04-05 16:54:07,229 [WARNING] users.views - Неудачный вход: a_rakhymzhan@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 16:54:07,233 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 17:05:28,064 [WARNING] users.serializers - [DEBUG] START am_suleimenova@kbtu.kz — failed: 0, blocked: None, last_failed: None
+2025-04-05 17:05:28,707 [INFO] users.serializers - [LOGIN SUCCESS] am_suleimenova@kbtu.kz successfully logged in
+2025-04-05 17:05:29,348 [WARNING] users.views - Новый IP входа: 127.0.0.1 для am_suleimenova@kbtu.kz
+2025-04-05 17:05:29,350 [INFO] users.views - JWT-вход: am_suleimenova@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 17:05:29,571 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 17:05:32,734 [WARNING] django.request - Not Found: /api/teams/my/
+2025-04-05 17:05:33,467 [INFO] users.views - JWT-выход: am_suleimenova@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 17:05:36,784 [WARNING] users.serializers - [DEBUG] START am_suleimenova@kbtu.kz — failed: 0, blocked: None, last_failed: None
+2025-04-05 17:05:37,417 [WARNING] users.serializers - [LOGIN FAIL] am_suleimenova@kbtu.kz — Attempts left: 2
+2025-04-05 17:05:37,418 [WARNING] users.views - Неудачный вход: am_suleimenova@kbtu.kz (IP: 127.0.0.1) — Incorrect password. Attempts left: 2
+2025-04-05 17:05:37,422 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 17:05:45,021 [WARNING] users.serializers - [DEBUG] START am_suleimenova@kbtu.kz — failed: 2, blocked: None, last_failed: 2025-04-05 12:05:36.783995+00:00
+2025-04-05 17:05:45,668 [WARNING] users.serializers - [BLOCKED] am_suleimenova@kbtu.kz blocked for 5 minutes
+2025-04-05 17:05:45,668 [WARNING] users.views - Неудачный вход: am_suleimenova@kbtu.kz (IP: 127.0.0.1) — Account is temporarily blocked. Try again in 5 minutes.
+2025-04-05 17:05:45,672 [WARNING] django.request - Unauthorized: /api/users/login/
+2025-04-05 17:09:59,694 [INFO] daphne.server - Killed 0 pending application instances

@@ -35,6 +35,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_blocked = models.BooleanField(default=False)
     blocked_until = models.DateTimeField(null=True, blank=True)
     block_duration = models.IntegerField(default=5)
+    last_failed_login = models.DateTimeField(null=True, blank=True)
     last_login_ip = models.GenericIPAddressField(null=True, blank=True)
 
     objects = CustomUserManager()
