@@ -79,18 +79,27 @@ export const useAuthStore = defineStore("auth", {
         });
     
         this.user = userResponse.data;
-        console.log("🔥 authStore.login called");
         await this.fetchFullProfile();
-        return true;
     
+        return { success: true };
       } catch (error: any) {
         this.token = null;
         localStorage.removeItem("token");
-        throw error;
+    
+        // Добавляем обработку блокировки
+        const responseData = error?.response?.data || {};
+        const message = responseData?.detail || "Login failed";
+    
+        throw {
+          success: false,
+          message,
+          blocked: responseData?.blocked || false,
+          blockedUntil: responseData?.blocked_until || null,
+        };
       } finally {
         this.isLoggingIn = false;
       }
-    },
+    },    
     
     
     async fetchTeamStatus() {

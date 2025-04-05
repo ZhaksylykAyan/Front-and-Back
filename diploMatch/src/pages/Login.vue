@@ -4,6 +4,7 @@
       <img src="../assets/logo.png" alt="Diplomatch Logo" class="logo" />
       <p class="tagline"><strong>Match. Collaborate. Graduate.</strong></p>
       <h2>Login</h2>
+
       <form @submit.prevent="handleLogin">
         <input type="email" v-model="email" placeholder="E-mail" required />
         <input
@@ -12,45 +13,75 @@
           placeholder="Password"
           required
         />
-        <button type="submit" class="btn" :disabled="loading">Login</button>
+        <button type="submit" class="btn" :disabled="loading || isBlocked">
+          {{ isBlocked ? `Please wait...` : "Login" }}
+        </button>
       </form>
+
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      <router-link to="/forgot-password" class="switch-link"
-        >Forgot password?</router-link
-      >
-      <router-link to="/register" class="switch-link"
-        >Don't have an account? Register</router-link
-      >
+
+      <router-link to="/forgot-password" class="switch-link">
+        Forgot password?
+      </router-link>
+      <router-link to="/register" class="switch-link">
+        Don't have an account? Register
+      </router-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useAuthStore } from "../store/auth";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../store/auth";
 
 const email = ref("");
 const password = ref("");
+const errorMessage = ref("");
+const loading = ref(false);
+const isBlocked = ref(false);
+const unblockTimeout = ref<number | null>(null);
+
 const authStore = useAuthStore();
 const router = useRouter();
-const loading = ref(false);
-const errorMessage = ref("");
 
 const handleLogin = async () => {
-  if (loading.value) return; // блокируем повторный вызов
-  console.log("🔥 handleLogin called");
+  if (loading.value || isBlocked.value) return;
   loading.value = true;
   errorMessage.value = "";
 
   try {
-    await authStore.login(email.value, password.value);
-    router.push("/dashboard");
+    const result = await authStore.login(email.value, password.value);
+    if (result.success) {
+      router.push("/dashboard");
+    }
   } catch (error: any) {
-    if (error.response && error.response.data && error.response.data.detail) {
-      errorMessage.value = error.response.data.detail;
+    console.error("Login error:", error);
+
+    if (error.blocked) {
+      isBlocked.value = true;
+
+      if (error.blockedUntil) {
+        const until = new Date(error.blockedUntil);
+        const localTime = until.toLocaleTimeString();
+        errorMessage.value = `${error.message} (Try again at ${localTime})`;
+
+        // Подсчёт времени до разблокировки
+        const now = new Date();
+        const waitMs = until.getTime() - now.getTime();
+
+        if (waitMs > 0) {
+          if (unblockTimeout.value) clearTimeout(unblockTimeout.value);
+          unblockTimeout.value = window.setTimeout(() => {
+            isBlocked.value = false;
+            errorMessage.value = "";
+          }, waitMs);
+        }
+      } else {
+        errorMessage.value = error.message;
+      }
     } else {
-      errorMessage.value = "Something went wrong. Try again";
+      errorMessage.value = error.message || "Login failed";
     }
   } finally {
     loading.value = false;
@@ -95,7 +126,7 @@ body {
   padding: 40px;
   width: 400px;
   border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 10px rgba( 0, 0, 0, 0.1);
   text-align: center;
 }
 
@@ -133,7 +164,12 @@ body {
   transition: background 0.3s;
 }
 
-.auth-box .btn:hover {
+.auth-box .btn:disabled {
+  background: #6b7280;
+  cursor: not-allowed;
+}
+
+.auth-box .btn:hover:not(:disabled) {
   background: #1e3a8a;
 }
 
