@@ -1,5 +1,5 @@
 from datetime import timedelta
-
+from django.core.cache import cache
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
@@ -26,62 +26,83 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         email = attrs.get("email")
         password = attrs.get("password")
+        request = self.context.get("request")
         now = timezone.now()
 
+        # IP логика
+        ip_address = request.META.get("REMOTE_ADDR", "unknown")
+        cache_key = f"login_attempts:{ip_address}"
+        cache_block_key = f"login_blocked:{ip_address}"
+
+        # 1. Проверка блокировки по IP
+        if cache.get(cache_block_key):
+            raise AuthenticationFailed("Too many login attempts from this IP. Try again later.")
+
+        # 2. Проверка email
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
-            raise AuthenticationFailed("User with given email does not exist")
+            # Увеличиваем попытки по IP даже при неверном email
+            cache.incr(cache_key)
+            cache.expire(cache_key, 600)  # 10 мин
+            raise AuthenticationFailed("Invalid credentials")
 
-        logger.warning(
-            f"[DEBUG] START {email} — failed: {user.failed_login_attempts}, blocked: {user.blocked_until}, last_failed: {user.last_failed_login}"
-        )
-
-        # Блокировка
+        # 3. Проверка блокировки пользователя
         if user.blocked_until and now < user.blocked_until:
             remaining = (user.blocked_until - now).seconds // 60
             raise AuthenticationFailed(f"Account is temporarily blocked. Try again in {remaining} minute(s).")
 
-        # Сброс, если прошло больше 10 минут
+        # 4. Сброс старых попыток (если больше 10 мин прошло)
         if user.last_failed_login and now - user.last_failed_login > timedelta(minutes=10):
             user.failed_login_attempts = 0
             user.block_duration = 5
             user.save()
 
-        # Неверный пароль
+        # 5. Проверка пароля
         if not user.check_password(password):
-            # ⛔ Проверка повторного запроса
+            # Защита от частых запросов (<1 секунда)
             if user.last_failed_login and (now - user.last_failed_login).total_seconds() < 1:
-                logger.warning(f"[SPAM BLOCK] {email} — Ignored duplicate request")
                 raise AuthenticationFailed("Too many login attempts. Please wait a moment.")
 
-            # 📌 Только теперь увеличиваем
+            # IP-блокировка
+            ip_attempts = cache.get(cache_key, 0) + 1
+            cache.set(cache_key, ip_attempts, timeout=600)  # сброс через 10 минут
+
+            if ip_attempts >= 5:
+                cache.set(cache_block_key, True, timeout=900)  # блок IP на 15 минут
+                raise AuthenticationFailed("Too many login attempts from your IP. Try again in 15 minutes.")
+
+            # Логика блокировки пользователя
             user.failed_login_attempts += 1
             user.last_failed_login = now
 
             if user.failed_login_attempts >= 3:
                 block_minutes = user.block_duration
                 user.blocked_until = now + timedelta(minutes=block_minutes)
-                user.block_duration += 5
+                user.block_duration = min(user.block_duration + 5, 30)
                 user.failed_login_attempts = 0
                 user.last_failed_login = None
                 user.save()
-                logger.warning(f"[BLOCKED] {email} blocked for {block_minutes} minutes")
-                raise AuthenticationFailed(f"Account is temporarily blocked. Try again in {block_minutes} minutes.")
+                raise AuthenticationFailed({
+                    "detail": "Account is temporarily blocked. Try again in a few minutes.",
+                    "blocked": True,
+                    "blocked_until": user.blocked_until,
+                })
 
             user.save()
             attempts_left = 3 - user.failed_login_attempts
-            logger.warning(f"[LOGIN FAIL] {email} — Attempts left: {attempts_left}")
             raise AuthenticationFailed(f"Incorrect password. Attempts left: {attempts_left}")
 
-        # Успешный вход
+        # 6. Успешный вход — всё сбрасываем
+        cache.delete(cache_key)
+        cache.delete(cache_block_key)
+
         user.failed_login_attempts = 0
         user.blocked_until = None
         user.block_duration = 5
         user.last_failed_login = None
         user.save()
 
-        logger.info(f"[LOGIN SUCCESS] {email} successfully logged in")
         return super().validate(attrs)
 
 

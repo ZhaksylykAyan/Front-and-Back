@@ -38,60 +38,31 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         ip = get_client_ip(request)
 
         try:
-            user = User.objects.get(email=email)
-            now = timezone.now()
-
-            # Проверка на временную блокировку
-            if user.blocked_until and now < user.blocked_until:
-                remaining = (user.blocked_until - now).seconds // 60
-                logger.warning(f"⛔ Заблокирован: {email} до {user.blocked_until}")
-                raise AuthenticationFailed(f"Account is temporarily blocked. Try again in {remaining} minutes.")
-
-            # Если время блокировки прошло — сбрасываем
-            if user.blocked_until and now >= user.blocked_until:
-                user.blocked_until = None
-                user.failed_login_attempts = 0
-                user.save()
-
             response = super().post(request, *args, **kwargs)
 
             if response.status_code == 200:
-                user.failed_login_attempts = 0
-                user.block_duration = 5  # сбрасываем прогрессивную блокировку
-                user.blocked_until = None
+                user = User.objects.get(email=email)
 
+                # IP-логика
                 if user.last_login_ip != ip:
-                    logger.warning(f"Новый IP входа: {ip} для {email}")
+                    logger.warning(f"🕵️ New login IP detected: {ip} for {email}")
                 user.last_login_ip = ip
+
+                # Сброс безопасный, но не обязателен — уже делается в validate()
                 user.save()
 
-                logger.info(f"JWT-вход: {email} (IP: {ip})")
+                logger.info(f"✅ JWT Login: {email} (IP: {ip})")
                 AccessLog.objects.create(
                     user=user,
-                    action='login',
+                    action="login",
                     ip_address=ip,
-                    user_agent=request.META.get('HTTP_USER_AGENT', '')
+                    user_agent=request.META.get("HTTP_USER_AGENT", ""),
                 )
 
             return response
 
         except AuthenticationFailed as e:
-            logger.warning(f"Неудачный вход: {email} (IP: {ip}) — {str(e)}")
-
-            try:
-                user = User.objects.get(email=email)
-                user.failed_login_attempts += 1
-
-                if user.failed_login_attempts >= 3:
-                    user.blocked_until = timezone.now() + timedelta(minutes=user.block_duration)
-                    logger.warning(f"🛡 Пользователь {email} заблокирован на {user.block_duration} минут")
-                    user.block_duration += 5  # увеличим блокировку в будущем
-                    user.failed_login_attempts = 0  # сбрасываем счётчик
-
-                user.save()
-            except User.DoesNotExist:
-                logger.warning(f"Попытка входа с несуществующим email: {email} (IP: {ip})")
-
+            logger.warning(f"❌ Failed login: {email} (IP: {ip}) — {str(e)}")
             raise
 
 
