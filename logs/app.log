@@ -1733,3 +1733,296 @@ ValueError: Key ':1:login_attempts:127.0.0.1' not found.
 2025-04-05 20:09:07,388 [WARNING] django.request - Not Found: /api/teams/my/
 2025-04-05 20:09:12,657 [WARNING] django.request - Not Found: /api/teams/my/
 2025-04-05 20:09:16,302 [INFO] daphne.server - Killed 1 pending application instances
+2025-04-05 20:10:05,069 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 20:10:05,069 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 20:10:05,070 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 20:10:05,070 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 20:10:05,457 [INFO] users.views - JWT-выход: a_beisebaev@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 20:10:05,499 [WARNING] django.request - Unauthorized: /api/teams/my/
+2025-04-05 20:10:05,505 [WARNING] django.request - Unauthorized: /api/teams/my-join-request/
+2025-04-05 20:10:05,511 [WARNING] django.request - Unauthorized: /api/teams/
+2025-04-05 20:10:05,557 [INFO] users.views - JWT-выход: a_beisebaev@kbtu.kz (IP: 127.0.0.1)
+2025-04-05 20:40:07,545 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 22:20:00,783 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 22:20:00,783 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 22:20:00,783 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 22:20:00,784 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 22:20:07,452 [WARNING] drf_yasg.inspectors.base - view's DeleteNotification raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 67, in get_queryset
+    assert self.queryset is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'DeleteNotification' should either include a `queryset` attribute, or override the `get_queryset()` method.
+2025-04-05 22:20:07,470 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,482 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,483 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,484 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,486 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,490 [WARNING] drf_yasg.inspectors.base - view's StudentProfileDetailView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 126, in get_serializer_class
+    assert self.serializer_class is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'StudentProfileDetailView' should either include a `serializer_class` attribute, or override the `get_serializer_class()` method.
+2025-04-05 22:20:07,522 [WARNING] drf_yasg.inspectors.base - view's DeleteNotification raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 67, in get_queryset
+    assert self.queryset is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'DeleteNotification' should either include a `queryset` attribute, or override the `get_queryset()` method.
+2025-04-05 22:20:07,524 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,525 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,526 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,528 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,529 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:20:07,531 [WARNING] drf_yasg.inspectors.base - view's StudentProfileDetailView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 126, in get_serializer_class
+    assert self.serializer_class is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'StudentProfileDetailView' should either include a `serializer_class` attribute, or override the `get_serializer_class()` method.
+2025-04-05 22:22:25,444 [INFO] daphne.server - Killed 0 pending application instances
+2025-04-05 22:22:39,066 [INFO] daphne.cli - Starting server at tcp:port=8000:interface=127.0.0.1
+2025-04-05 22:22:39,066 [INFO] daphne.server - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2025-04-05 22:22:39,066 [INFO] daphne.server - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2025-04-05 22:22:39,067 [INFO] daphne.server - Listening on TCP address 127.0.0.1:8000
+2025-04-05 22:22:44,462 [WARNING] django.request - Not Found: /favicon.ico
+2025-04-05 22:22:54,777 [WARNING] drf_yasg.inspectors.base - view's DeleteNotification raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 67, in get_queryset
+    assert self.queryset is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'DeleteNotification' should either include a `queryset` attribute, or override the `get_queryset()` method.
+2025-04-05 22:22:54,780 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,781 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,783 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,784 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,785 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,788 [WARNING] drf_yasg.inspectors.base - view's StudentProfileDetailView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 126, in get_serializer_class
+    assert self.serializer_class is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'StudentProfileDetailView' should either include a `serializer_class` attribute, or override the `get_serializer_class()` method.
+2025-04-05 22:22:54,824 [WARNING] drf_yasg.inspectors.base - view's DeleteNotification raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 67, in get_queryset
+    assert self.queryset is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'DeleteNotification' should either include a `queryset` attribute, or override the `get_queryset()` method.
+2025-04-05 22:22:54,826 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,827 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,828 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,829 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,830 [WARNING] drf_yasg.inspectors.base - view's ProfileCompletionView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\profiles\views.py", line 39, in get_serializer_class
+    if user.role == "Student":
+       ^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+2025-04-05 22:22:54,833 [WARNING] drf_yasg.inspectors.base - view's StudentProfileDetailView raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "D:\DTest\.venv\Lib\site-packages\drf_yasg\inspectors\base.py", line 42, in call_view_method
+    return view_method()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "D:\DTest\.venv\Lib\site-packages\rest_framework\generics.py", line 126, in get_serializer_class
+    assert self.serializer_class is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'StudentProfileDetailView' should either include a `serializer_class` attribute, or override the `get_serializer_class()` method.
+2025-04-05 22:24:49,021 [INFO] daphne.server - Killed 0 pending application instances

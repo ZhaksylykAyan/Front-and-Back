@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'channels',
 
+    'drf_yasg',
     # Custom apps
     'users',
     'profiles',
