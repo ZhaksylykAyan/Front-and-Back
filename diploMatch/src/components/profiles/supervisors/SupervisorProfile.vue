@@ -21,12 +21,27 @@
         </div>
 
         <div class="right-column">
-          <h3 class="user-name">
-            {{ profile.first_name }} {{ profile.last_name }}
-          </h3>
-          <a v-if="profile.user_email" :href="`mailto:${profile.user_email}`">
+          <div class="info-header">
+            <h3 class="user-name">
+              {{ profile.first_name }} {{ profile.last_name }}
+            </h3>
+            <button
+              v-if="isViewingOther"
+              class="send-message-btn"
+              @click="startChat"
+            >
+              <i class="fa-regular fa-comment-dots"></i> Send Message
+            </button>
+          </div>
+
+          <a
+            v-if="profile.user_email"
+            :href="`mailto:${profile.user_email}`"
+            class="email-link"
+          >
             {{ profile.user_email }}
           </a>
+
           <div class="info-section">
             <p>{{ profile.degree }}</p>
           </div>
@@ -204,6 +219,8 @@ import axios from "axios";
 import requestIcon from "../../../icons/request.png";
 import { useAuthStore } from "../../../store/auth";
 import { useLikeStore } from "../../../store/likes";
+import { useChatStore } from "../../../store/chat";
+const chatStore = useChatStore();
 const likeStore = useLikeStore();
 const userHasTeam = computed(() => authStore.userHasTeam);
 const userHasPendingRequest = computed(() => authStore.userHasPendingRequest);
@@ -310,7 +327,22 @@ const approveProject = async (projectId) => {
     console.error(err);
   }
 };
-
+const startChat = async () => {
+  try {
+    const res = await axios.post(
+      "http://127.0.0.1:8000/api/chats/start/",
+      { user_id: profile.value.user },
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+    chatStore.setActiveChat(res.data.id);
+    chatStore.openChatModal();
+  } catch (err) {
+    console.error("Ошибка при создании чата:", err);
+    alert("Не удалось начать чат");
+  }
+};
 const goToCreateProject = () => {
   router.push("/create-project");
 };
@@ -493,7 +525,6 @@ onMounted(async () => {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-
 .profile-body {
   display: flex;
   gap: 30px;
@@ -518,7 +549,7 @@ onMounted(async () => {
 
 .user-name {
   font-size: 26px;
-  font-weight: bold;
+  font-weight: 600;
   margin-top: 0px;
 }
 
@@ -580,7 +611,31 @@ onMounted(async () => {
   margin-bottom: 6px;
   margin: 0px;
 }
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+.send-message-btn {
+  /* margin-top: 10px; ❌ убрать */
+  background: #007bff;
+  margin-bottom: 20px;
+  color: white;
+  padding: 8px 14px; /* уменьшаем чуть-чуть padding */
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center; /* для центрирования иконки и текста */
+  gap: 8px;
+}
+
+.send-message-btn:hover {
+  background-color: #0056b3;
+}
 .heart-icon {
   font-size: 20px;
   color: #ccc;

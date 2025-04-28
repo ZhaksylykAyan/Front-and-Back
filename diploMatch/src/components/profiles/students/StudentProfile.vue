@@ -3,12 +3,17 @@
     <div class="profile-card">
       <div class="profile-header">
         <h2 v-if="!isViewingOther">{{ "My Profile" }}</h2>
-        <div class="actions" v-if="!props.readonly">
-          <button class="edit-btn" @click="goToEdit">
+        <div class="actions">
+          <button v-if="!isViewingOther" class="edit-btn" @click="goToEdit">
             <i class="fa-solid fa-pen" style="margin-right: 6px"></i>
             Edit Profile
           </button>
-          <button class="create-btn" @click="goToCreateProject">
+
+          <button
+            v-if="!isViewingOther"
+            class="create-btn"
+            @click="goToCreateProject"
+          >
             <i class="fa-solid fa-plus"></i>
             Create Project
           </button>
@@ -21,10 +26,25 @@
         </div>
 
         <div class="profile-info">
-          <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
-          <a v-if="profile.user_email" :href="`mailto:${profile.user_email}`">
-            {{ profile.user_email }}
-          </a>
+          <div class="info-header">
+            <div class="name-box">
+              <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
+              <a
+                v-if="profile.user_email"
+                :href="`mailto:${profile.user_email}`"
+                class="email-link"
+              >
+                {{ profile.user_email }}
+              </a>
+            </div>
+            <button
+              v-if="isViewingOther"
+              class="send-message-btn"
+              @click="startChat"
+            >
+              <i class="fa-regular fa-comment-dots"></i> Send Message
+            </button>
+          </div>
           <p><strong>GPA:</strong> {{ profile.gpa }}</p>
           <p v-if="profile.specialization">
             <strong>Major:</strong> {{ profile.specialization }}
@@ -166,11 +186,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "../../../store/auth";
 import axios from "axios";
 import { useLikeStore } from "../../../store/likes";
+import { useChatStore } from "../../../store/chat";
+const chatStore = useChatStore();
 const likeStore = useLikeStore();
 const isViewedSupervisor = computed(() => {
   return isViewingOther.value && authStore.user?.role === "Supervisor";
@@ -226,6 +248,24 @@ const leaveTeam = () => {
 
 const cancelLeave = () => {
   showLeaveConfirm.value = false;
+};
+
+const startChat = async () => {
+  try {
+    const res = await axios.post(
+      "http://127.0.0.1:8000/api/chats/start/",
+      { user_id: profile.value.user }, // 👈 ВАЖНО: именно user, не id!
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
+    // Открыть чат с этим пользователем
+    chatStore.setActiveChat(res.data.id);
+    chatStore.openChatModal();
+  } catch (err) {
+    console.error("Ошибка при создании чата:", err);
+    alert("Не удалось начать чат");
+  }
 };
 
 const confirmLeave = async () => {
@@ -293,7 +333,15 @@ const getSkillClass = (skillName) => {
   return "skill-pill";
 };
 
-onMounted(async () => {
+watch(
+  () => route.params.id,
+  async (newId, oldId) => {
+    if (newId !== oldId) {
+      await loadProfileData(); // перезагружаем профиль
+    }
+  }
+);
+const loadProfileData = async () => {
   await likeStore.fetchLikes();
   try {
     const skillsRes = await axios.get(
@@ -303,31 +351,11 @@ onMounted(async () => {
       }
     );
     skills.value = skillsRes.data;
-    if (isViewingOther.value) {
-      const myProfile = await axios.get(
-        "http://127.0.0.1:8000/api/profiles/complete-profile/",
-        {
-          headers: { Authorization: `Bearer ${authStore.token}` },
-        }
-      );
-    }
-    // 📌 Загружаем профиль текущего пользователя
-    const profileRes = await axios.get(
-      "http://127.0.0.1:8000/api/profiles/complete-profile/",
-      {
-        headers: { Authorization: `Bearer ${authStore.token}` },
-      }
-    );
-
-    profile.value = profileRes.data;
-    selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
-    mySkills.value = profileRes.data.skills || []; // <-- вот сюда добавь!
 
     if (
       props.viewedUserId &&
       props.viewedUserId !== authStore.user.id.toString()
     ) {
-      // 📌 Загружаем профиль другого пользователя
       const profileRes = await axios.get(
         `http://127.0.0.1:8000/api/profiles/students/${props.viewedUserId}/`,
         {
@@ -336,24 +364,17 @@ onMounted(async () => {
       );
       profile.value = profileRes.data;
       selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
-      userHasTeam.value = profileRes.data?.team !== null;
-      await authStore.refreshTeamAndRequestStatus();
-
-      // 📌 Подставляем команду из profileRes
       team.value = profileRes.data.team || null;
     } else {
-      // 📌 Загружаем профиль текущего пользователя
       const profileRes = await axios.get(
         "http://127.0.0.1:8000/api/profiles/complete-profile/",
         {
           headers: { Authorization: `Bearer ${authStore.token}` },
         }
       );
-
       profile.value = profileRes.data;
       selectedSkills.value = profileRes.data.skills?.map((s) => s.id) || [];
 
-      // 📌 Только в этом случае запрашиваем api/teams/my/
       const teamRes = await axios.get("http://127.0.0.1:8000/api/teams/my/", {
         headers: { Authorization: `Bearer ${authStore.token}` },
       });
@@ -363,7 +384,9 @@ onMounted(async () => {
     console.error("Error loading profile or team data:", err);
     team.value = null;
   }
-});
+};
+
+onMounted(loadProfileData);
 
 const goToEdit = () => {
   if (authStore.user?.role) {
@@ -409,6 +432,38 @@ const editProject = () => {
   font-size: 22px;
   font-weight: bold;
 }
+.info-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 20px;
+}
+.name-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.name-box h3 {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.email-link {
+  margin-top: 6px;
+  font-size: 15px;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.info-header h3 {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0;
+}
+
 .actions {
   display: flex;
   align-items: center;
@@ -702,6 +757,20 @@ const editProject = () => {
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
+}
+.send-message-btn {
+  margin-bottom: 20px;
+  background: #007bff;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 400px;
+}
+.send-message-btn:hover {
+  background-color: #0056b3;
 }
 
 @media (max-width: 768px) {

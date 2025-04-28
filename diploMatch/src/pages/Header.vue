@@ -17,6 +17,7 @@
       </router-link>
       <router-link to="/dashboard" class="nav-item">Projects</router-link>
       <router-link to="/orders" class="nav-item">Requests</router-link>
+      <ChatIcon />
       <router-link to="/liked" class="icon">
         <i class="fa-regular fa-heart"></i>
       </router-link>
@@ -24,7 +25,7 @@
       <div class="profile-menu" ref="profileMenu">
         <button class="profile-button" @click="toggleDropdown">
           <i class="fas fa-user"></i>
-          <span>{{ authStore.fullProfile?.first_name || 'Profile' }}</span>
+          <span>{{ authStore.fullProfile?.first_name || "Profile" }}</span>
         </button>
         <div v-if="dropdownOpen" class="dropdown-menu">
           <button @click="goToProfile">View Profile</button>
@@ -60,6 +61,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
+import ChatIcon  from "../components/Chat/ChatIcon.vue";
 import NotificationBell from "../components/notification/NotificationBell.vue";
 const router = useRouter();
 const authStore = useAuthStore();
@@ -121,13 +123,13 @@ onBeforeUnmount(() => {
 /* Logo */
 .logo {
   text-decoration: none;
-  font-family: 'Sora', sans-serif;
+  font-family: "Sora", sans-serif;
   color: black;
   font-size: 22px;
   font-weight: bold;
 }
 .blue {
-  color: #002D9E;
+  color: #002d9e;
 }
 
 /* Desktop Menu */
