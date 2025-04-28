@@ -2,13 +2,11 @@ from rest_framework import serializers
 
 from topics.serializers import ThesisTopicSerializer
 from .models import Team, JoinRequest, SupervisorRequest, Like
-from profiles.models import StudentProfile, SupervisorProfile
+from profiles.models import SupervisorProfile
 from profiles.serializers import StudentProfileSerializer, SupervisorShortSerializer
 from profiles.serializers import SupervisorProfileSerializer
-from topics.models import ThesisTopic
 
 class TeamSerializer(serializers.ModelSerializer):
-    """ Serializer for Team model """
     members = StudentProfileSerializer(many=True, read_only=True)
     owner = serializers.PrimaryKeyRelatedField(queryset=SupervisorProfile.objects.all(), required=False)
     thesis_topic = ThesisTopicSerializer()
@@ -26,7 +24,6 @@ class TeamSerializer(serializers.ModelSerializer):
         return [skill.name for skill in obj.thesis_topic.required_skills.all()]
 
     def validate(self, data):
-        """ Ensure a student can only apply to 1 team at a time """
         user = self.context['request'].user
         if hasattr(user, 'student_profile'):
             if user.student_profile.teams.filter(status="open").exists():

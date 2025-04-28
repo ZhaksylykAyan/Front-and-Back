@@ -12,7 +12,6 @@ class Membership(models.Model):
         unique_together = ('student', 'team')
 
 class Team(models.Model):
-    """ Model for thesis teams """
     id = models.AutoField(primary_key=True)
     thesis_topic = models.OneToOneField(ThesisTopic, on_delete=models.CASCADE, related_name="team")
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="owned_teams")
@@ -36,17 +35,13 @@ class Team(models.Model):
         return len(team_skills.intersection(required_skills)) >= 4
 
     def apply_to_supervisor(self):
-        """ Allow team to apply to the supervisor for approval """
         if not self.has_required_skills():
             raise ValueError("Team does not meet the minimum required skills.")
         self.status = "pending"
         self.save()
 
     def approve_team(self, supervisor):
-        """ Supervisor approves the team and becomes the new owner """
-        # if self.status != "pending":
-        #     raise ValueError("Only pending teams can be approved.")
-        from teams.models import Team  # если ты вдруг в другом файле
+        from teams.models import Team
         if Team.objects.filter(supervisor=supervisor).count() >= 10:
             raise ValueError("Supervisor cannot own more than 10 teams.")
         self.supervisor = supervisor
@@ -55,7 +50,6 @@ class Team(models.Model):
         self.save()
 
     def reject_team(self):
-        """ Supervisor rejects the team """
         self.status = "rejected"
         self.save()
 

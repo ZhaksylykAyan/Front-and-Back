@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     'drf_yasg',
     # Custom apps
+    'chat',
     'users',
     'profiles',
     'teams',
@@ -127,11 +128,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Change from 1 day to 7 days
 }
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-    },
-}
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -235,6 +232,15 @@ LOGGING = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",  # проверь порт, если другой
+        "LOCATION": "redis://127.0.0.1:6379/1",
     }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
 }

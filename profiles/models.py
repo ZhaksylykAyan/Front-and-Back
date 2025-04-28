@@ -15,8 +15,6 @@ class Skill(models.Model):
 
 
 class StudentProfile(models.Model):
-    """ Profile model for students """
-
     MAJOR_CHOICES = [
         ("Automation and Control", "Automation and Control"),
         ("Information Systems", "Information Systems"),
@@ -45,12 +43,10 @@ class StudentProfile(models.Model):
     skills = models.ManyToManyField(Skill, blank=True)
 
     def clean(self):
-        """ Ensure students do not select more than 5 skills """
         if self.pk and self.skills.count() > 5:
             raise ValidationError("Students can select a maximum of 5 skills.")
 
     def update_profile_completion(self):
-        """ Check if profile is completed and update the user field """
         required_fields = [self.first_name, self.last_name, self.specialization, self.gpa]
         self.user.is_profile_completed = all(required_fields) and self.skills.exists()
         self.user.save()
@@ -66,7 +62,6 @@ class StudentProfile(models.Model):
 
 
 class SupervisorProfile(models.Model):
-    """ Profile model for supervisors """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -80,7 +75,6 @@ class SupervisorProfile(models.Model):
     skills = models.ManyToManyField(Skill, blank=True)
 
     def clean(self):
-        """ Ensure supervisors do not select more than 10 skills """
         if self.pk and self.skills.count() > 10:
             raise ValidationError("Supervisors can select a maximum of 10 skills.")
 
@@ -101,7 +95,6 @@ class SupervisorProfile(models.Model):
 
 
 class DeanOfficeProfile(models.Model):
-    """ Profile model for Dean's Office """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

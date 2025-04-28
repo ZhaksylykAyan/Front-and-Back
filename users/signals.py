@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 @receiver(user_logged_in)
 def log_login(sender, request, user, **kwargs):
     ip = get_client_ip(request)
-    logger.info(f"Вход: {user.username} (IP: {ip})")
+    logger.info(f"Вход: {user.email} (IP: {ip})")
 
 @receiver(user_logged_out)
 def log_logout(sender, request, user, **kwargs):

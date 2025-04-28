@@ -11,7 +11,6 @@ def generate_excel_for_approved_teams(request):
     ws = wb.active
     ws.title = "Approved Teams"
 
-    # Заголовки
     ws.append(["№", "Студент", "Тема", "Супервайзер"])
 
     bold_font = Font(bold=True)
@@ -32,13 +31,11 @@ def generate_excel_for_approved_teams(request):
         )
         supervisor_text = f"{supervisor.last_name} {supervisor.first_name}, {supervisor.degree}"
 
-        # Заполняем строки только с именами студентов
         for student in members:
             ws.append([count, f"{student.last_name} {student.first_name}", "", ""])
             row_num += 1
             count += 1
 
-        # Объединяем ячейки с темой и супервайзером
         start_merge = row_num - len(members)
         end_merge = row_num - 1
         ws.merge_cells(start_row=start_merge, end_row=end_merge, start_column=3, end_column=3)
@@ -52,7 +49,6 @@ def generate_excel_for_approved_teams(request):
         supervisor_cell.font = Font(name='Calibri')
         supervisor_cell.alignment = wrap
 
-    # Устанавливаем ширину столбцов
     col_widths = [5, 35, 55, 40]
     for i, width in enumerate(col_widths, start=1):
         ws.column_dimensions[get_column_letter(i)].width = width
