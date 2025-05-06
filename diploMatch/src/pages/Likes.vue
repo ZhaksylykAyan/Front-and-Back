@@ -293,5 +293,18 @@ onMounted(async () => {
   background: #9ede9c;
   color: #898787;
 }
+@media (max-width: 768px) {
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    margin-top: 8px;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+}
 
 </style>

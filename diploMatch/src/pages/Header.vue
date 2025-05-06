@@ -33,7 +33,7 @@
         </div>
       </div>
     </nav>
-
+    <NotificationBell v-if="isMobile" />
     <!-- 📱 Mobile Burger -->
     <div class="burger" v-if="isMobile" @click="burgerOpen = !burgerOpen">
       <i class="fas fa-bars"></i>
@@ -51,6 +51,7 @@
       <router-link to="/profile" @click="closeMenu">Profile</router-link>
       <router-link to="/dashboard" @click="closeMenu">Projects</router-link>
       <router-link to="/orders" @click="closeMenu">Requests</router-link>
+      <button @click="openChatModalFromMenu">Chats 💬</button>
       <router-link to="/liked" @click="closeMenu">Favorites ❤️</router-link>
       <button @click="logout">Logout</button>
     </div>
@@ -61,16 +62,21 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
+import { useChatStore } from "../store/chat";
 import ChatIcon  from "../components/Chat/ChatIcon.vue";
 import NotificationBell from "../components/notification/NotificationBell.vue";
 const router = useRouter();
 const authStore = useAuthStore();
 const userRole = authStore.user?.role;
+const chatStore = useChatStore();
 const dropdownOpen = ref(false);
 const profileMenu = ref(null);
 const burgerOpen = ref(false);
 const isMobile = ref(window.innerWidth < 768);
-
+const openChatModalFromMenu = () => {
+  burgerOpen.value = false;
+  chatStore.openChatModal();
+};
 const toggleDropdown = () => (dropdownOpen.value = !dropdownOpen.value);
 const goToProfile = () => {
   dropdownOpen.value = false;
@@ -91,7 +97,6 @@ const handleClickOutside = (e) => {
 const updateWindowSize = () => {
   isMobile.value = window.innerWidth < 768;
   if (!isMobile.value) burgerOpen.value = false;
-  console.log("isMobile:", isMobile.value);
 };
 
 const closeMenu = () => (burgerOpen.value = false);
@@ -256,6 +261,17 @@ onBeforeUnmount(() => {
   }
   .burger {
     display: block;
+    font-size: 22px;
+    cursor: pointer;
+  }
+  .notification-icon {
+    margin-left: 130px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 </style>

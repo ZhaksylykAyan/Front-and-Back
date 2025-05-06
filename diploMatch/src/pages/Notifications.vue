@@ -178,4 +178,28 @@ onMounted(() => fetchNotifications());
   color: #a71d2a;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
+@media (max-width: 768px) {
+  .flex-between {
+  display: flex;
+  align-items: flex-start;
+}
+
+.message {
+  flex: 1;
+  margin-right: 8px;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.timestamp {
+  white-space: nowrap;
+  font-size: 0.8rem;
+  margin-top: 16px;
+  color: #777;
+  flex-shrink: 0;
+}
+
+
+}
+
 </style>

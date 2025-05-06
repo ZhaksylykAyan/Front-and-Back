@@ -44,7 +44,6 @@ const connectWebSocket = () => {
   );
 
   socket.onopen = () => {
-    console.log("WebSocket Connected ✅");
   };
 
   socket.onmessage = (event) => {
@@ -59,7 +58,6 @@ const connectWebSocket = () => {
   };
 
   socket.onclose = () => {
-    console.log("WebSocket disconnected. Reconnecting...");
     setTimeout(connectWebSocket, 3000); // ⏳ Авто-реконнект
   };
 };

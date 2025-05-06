@@ -292,7 +292,7 @@ const saveProfile = async () => {
 }
 
 input {
-  width: 95%;
+  width: 100%;
   padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -404,5 +404,10 @@ input:focus {
 
 .cancel-btn:hover {
   background-color: #bbb;
+}
+@media (max-width: 768px) {
+  .form-grid {
+    width: 55%; 
+  }
 }
 </style>

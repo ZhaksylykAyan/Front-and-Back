@@ -19,7 +19,7 @@
 
         <div class="image-wrapper">
           <img :src="imagePreview || defaultAvatar" class="profile-image" />
-          <label class="upload-btn" v-if="editing">
+          <label class="upload-btn">
             <input type="file" accept="image/*" @change="handleImageUpload" />
             <i class="fas fa-camera"></i>
           </label>
@@ -67,7 +67,7 @@
         <div class="skills-grid readonly">
           <span
             v-for="skill in selectedSkillsNames"
-            :key="skill.id"
+            :key="skill"
             class="skill-card selected"
           >
             {{ skill }}
@@ -105,7 +105,6 @@ const user = authStore.user;
 const profile = ref({});
 const skills = ref([]);
 const selectedSkills = ref([]);
-const editing = ref(true);
 const successMessage = ref("");
 const errorMessage = ref("");
 const imageFile = ref(null);

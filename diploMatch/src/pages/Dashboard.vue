@@ -575,4 +575,57 @@ onMounted(async () => {
   opacity: 0.4;
   cursor: not-allowed;
 }
+@media (max-width: 768px) {
+  .project-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .project-title {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .actions,
+  .project-actions {
+    align-self: flex-start;
+  }
+
+  .apply-btn {
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .project-description {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .project-members {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .project-skills {
+    margin-top: 10px;
+  }
+
+  .skill-pill {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
+
 </style>

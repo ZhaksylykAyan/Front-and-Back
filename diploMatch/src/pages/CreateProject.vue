@@ -83,7 +83,7 @@
               class="remove-btn"
               @click="confirmRemoveMember(member)"
             >
-              🗑 Remove
+              🗑
             </button>
           </li>
         </ul>
@@ -179,7 +179,6 @@ const loadTeam = async (topicId) => {
       teamMembers.value = filteredMembers;
       isOwner.value = teamData.is_owner ?? false;
 
-      console.log("✅ Team loaded:", team.value);
     } else {
       console.warn("⚠️ No matching team found for topic:", topicId);
     }
@@ -190,7 +189,6 @@ const loadTeam = async (topicId) => {
 
 
 const confirmRemoveMember = (member) => {
-  console.log("Selected member:", member);
   memberToRemove.value = member;
   showRemoveModal.value = true;
 };
@@ -303,7 +301,6 @@ onMounted(async () => {
       isOwner.value = data.is_owner;
 
       await loadTeam(projectId.value);
-      console.log("Team members loaded:", teamMembers.value);
     }
   } catch (err) {
     console.error("Failed to load data", err);

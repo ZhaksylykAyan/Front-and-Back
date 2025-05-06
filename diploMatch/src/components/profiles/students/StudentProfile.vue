@@ -25,18 +25,11 @@
           <img :src="profileImage" class="profile-img" />
         </div>
 
-        <div class="profile-info">
+        <div class="main-info-block">
           <div class="info-header">
-            <div class="name-box">
-              <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
-              <a
-                v-if="profile.user_email"
-                :href="`mailto:${profile.user_email}`"
-                class="email-link"
-              >
-                {{ profile.user_email }}
-              </a>
-            </div>
+            <h3 class="user-name">
+              {{ profile.first_name }} {{ profile.last_name }}
+            </h3>
             <button
               v-if="isViewingOther"
               class="send-message-btn"
@@ -45,10 +38,20 @@
               <i class="fa-regular fa-comment-dots"></i> Send Message
             </button>
           </div>
+
+          <a
+            v-if="profile.user_email"
+            :href="`mailto:${profile.user_email}`"
+            class="email-link"
+          >
+            {{ profile.user_email }}
+          </a>
+
           <p><strong>GPA:</strong> {{ profile.gpa }}</p>
           <p v-if="profile.specialization">
             <strong>Major:</strong> {{ profile.specialization }}
           </p>
+
           <div v-if="profile.portfolio" class="portfolio-link">
             <a :href="profile.portfolio" target="_blank" rel="noopener">
               {{ profile.portfolio }}
@@ -254,14 +257,27 @@ const startChat = async () => {
   try {
     const res = await axios.post(
       "http://127.0.0.1:8000/api/chats/start/",
-      { user_id: profile.value.user }, // 👈 ВАЖНО: именно user, не id!
+      { user_id: profile.value.user },
       {
         headers: { Authorization: `Bearer ${authStore.token}` },
       }
     );
-    // Открыть чат с этим пользователем
-    chatStore.setActiveChat(res.data.id);
+
+    const chatId = res.data.id;
+
+    // Загружаем сообщения
+    await chatStore.fetchMessages(chatId);
+
+    // Открываем модалку
     chatStore.openChatModal();
+
+    // Даём время DOM-у отрендерить модалку, потом выбираем чат
+    setTimeout(() => {
+      const event = new CustomEvent("select-chat", {
+        detail: chatId,
+      });
+      window.dispatchEvent(event);
+    }, 50);
   } catch (err) {
     console.error("Ошибка при создании чата:", err);
     alert("Не удалось начать чат");
@@ -434,18 +450,13 @@ const editProject = () => {
 }
 .info-header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 10px;
-  gap: 20px;
+  gap: 10px;
 }
-.name-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.name-box h3 {
+.user-name {
   font-size: 26px;
   font-weight: bold;
   margin: 0;
@@ -559,6 +570,23 @@ const editProject = () => {
   display: flex;
   gap: 30px;
   margin-top: 30px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.photo-section {
+  flex-shrink: 0;
+}
+.main-info-block {
+  flex: 1;
+  width: 100%;
+}
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .profile-img {
@@ -567,17 +595,6 @@ const editProject = () => {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #007bff;
-}
-
-.profile-info h3 {
-  font-size: 26px;
-  font-weight: bold;
-  margin-top: 0px;
-}
-
-.profile-info p {
-  margin-bottom: 6px;
-  font-size: 16px;
 }
 
 .section-title {
@@ -767,16 +784,39 @@ const editProject = () => {
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  margin-left: 400px;
 }
 .send-message-btn:hover {
   background-color: #0056b3;
 }
 
 @media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .profile-header h2 {
+    margin-bottom: 10px;
+  }
+  
+  .actions button {
+    flex: 1 1 auto;
+    min-width: 140px;
+    max-width: 200px;
+    white-space: nowrap; /* ✅ запрет переноса */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    justify-content: center;
+  }
+
+  .profile-container {
+    padding: 30px 20px;
+  }
   .profile-main {
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
   .portfolio-link {
     word-break: break-word;
@@ -792,41 +832,64 @@ const editProject = () => {
     word-break: break-all;
   }
 
-  .photo-section,
-  .profile-info {
+  .photo-section {
     width: 100%;
     text-align: center;
   }
-
+  .project-section {
+    padding-left: 0 !important; /* Убираем левый отступ */
+    padding-right: 0 !important;
+  }
+  .project-card {
+    border-radius: 0; /* опционально — растягивает на всю ширину */
+  }
   .project-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
 
-  .actions {
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 10px;
-  }
-
-  .actions button,
-  .actions i {
-    width: 100%;
-    text-align: center;
-  }
-  .project-skills {
-    justify-content: center;
-  }
   .skill-pill {
     word-break: break-word;
     text-align: center;
   }
   .team-members {
     flex-wrap: wrap;
-    justify-content: center;
+  }
+  .info-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    margin-bottom: 12px;
   }
 
+  .user-name {
+    font-size: 22px;
+  }
+
+  .email-link {
+    font-size: 14px;
+    word-break: break-word;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .send-message-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 15px;
+    margin-bottom: 16px;
+    padding: 10px 16px;
+  }
+
+  .section-title {
+    text-align: center;
+  }
+
+  .skills-box {
+    justify-content: center;
+  }
   .profile-container {
     padding: 20px 10px;
   }

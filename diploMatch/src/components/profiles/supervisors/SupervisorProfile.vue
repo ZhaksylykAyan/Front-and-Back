@@ -3,7 +3,7 @@
     <div class="profile-card">
       <div class="profile-header">
         <h2 class="section-title" v-if="!isViewingOther">{{ "My Profile" }}</h2>
-        <div class="profile-actions" v-if="!isViewingOther && !editing">
+        <div class="profile-actions" v-if="!isViewingOther">
           <button class="edit-btn" @click="goToEdit">
             <i class="fa-solid fa-pen" style="margin-right: 6px"></i>
             Edit Profile
@@ -336,13 +336,24 @@ const startChat = async () => {
         headers: { Authorization: `Bearer ${authStore.token}` },
       }
     );
-    chatStore.setActiveChat(res.data.id);
+
+    const chatId = res.data.id;
+
+    await chatStore.fetchMessages(chatId);
+
+    chatStore.setActiveChat(chatId);
     chatStore.openChatModal();
+    chatStore.resetUnread(chatId);
+
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent("select-chat", { detail: chatId }));
+    }, 0);
   } catch (err) {
     console.error("Ошибка при создании чата:", err);
     alert("Не удалось начать чат");
   }
 };
+
 const goToCreateProject = () => {
   router.push("/create-project");
 };
@@ -389,11 +400,8 @@ const calculateCompatibility = (requiredSkills) => {
     typeof s === "string" ? s.toLowerCase() : s.name?.toLowerCase()
   );
 
-  console.log("🧩 Required skills:", required);
-  console.log("🎓 My professor skills:", mySkillNames);
 
   const matched = required.filter((skill) => mySkillNames.includes(skill));
-  console.log("✅ Matched:", matched);
 
   return Math.round((matched.length / required.length) * 100);
 };
@@ -615,21 +623,25 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .send-message-btn {
-  /* margin-top: 10px; ❌ убрать */
+  white-space: nowrap;
+  max-width: 100%;
   background: #007bff;
   margin-bottom: 20px;
   color: white;
-  padding: 8px 14px; /* уменьшаем чуть-чуть padding */
+  padding: 8px 14px;
+  flex-shrink: 0;
   border: none;
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
   font-size: 14px;
   display: flex;
-  align-items: center; /* для центрирования иконки и текста */
+  align-items: center;
   gap: 8px;
 }
 
@@ -838,24 +850,54 @@ onMounted(async () => {
   .profile-container {
     padding: 30px 20px;
   }
-
+  .profile-header {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
   .profile-body {
     flex-direction: column;
     align-items: center;
     text-align: center;
+  }
+  .profile-actions button {
+    flex: 1 1 auto;
+    min-width: 140px;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    justify-content: center;
   }
 
   .left-column,
   .right-column {
     width: 100%;
   }
-
+  .info-header {
+    flex-direction: column;
+    align-items: center; /* 👈 центрирует имя и кнопку */
+    text-align: center; /* 👈 выравнивание текста по центру */
+    gap: 10px; /* отступ между элементами */
+  }
+  .user-name {
+    font-size: 22px; /* можно слегка уменьшить */
+  }
   .profile-image {
     width: 120px;
     height: 120px;
     margin-bottom: 20px;
   }
 
+  .projects-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .project-card {
+    border-radius: 0;
+  }
   .projects-header {
     flex-direction: column;
     align-items: flex-start;
@@ -875,12 +917,16 @@ onMounted(async () => {
 
   .team-members {
     flex-wrap: wrap;
-    justify-content: center;
   }
 
-  .skills-grid,
-  .project-skills {
+  .skills-grid {
     justify-content: center;
   }
+  .send-message-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 15px;
+  }
+
 }
 </style>

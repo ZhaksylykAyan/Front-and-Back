@@ -1,8 +1,20 @@
 <template>
   <div class="chat-window">
     <div class="chat-header">
+      <button
+        v-if="isMobile && chatStore.activeChatId"
+        @click="chatStore.clearActiveChat()"
+        class="back-button"
+        aria-label="Назад"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
       <router-link :to="getOtherUserProfileLink" class="user-info">
-        <img :src="otherUserPhoto || defaultAvatar" class="header-avatar" alt="avatar" />
+        <img
+          :src="otherUserPhoto || defaultAvatar"
+          class="header-avatar"
+          alt="avatar"
+        />
         <div class="name-status">
           <p class="user-name">{{ otherUserFullName }}</p>
           <span :class="{ online: isOnline }">
@@ -13,10 +25,7 @@
     </div>
 
     <div class="chat-messages" ref="msgContainer">
-      <div
-        v-for="(msg, index) in sortedMessages"
-        :key="msg.id"
-      >
+      <div v-for="(msg, index) in sortedMessages" :key="msg.id">
         <div v-if="shouldShowDate(index)" class="date-separator">
           {{ formatDate(msg.timestamp) }}
         </div>
@@ -24,13 +33,13 @@
         <div
           :class="[
             'message-container',
-            { own: msg.sender.email === authStore.user.email }
+            { own: msg.sender.email === authStore.user.email },
           ]"
         >
           <div
             :class="[
               'message-bubble',
-              { own: msg.sender.email === authStore.user.email }
+              { own: msg.sender.email === authStore.user.email },
             ]"
           >
             <span class="message-text">{{ msg.content }}</span>
@@ -39,7 +48,12 @@
         </div>
       </div>
 
-      <div v-if="chatStore.typingUser && chatStore.typingUser !== authStore.user.email" class="typing">
+      <div
+        v-if="
+          chatStore.typingUser && chatStore.typingUser !== authStore.user.email
+        "
+        class="typing"
+      >
         {{ chatStore.typingUser }} is typing...
       </div>
     </div>
@@ -51,17 +65,27 @@
         type="text"
         placeholder="Type a message..."
       />
-      <button type="submit">Send</button>
+      <button type="submit" class="send-button" aria-label="Send">
+        <i class="fas fa-paper-plane"></i>
+      </button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick, computed, onBeforeUnmount } from "vue";
+import {
+  ref,
+  onMounted,
+  watch,
+  nextTick,
+  computed,
+  onBeforeUnmount,
+} from "vue";
 import { useChatStore } from "../../store/chat";
 import { useAuthStore } from "../../store/auth";
 import axios from "axios";
 import dayjs from "dayjs";
+const isMobile = ref(false);
 
 const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 const chatStore = useChatStore();
@@ -74,7 +98,9 @@ const lastSeen = ref(null);
 let typingTimeout = null;
 const isUserNearBottom = ref(true);
 const showScrollButton = ref(false);
-
+const updateIsMobile = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
 const formatTime = (ts) => dayjs(ts).format("HH:mm");
 
 const formatDate = (ts) => {
@@ -108,7 +134,9 @@ const otherUser = computed(() => {
 const otherUserFullName = computed(() => {
   if (!otherUser.value) return "Unknown";
   if (otherUser.value.profile) {
-    return `${otherUser.value.profile.first_name || ""} ${otherUser.value.profile.last_name || ""}`.trim();
+    return `${otherUser.value.profile.first_name || ""} ${
+      otherUser.value.profile.last_name || ""
+    }`.trim();
   }
   return otherUser.value.email;
 });
@@ -168,7 +196,9 @@ const fetchUserStatus = async () => {
   const userId = getOtherUserId();
   if (userId) {
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/users/${userId}/status/`);
+      const res = await axios.get(
+        `http://127.0.0.1:8000/api/users/${userId}/status/`
+      );
       isOnline.value = res.data.is_online;
       lastSeen.value = res.data.last_seen;
     } catch (error) {
@@ -183,16 +213,16 @@ const connectWebSocket = () => {
   if (ws.value) {
     ws.value.close();
   }
-  ws.value = new WebSocket(`${protocol}://127.0.0.1:8000/ws/chat/${chatStore.activeChatId}/?token=${token}`);
+  ws.value = new WebSocket(
+    `${protocol}://127.0.0.1:8000/ws/chat/${chatStore.activeChatId}/?token=${token}`
+  );
 
   ws.value.onopen = () => {
-    console.log("Chat WebSocket connected");
     pingOnline();
     setInterval(pingOnline, 30000);
   };
 
   ws.value.onclose = () => {
-    console.log("Chat WebSocket closed, reconnecting...");
     setTimeout(connectWebSocket, 3000);
   };
 
@@ -237,9 +267,13 @@ const sendMessage = async () => {
   ws.value.send(JSON.stringify({ message: messageContent }));
 
   try {
-    await axios.post(`http://127.0.0.1:8000/api/chats/${chatStore.activeChatId}/messages/`, { content: messageContent }, {
-      headers: { Authorization: `Bearer ${authStore.token}` },
-    });
+    await axios.post(
+      `http://127.0.0.1:8000/api/chats/${chatStore.activeChatId}/messages/`,
+      { content: messageContent },
+      {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+      }
+    );
     await chatStore.fetchMessages(chatStore.activeChatId);
     chatStore.setLastMessage(chatStore.activeChatId, {
       content: messageContent,
@@ -254,7 +288,9 @@ const sendMessage = async () => {
 
 const sortedMessages = computed(() => {
   const messages = chatStore.chatMessagesByChatId[chatStore.activeChatId] || [];
-  return [...messages].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  return [...messages].sort(
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+  );
 });
 
 const sendTyping = () => {
@@ -286,6 +322,8 @@ const scrollToBottom = async (force = false) => {
 };
 
 onMounted(async () => {
+  updateIsMobile();
+  window.addEventListener("resize", updateIsMobile);
   if (chatStore.activeChatId) {
     await chatStore.fetchMessages(chatStore.activeChatId);
     await nextTick();
@@ -299,6 +337,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateIsMobile);
   if (msgContainer.value) {
     msgContainer.value.removeEventListener("scroll", onScroll);
   }
@@ -321,19 +360,21 @@ watch(
 );
 </script>
 
-
 <style scoped>
 .chat-window {
   display: flex;
   flex-direction: column;
   height: 100%;
+  max-height: 100vh;
+  
 }
 .chat-header {
   padding: 12px;
   background: #f5f5f5;
   border-bottom: 1px solid #ccc;
   display: flex;
-  justify-content: space-between;
+  align-items: center; /* 👈 добавили */
+  gap: 10px; /* 👈 добавили */
   font-weight: bold;
 }
 .chat-header .online {
@@ -347,6 +388,7 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: 0; /* ❗ ВАЖНО, позволяет flex: 1 работать как надо */
 }
 .message-container {
   display: flex;
@@ -373,6 +415,8 @@ watch(
 .message-text {
   font-size: 14px;
   margin-bottom: 4px;
+  word-break: break-word; /* 💥 разрывает длинные слова */
+  overflow-wrap: anywhere;
 }
 .message-time {
   font-size: 10px;
@@ -400,6 +444,11 @@ watch(
   font-weight: bold;
   cursor: pointer;
 }
+.name-status span {
+  font-weight: normal;
+  color: #888;
+  font-size: 13px;
+}
 .typing {
   font-style: italic;
   color: #555;
@@ -416,6 +465,7 @@ watch(
   display: flex;
   align-items: center;
   gap: 10px;
+  flex: 1;
   text-decoration: none;
   color: inherit;
 }
@@ -436,5 +486,30 @@ watch(
   font-weight: bold;
   margin: 0;
 }
-
+.send-button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #007bff;
+  color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.send-button i {
+  transform: rotate(45deg); /* для наклона, как в Telegram */
+}
+.back-button {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  color: #333;
+}
 </style>

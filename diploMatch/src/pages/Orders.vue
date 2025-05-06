@@ -27,7 +27,7 @@
               v-if="mySupervisorRequest.status === 'pending'"
               class="cancel-btn"
               @click="cancelSupervisorRequest"
-            >
+            > 
               Cancel
             </button>
           </div>
@@ -566,8 +566,10 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
 }
+
 .project-title {
   font-size: 18px;
+  margin: 0;
   font-weight: bold;
 }
 .status-with-button {
@@ -715,4 +717,27 @@ onMounted(async () => {
   font-size: 14px;
   color: #555;
 }
+@media (max-width: 768px) {
+  .request-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .status-with-button {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .status-tag {
+    padding: 8px 14px;
+    margin: 0; /* сброс если вдруг где-то задан отступ */
+  }
+
+  .cancel-btn {
+    padding: 9px 16px;
+  }
+}
+
 </style>

@@ -3,10 +3,14 @@
   box-sizing: border-box;
 }
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
 
-  
+body.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}

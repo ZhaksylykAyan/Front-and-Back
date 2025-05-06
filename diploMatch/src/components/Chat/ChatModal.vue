@@ -1,12 +1,12 @@
 <template>
   <div class="chat-modal" ref="modalRef">
     <div class="chat-drag-handle" @mousedown="startDrag">
-      <span>Чаты</span>
+      <span>Chats</span>
       <button @click="closeModal" class="close-btn">✕</button>
     </div>
 
     <div class="chat-content">
-      <div class="chat-left">
+      <div class="chat-left" v-show="!chatStore.activeChatId || !isMobile">
         <ul class="chat-list">
           <li
             v-for="chat in sortedChats"
@@ -39,7 +39,7 @@
                   <span class="last-message">
                     {{
                       chatStore.chatLastMessages[chat.id]?.content ||
-                      "Нет сообщений"
+                      "No messages"
                     }}
                   </span>
 
@@ -61,11 +61,11 @@
         </ul>
       </div>
 
-      <div class="chat-right" v-if="chatStore.activeChatId">
+      <div class="chat-right" v-if="chatStore.activeChatId" v-show="chatStore.activeChatId || !isMobile">
         <ChatWindow />
       </div>
-      <div class="chat-right empty" v-else>
-        <p>Выберите чат, чтобы начать общение</p>
+      <div class="chat-right empty" v-else-if="!isMobile">
+        <p>Select a chat to start a conversation</p>
       </div>
     </div>
   </div>
@@ -78,17 +78,23 @@ import ChatWindow from "./ChatWindow.vue";
 import axios from "axios";
 import { useAuthStore } from "../../store/auth";
 import dayjs from "dayjs"; // если ещё не подключил
-
+const isMobile = ref(false);
 const chatStore = useChatStore();
 const authStore = useAuthStore();
 const modalRef = ref(null);
 let offset = { x: 0, y: 0 };
 let isDragging = false;
+const updateIsMobile = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
 const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 const closeModal = () => {
   chatStore.closeChatModal();
 };
-
+const handleSelectChat = async (e) => {
+  const chatId = e.detail;
+  await selectChat(chatId);
+};
 const fetchChats = async () => {
   try {
     const res = await axios.get("http://127.0.0.1:8000/api/chats/", {
@@ -113,7 +119,7 @@ const fetchChats = async () => {
         });
       } else {
         chatStore.setLastMessage(chat.id, {
-          content: "Нет сообщений",
+          content: "No messages",
           timestamp: null,
         });
       }
@@ -241,8 +247,12 @@ const stopDrag = () => {
 };
 
 onMounted(() => {
+  document.body.classList.add("no-scroll");
   chatStore.clearActiveChat();
   fetchChats();
+  updateIsMobile();
+  window.addEventListener("resize", updateIsMobile);
+  window.addEventListener("select-chat", handleSelectChat);
 
   const modal = modalRef.value;
   if (!modal) return;
@@ -259,7 +269,12 @@ onMounted(() => {
   }
 });
 
-onBeforeUnmount(() => stopDrag());
+onBeforeUnmount(() => {
+  document.body.classList.remove("no-scroll");
+  stopDrag();
+  window.removeEventListener("resize", updateIsMobile);
+  window.removeEventListener("select-chat", handleSelectChat);
+});
 </script>
 
 <style scoped>
@@ -406,4 +421,46 @@ onBeforeUnmount(() => stopDrag());
   color: #999;
   margin-left: 8px;
 }
+@media (max-width: 768px) {
+  .chat-modal {
+    width: 100vw;
+    height: 100vh;
+    top: 0 !important;
+    left: 0 !important;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .chat-drag-handle {
+    cursor: default;
+    padding: 14px;
+    font-size: 18px;
+  }
+
+  .chat-content {
+    flex-direction: column;
+  }
+
+  .chat-left {
+    width: 100%;
+    padding: 12px;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .chat-right {
+    flex: 1;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 50px);
+  }
+
+  .chat-right.empty {
+    font-size: 14px;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 </style>
