@@ -3,6 +3,7 @@ from django.conf import settings
 from profiles.models import StudentProfile, SupervisorProfile, Skill
 from topics.models import ThesisTopic
 
+
 class Membership(models.Model):
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
     team = models.ForeignKey('Team', on_delete=models.CASCADE)
@@ -10,6 +11,7 @@ class Membership(models.Model):
 
     class Meta:
         unique_together = ('student', 'team')
+
 
 class Team(models.Model):
     id = models.AutoField(primary_key=True)
@@ -24,7 +26,8 @@ class Team(models.Model):
     supervisor = models.ForeignKey(SupervisorProfile, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(
         max_length=20,
-        choices=[("pending", "Pending Approval"), ("approved", "Approved"), ("rejected", "Rejected")],
+        choices=[("pending", "Pending Approval"), ("approved", "Approved"), ("rejected", "Rejected"),
+                 ("team_approved", "Team Approved")],
         default="pending"
     )
 
@@ -47,6 +50,15 @@ class Team(models.Model):
         self.supervisor = supervisor
         self.owner = supervisor.user
         self.status = "approved"
+        self.save()
+
+    def approve_by_supervisor_and_send_to_dean(self, supervisor):
+        """ Approves and sends to dean's office """
+        if Team.objects.filter(supervisor=supervisor).count() >= 10:
+            raise ValueError("Supervisor cannot own more than 10 teams.")
+        self.supervisor = supervisor
+        self.owner = supervisor.user
+        self.status = "team_approved"
         self.save()
 
     def reject_team(self):

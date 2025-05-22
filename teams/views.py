@@ -550,7 +550,7 @@ class ApproveTeamView(APIView):
             return Response({"error": "Team not found."}, status=404)
 
         try:
-            team.approve_team(user.supervisor_profile)
+            team.approve_by_supervisor_and_send_to_dean(user.supervisor_profile)
             return Response({"success": "Team approved."})
         except Exception as e:
             return Response({"error": str(e)}, status=400)
@@ -564,7 +564,7 @@ class ApprovedTeamsForDeanView(generics.ListAPIView):
         user = self.request.user
         if user.role != "Dean Office":
             return Team.objects.none()
-        return Team.objects.filter(status="approved")
+        return Team.objects.filter(status="team_approved")
 
 
 class ExportApprovedTeamsExcelView(APIView):
@@ -580,3 +580,32 @@ class ExportApprovedTeamsExcelView(APIView):
         # ✅ Просто передаем request, teams уже внутри собираются
         excel_response = generate_excel_for_approved_teams(request)
         return excel_response
+
+class ReturnTeamWithCommentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        user = request.user
+        if user.role != "Dean Office":
+            return Response({"error": "Only Dean Office can return projects."}, status=403)
+
+        comment = request.data.get("comment", "").strip()
+        if not comment:
+            return Response({"error": "Return reason is required."}, status=400)
+
+        try:
+            team = Team.objects.get(pk=pk)
+        except Team.DoesNotExist:
+            return Response({"error": "Team not found."}, status=404)
+
+        # Меняем статус
+        team.status = "approved"
+        team.save()
+
+        # Отправляем уведомление владельцу
+        send_notification(
+            team.owner,
+            f"Your project '{team.thesis_topic.title}' was returned by the Dean's Office. Reason: {comment}"
+        )
+
+        return Response({"message": "Project returned with comment."}, status=200)
