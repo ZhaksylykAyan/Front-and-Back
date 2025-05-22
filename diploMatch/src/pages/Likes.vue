@@ -158,7 +158,7 @@ onMounted(async () => {
     const res = await axios.get("http://127.0.0.1:8000/api/teams/likes/", {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
-    projects.value = res.data;
+    projects.value = res.data.filter(p => p.status !== 'team_approved');
     const profileRes = await axios.get(
       "http://127.0.0.1:8000/api/profiles/complete-profile/",
       {

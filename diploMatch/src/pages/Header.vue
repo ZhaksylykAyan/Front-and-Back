@@ -82,10 +82,10 @@ const goToProfile = () => {
   dropdownOpen.value = false;
   router.push("/profile");
 };
-const logout = () => {
-  authStore.logout();
+const logout = async () => {
+  await authStore.logout();           
   dropdownOpen.value = false;
-  router.push("/login");
+  router.push("/login");              
 };
 
 const handleClickOutside = (e) => {

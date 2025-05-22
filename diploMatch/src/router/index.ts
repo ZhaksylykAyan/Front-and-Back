@@ -73,39 +73,26 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
   const token = localStorage.getItem("token");
 
-  const publicPages = ["/login", "/register", "/forgot-password"];
-  const authRequired = to.meta.requiresAuth;
+  const publicPages = ["/login", "/register", "/forgot-password", "/reset-password"];
+  const isPublic = publicPages.some(page => to.path.startsWith(page));
 
-  // If navigating to a public page — allow directly
-  if (publicPages.includes(to.path)) {
-    return next();
-  }
-
-  // No token, trying to access protected page → redirect
-  if (authRequired && !token) {
-    return next("/login");
-  }
-
-  // If token exists but user not loaded → restore user
+  // Если токен есть, но пользователь не загружен — восстанавливаем
   if (token && !authStore.user) {
     await authStore.restoreUser();
   }
 
-  // After restore, check again
-  if (authRequired && !authStore.token) {
+  // Если неавторизован и не на публичной странице — редирект на login
+  if (!authStore.token && !isPublic) {
     return next("/login");
   }
 
-  // // Redirect to profile completion page if profile is not completed
-  // if (
-  //   authStore.user &&
-  //   !authStore.user.is_profile_completed &&
-  //   to.path !== "/profile"
-  // ) {
-  //   return next("/profile");
-  // }
+  // Если уже авторизован и зашёл на login/register — редирект на dashboard
+  if (authStore.token && (to.path === "/login" || to.path === "/register")) {
+    return next("/dashboard");
+  }
 
-  return next(); // Allow navigation
+  return next(); // всё в порядке
 });
+
 
 export default router;

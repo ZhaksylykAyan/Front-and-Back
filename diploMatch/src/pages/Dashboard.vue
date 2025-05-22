@@ -32,6 +32,13 @@
           <h3 class="project-title">{{ project.thesis_name }}</h3>
           <div class="project-actions" v-if="isDean">
             <button
+              class="action-btn red"
+              title="Return project to supervisor"
+              @click="openReturnModal(project.id)"
+            >
+              <i class="fa-solid fa-rotate-left"></i>
+            </button>
+            <button
               class="action-btn gray"
               title="Edit this project"
               @click="goToEditProject(project.thesis_id)"
@@ -129,6 +136,39 @@
         </button>
       </div>
     </div>
+    <!-- 🔁 Modal: Return project with comment -->
+    <div v-if="showReturnModal" class="modal-overlay">
+      <div class="modal-box">
+        <h3>Return Project to Supervisor</h3>
+        <p class="modal-text">
+          Please provide a reason for returning this project:
+        </p>
+        <textarea
+          v-model="returnComment"
+          rows="4"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+          "
+        ></textarea>
+        <div
+          class="modal-actions"
+          style="
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+          "
+        >
+          <button class="cancel-btn" @click="showReturnModal = false">
+            Cancel
+          </button>
+          <button class="confirm-btn" @click="submitReturn">Submit</button>
+        </div>
+      </div>
+    </div>
 
     <!-- ✅ Футер будет всегда снизу -->
     <Footer />
@@ -157,6 +197,9 @@ const route = useRoute();
 const router = useRouter();
 const userHasTeam = computed(() => authStore.userHasTeam);
 const userHasPendingRequest = computed(() => authStore.userHasPendingRequest);
+const showReturnModal = ref(false);
+const returnComment = ref("");
+const selectedProjectId = ref(null);
 // ✅ Pagination
 const currentPage = ref(parseInt(route.query.page) || 1);
 watch(
@@ -218,7 +261,31 @@ const getSkillClass = (skillName, project) => {
   if (!isMySkill && isCovered) return "skill-pill covered"; // 🔵🩶
   return "skill-pill"; // 🔵
 };
-
+const openReturnModal = (projectId) => {
+  selectedProjectId.value = projectId;
+  returnComment.value = "";
+  showReturnModal.value = true;
+};
+const submitReturn = async () => {
+  try {
+    await axios.post(
+      `http://127.0.0.1:8000/api/teams/${selectedProjectId.value}/return-comment/`,
+      { comment: returnComment.value },
+      {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      }
+    );
+    alert("Project returned successfully.");
+    projects.value = projects.value.filter(
+      (p) => p.id !== selectedProjectId.value
+    );
+    showReturnModal.value = false;
+  } catch (err) {
+    alert(err.response?.data?.error || "Failed to return project");
+  }
+};
 const getPhoto = (person) => {
   const photoPath = person?.photo || person?.user?.photo;
   if (photoPath) {
@@ -294,9 +361,9 @@ onMounted(async () => {
     const res = await axios.get(endpoint, {
       headers: { Authorization: `Bearer ${authStore.token}` },
     });
-    projects.value = res.data;
-
-    projects.value = res.data;
+    projects.value = isDean.value
+      ? res.data // декан видит всё
+      : res.data.filter((p) => p.status !== "team_approved");
     const profileRes = await axios.get(
       "http://127.0.0.1:8000/api/profiles/complete-profile/",
       {
@@ -565,7 +632,11 @@ onMounted(async () => {
   font-weight: bold;
   color: #333;
 }
-
+.project-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .pagination button.active {
   background-color: #007bff;
   color: white;
@@ -574,6 +645,41 @@ onMounted(async () => {
 .pagination button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+.modal-actions button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  min-width: 100px;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #bbb;
+}
+
+.confirm-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #0056b3;
+}
+.red {
+  background-color: #dc3545; /* Красный как в Bootstrap */
+}
+
+.red:hover {
+  background-color: #bb2d3b;
 }
 @media (max-width: 768px) {
   .project-card {
@@ -627,5 +733,4 @@ onMounted(async () => {
     gap: 4px;
   }
 }
-
 </style>

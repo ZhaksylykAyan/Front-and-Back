@@ -77,8 +77,11 @@
         <div class="project-header">
           <h3 class="project-title">{{ project.thesis_name }}</h3>
           <!-- Actions for owner -->
-          <div class="project-actions" v-if="!isViewingOther">
-            <!-- Кнопка -->
+          <!-- ✅ Показываем кнопки только если статус НЕ "team_approved" -->
+          <div
+            class="project-actions"
+            v-if="!isViewingOther && project.status !== 'team_approved'"
+          >
             <button
               class="action-btn green"
               title="Send to Dean's Office"
@@ -102,6 +105,25 @@
             >
               <i class="fa-solid fa-trash"></i>
             </button>
+          </div>
+
+          <!-- ✅ Показываем надпись, если команда уже одобрена -->
+          <div
+            class="project-actions"
+            v-else-if="project.status === 'team_approved'"
+          >
+            <span
+              style="
+                border: 2px solid #28a745;
+                color: #28a745;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: bold;
+                text-transform: capitalize;
+              "
+              >Team Approved</span
+            >
           </div>
 
           <!-- ❤️ Like + Apply for others -->
@@ -322,11 +344,18 @@ const approveProject = async (projectId) => {
       }
     );
     alert("Project successfully approved and sent to dean office!");
+
+    // 🔄 Обновляем локальный статус проекта
+    const project = myProjects.value.find((p) => p.id === projectId);
+    if (project) {
+      project.status = "team_approved";
+    }
   } catch (err) {
     alert(err.response?.data?.error || "Failed to approve");
     console.error(err);
   }
 };
+
 const startChat = async () => {
   try {
     const res = await axios.post(
@@ -399,7 +428,6 @@ const calculateCompatibility = (requiredSkills) => {
   const mySkillNames = mySkills.value.map((s) =>
     typeof s === "string" ? s.toLowerCase() : s.name?.toLowerCase()
   );
-
 
   const matched = required.filter((skill) => mySkillNames.includes(skill));
 
@@ -851,11 +879,11 @@ onMounted(async () => {
     padding: 30px 20px;
   }
   .profile-header {
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 16px;
-}
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
   .profile-body {
     flex-direction: column;
     align-items: center;
@@ -927,6 +955,5 @@ onMounted(async () => {
     justify-content: center;
     font-size: 15px;
   }
-
 }
 </style>

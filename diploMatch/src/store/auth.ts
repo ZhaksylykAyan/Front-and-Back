@@ -209,9 +209,9 @@ export const useAuthStore = defineStore("auth", {
       this.token = null;
       localStorage.removeItem("token");
     
-      // редирект по желанию
-      const router = useRouter();
-      router.push("/login");
+      // // редирект по желанию
+      // const router = useRouter();
+      // router.push("/login");
     },
     
 

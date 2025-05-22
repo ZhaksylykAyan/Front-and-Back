@@ -11,7 +11,14 @@
         <div class="flex-between">
           <div class="message">
             <span v-if="!notif.is_read" class="dot">●</span>
-            <p>{{ notif.message }}</p>
+            <div>
+              <p>
+                {{ getMessageWithoutReason(notif.message) }}
+              </p>
+              <p v-if="getReason(notif.message)" class="reason-line">
+                Reason: {{ getReason(notif.message) }}
+              </p>
+            </div>
           </div>
           <small class="timestamp">{{ formatTime(notif.timestamp) }}</small>
         </div>
@@ -56,7 +63,13 @@ const fetchNotifications = async () => {
 const formatTime = (timestamp) => {
   return dayjs(timestamp).fromNow();
 };
+const getMessageWithoutReason = (msg) => {
+  return msg.split("Reason:")[0].trim();
+};
 
+const getReason = (msg) => {
+  return msg.includes("Reason:") ? msg.split("Reason:")[1].trim() : "";
+};
 const markAllAsRead = async () => {
   try {
     await axios.patch(
@@ -178,28 +191,31 @@ onMounted(() => fetchNotifications());
   color: #a71d2a;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
+.reason-line {
+  margin-top: 4px;
+  font-weight: normal;
+  font-size: 14px;
+  color: #555;
+}
 @media (max-width: 768px) {
   .flex-between {
-  display: flex;
-  align-items: flex-start;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .message {
+    flex: 1;
+    margin-right: 8px;
+    word-break: break-word;
+    min-width: 0;
+  }
+
+  .timestamp {
+    white-space: nowrap;
+    font-size: 0.8rem;
+    margin-top: 16px;
+    color: #777;
+    flex-shrink: 0;
+  }
 }
-
-.message {
-  flex: 1;
-  margin-right: 8px;
-  word-break: break-word;
-  min-width: 0;
-}
-
-.timestamp {
-  white-space: nowrap;
-  font-size: 0.8rem;
-  margin-top: 16px;
-  color: #777;
-  flex-shrink: 0;
-}
-
-
-}
-
 </style>
