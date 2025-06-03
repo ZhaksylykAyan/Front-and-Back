@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 def generate_excel_for_approved_teams(request):
     from teams.models import Team
-    teams = Team.objects.filter(status="approved").prefetch_related("members", "thesis_topic", "supervisor")
+    teams = Team.objects.filter(status="team_approved").prefetch_related("members", "thesis_topic", "supervisor")
 
     wb = openpyxl.Workbook()
     ws = wb.active

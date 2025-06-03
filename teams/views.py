@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, status
 
 import teams
-from profiles.models import SupervisorProfile, StudentProfile
+from profiles.models import SupervisorProfile, StudentProfile, DeanOfficeProfile
 from topics.models import ThesisTopic
 from topics.serializers import ThesisTopicSerializer
 from .models import Team, JoinRequest, SupervisorRequest, Like, Membership
@@ -493,7 +493,7 @@ class SupervisorDeleteTeamView(APIView):
 
 
 class RemoveTeamMemberView(APIView):
-    """ Позволяет owner'у или supervisor'у удалить участника из команды """
+    """ Позволяет owner'у, supervisor'у или сотруднику деканата удалить участника из команды """
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk, student_id):
@@ -506,9 +506,10 @@ class RemoveTeamMemberView(APIView):
 
         is_owner = team.owner == user
         is_supervisor = team.supervisor and team.supervisor.user == user
+        is_dean_office = hasattr(user, 'dean_office_profile')  # 👈 добавили
 
-        if not (is_owner or is_supervisor):
-            return Response({"error": "Only the owner or supervisor can remove members."}, status=403)
+        if not (is_owner or is_supervisor or is_dean_office):  # 👈 обновили
+            return Response({"error": "Only the owner, supervisor or dean office can remove members."}, status=403)
 
         if student_id == user.id:
             return Response({"error": "You cannot remove yourself."}, status=400)
@@ -521,15 +522,12 @@ class RemoveTeamMemberView(APIView):
         if student not in team.members.all():
             return Response({"error": "Student is not in the team."}, status=400)
 
-        # Удаляем участника
         team.members.remove(student)
 
-        # ✅ Обнуляем created_by_student, если студент был автором темы
         if team.thesis_topic.created_by_student == student:
             team.thesis_topic.created_by_student = None
             team.thesis_topic.save()
 
-        # Уведомляем студента
         send_notification(student.user, f"You were removed from the team '{team.thesis_topic.title}'.")
 
         return Response({"message": "Student removed from the team."}, status=200)
