@@ -18,9 +18,23 @@
     <div class="footer-right">
       <p>We are on social media:</p>
       <div class="icons">
-        <i class="fa-brands fa-instagram"></i>
-        <i class="fa-brands fa-telegram"></i>
-        <i class="fa-solid fa-envelope"></i>
+        <a
+          href="https://www.instagram.com/diplomatch.kz/"
+          target="_blank"
+          aria-label="Instagram"
+        >
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a
+          href="https://t.me/diplomatch_kz"
+          target="_blank"
+          aria-label="Telegram"
+        >
+          <i class="fa-brands fa-telegram"></i>
+        </a>
+        <a href="mailto:aminekka603@gmail.com" aria-label="Email">
+          <i class="fa-solid fa-envelope"></i>
+        </a>
       </div>
     </div>
   </footer>
@@ -88,6 +102,17 @@
   gap: 16px;
   font-size: 20px;
 }
+
+.icons a {
+  color: white; /* ← фиксирует цвет */
+  text-decoration: none;
+  transition: transform 0.3s;
+}
+
+.icons a:hover {
+  transform: scale(1.2);
+}
+
 
 @media (max-width: 768px) {
   .footer {

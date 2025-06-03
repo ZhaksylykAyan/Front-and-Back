@@ -6,7 +6,7 @@ import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import Profile from "../pages/Profile.vue";
-import CreateTopic from '../pages/CreateProject.vue';
+import CreateTopic from "../pages/CreateProject.vue";
 import PasswordReset from "../pages/PasswordReset.vue";
 import Orders from "../pages/Orders.vue";
 import StudentProfile from "../components/profiles/students/StudentProfile.vue";
@@ -14,17 +14,22 @@ import SupervisorProfile from "../components/profiles/supervisors/SupervisorProf
 import Professors from "../pages/Professors.vue";
 import Notifications from "../pages/Notifications.vue";
 import Likes from "../pages/Likes.vue";
+import About from "../pages/About.vue";
 
 const routes = [
   { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } },
   { path: "/login", component: Login },
   { path: "/register", component: Register },
-  { path: "/profile", component: Profile, meta: { requiresAuth: true, requiresProfile: true } },
+  {
+    path: "/profile",
+    component: Profile,
+    meta: { requiresAuth: true, requiresProfile: true },
+  },
   { path: "/forgot-password", component: PasswordReset },
   { path: "/reset-password/:uid/:token", component: PasswordReset },
   {
-    path: '/create-project',
-    name: 'CreateTopic',
+    path: "/create-project",
+    name: "CreateTopic",
     component: CreateTopic,
     meta: { requiresAuth: true },
   },
@@ -33,7 +38,7 @@ const routes = [
     name: "StudentPublicProfile",
     component: StudentProfile,
     meta: { requiresAuth: true },
-    props: route => ({ viewedUserId: route.params.id, readonly: true }),
+    props: (route) => ({ viewedUserId: route.params.id, readonly: true }),
   },
   {
     path: "/orders",
@@ -42,25 +47,30 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/professors',
-    name: 'Professors',
-    component: Professors
+    path: "/professors",
+    name: "Professors",
+    component: Professors,
   },
 
   {
-    path: '/supervisors/:id',
-    name: 'SupervisorProfile',
-    component: SupervisorProfile // компонент, который отображает профиль супервизора
+    path: "/supervisors/:id",
+    name: "SupervisorProfile",
+    component: SupervisorProfile, // компонент, который отображает профиль супервизора
   },
   {
     path: "/notifications",
-    name: 'Notifications',
+    name: "Notifications",
     component: Notifications,
   },
   {
     path: "/liked",
-    name: 'Liked',
+    name: "Liked",
     component: Likes,
+  },
+  {
+    path: "/about",
+    name: "About",
+    component: About
   },
 ];
 
@@ -73,8 +83,13 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
   const token = localStorage.getItem("token");
 
-  const publicPages = ["/login", "/register", "/forgot-password", "/reset-password"];
-  const isPublic = publicPages.some(page => to.path.startsWith(page));
+  const publicPages = [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+  ];
+  const isPublic = publicPages.some((page) => to.path.startsWith(page));
 
   // Если токен есть, но пользователь не загружен — восстанавливаем
   if (token && !authStore.user) {
@@ -93,6 +108,5 @@ router.beforeEach(async (to, from, next) => {
 
   return next(); // всё в порядке
 });
-
 
 export default router;
