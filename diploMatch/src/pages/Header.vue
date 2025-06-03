@@ -63,7 +63,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/auth";
 import { useChatStore } from "../store/chat";
-import ChatIcon  from "../components/Chat/ChatIcon.vue";
+import ChatIcon from "../components/Chat/ChatIcon.vue";
 import NotificationBell from "../components/notification/NotificationBell.vue";
 const router = useRouter();
 const authStore = useAuthStore();
@@ -83,9 +83,9 @@ const goToProfile = () => {
   router.push("/profile");
 };
 const logout = async () => {
-  await authStore.logout();           
+  await authStore.logout();
   dropdownOpen.value = false;
-  router.push("/login");              
+  router.push("/login");
 };
 
 const handleClickOutside = (e) => {

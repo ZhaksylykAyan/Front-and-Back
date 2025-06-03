@@ -18,11 +18,6 @@
           <a href="#" class="email">{{ authStore.user.email }}</a>
         </div>
       </div>
-
-      <div class="download-section">
-        <h3>Download approved projects?</h3>
-        <button class="download-btn">Download xlsx</button>
-      </div>
     </div>
   </div>
 </template>
